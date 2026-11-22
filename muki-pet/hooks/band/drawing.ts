@@ -5,12 +5,14 @@
 
 import { activeVisit, drawingOptions, nearHold, type State } from '../brain/machine.ts'
 import { robotSvg, type Mood } from '../draw/index.ts'
+import type { Headset } from '../draw/feature.ts'
 import { activePile } from '../brain/behaviours/papers.ts'
 
 export function createDrawings() {
-  let cached = { key: '', width: 0, mood: 'neutral' as Mood, visit: undefined as number | undefined, source: '' }
+  let cached = { key: '', width: 0, mood: 'neutral' as Mood, visit: undefined as number | undefined, headset: false, source: '' }
 
-  return function drawingFor(s: State, width: number, now: number): string {
+  // `headset`: whether Remote Control is on (brain/remote.ts).
+  return function drawingFor(s: State, width: number, now: number, headset = false): string {
     // While you're with him, the drawing shown stays (the host redraws the
     // band for its own reasons too); only a new width changes it.
     if (nearHold(s) && cached.source && cached.width === width) return cached.source
@@ -18,16 +20,19 @@ export function createDrawings() {
     const active = activeVisit(s, now) ?? activePile(s.slices.papers, now)
     // Mid-visit, only a new width makes a new drawing; the rest waits.
     if (active && cached.visit === active.start && cached.width === width) return cached.source
-    const key = `${width}|${s.mood}|${s.heat}|${s.home}|${s.slices.papers.count}`
+    const key = `${width}|${s.mood}|${s.heat}|${s.home}|${s.slices.papers.count}|${headset}`
     // A visit drawing that outlived its visit is rebuilt as the plain one.
     if (cached.key !== key || (cached.visit !== undefined && !active)) {
       const { visit, pile } = drawingOptions(s, now)
+      // The drawing that puts it on or takes it off plays that once; later ones show it at rest.
+      const hs: Headset | undefined = headset !== cached.headset ? (headset ? 'drop' : 'lift') : headset ? 'on' : undefined
       cached = {
         key,
         width,
         mood: s.mood,
         visit: active?.start,
-        source: robotSvg(width, { mood: s.mood, from: cached.mood, heat: s.heat, home: s.home, visit, pile }),
+        headset,
+        source: robotSvg(width, { mood: s.mood, from: cached.mood, heat: s.heat, home: s.home, visit, pile, headset: hs }),
       }
     }
     return cached.source

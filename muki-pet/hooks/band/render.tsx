@@ -4,6 +4,7 @@
 import type { EngineInterface, MatchedHook } from 'claude-code'
 
 import { readPapers } from '../brain/pile-store.ts'
+import { remoteOn } from '../brain/remote.ts'
 import { brainState, readHeat, readHome, send } from '../brain/runtime.ts'
 import { BAND_HEIGHT } from '../character/geometry.ts'
 import { createDrawings } from './drawing.ts'
@@ -36,12 +37,13 @@ export async function renderBand($: EngineInterface, e: Parameters<BandHook>[1],
   await readHeat($)
   await readHome($)
   await readPapers($)
+  const headset = remoteOn()
   await send($, { type: 'band', width })
   let now = 0
   try {
     now = await $.clock.now()
   } catch {}
-  const source = drawingFor(brainState(), width, now)
+  const source = drawingFor(brainState(), width, now, headset)
   swapIn($, source, width)
 
   const frames = framesView()

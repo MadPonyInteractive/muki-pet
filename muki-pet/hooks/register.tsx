@@ -11,6 +11,7 @@ import { renderBand } from './band/render.tsx'
 import { heatOf } from './character/heat.ts'
 import { propFor } from './character/props.ts'
 import { addPaper, sendPapers, startsBackgroundTask } from './brain/pile-store.ts'
+import { promptSeen } from './brain/remote.ts'
 import { send } from './brain/runtime.ts'
 
 export const register: Register = on => {
@@ -23,6 +24,15 @@ export const register: Register = on => {
       if (e.element === 'near' && typeof data?.over === 'boolean') {
         await send($, { type: 'near', on: data.over })
       }
+    } catch {}
+    return next(e)
+  })
+
+  // Remote Control: a message from your phone puts his headset on; one typed
+  // at the desk takes it off (brain/remote.ts).
+  on('prompt.submit', async ($, e, next) => {
+    try {
+      promptSeen($, e.origin.kind)
     } catch {}
     return next(e)
   })

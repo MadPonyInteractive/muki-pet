@@ -66,6 +66,11 @@ export const K = {
   pile: 'pl',
   pileTop: 'plf', // the top sheet, lifting a corner now and then
   pileVisit: 'pv', // on the svg root while he visits the pile
+  // The Remote Control headset.
+  headset: 'hs',
+  headsetTip: 'hst', // the antenna's blinking tip
+  headsetDrop: 'hsd', // on the svg root while it drops on
+  headsetLift: 'hsl', // on the svg root while it lifts off
   // Heat.
   sweat: 'sw',
   sweat1: 'sw1',

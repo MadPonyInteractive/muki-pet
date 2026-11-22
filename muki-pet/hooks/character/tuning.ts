@@ -62,3 +62,7 @@ export const FPS = 30
 export const DASH = 'cubic-bezier(.6,0,.25,1)'
 export const ROLL = 'cubic-bezier(.45,0,.55,1)'
 export const BACK = '1s cubic-bezier(.45,0,.3,1)'
+
+// The Remote Control headset comes off this long after your last message from
+// the phone or web (MPI-15), unless you type at the desk first. In ms.
+export const REMOTE_IDLE_MS = 15 * 60_000

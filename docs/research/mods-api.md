@@ -66,6 +66,11 @@ Source: `C:\Program Files\WindowsApps\Claude_5.11492.2.0_x64__pzs8sxrjxfjjc\app\
 - Pointer events carry whole cells only (`Math.floor(clientX / cellWidth)`): **no `fine` sub-cell position in Desktop**, and `enter`/`leave` carry the last `move`'s cell. So a 1-row strip can't tell which way the pointer crossed it.
 - The trick Muki uses (MPI-9): the band's keyed Box is a hover scope; its hover squeezes an absolute 0-tall Box to 0 wide (`right: 9999`), and the `Client` inside sees the resize. 0 columns after having been wide = the pointer is over the band. **Unproven live:** whether the hover scope counts the pointer over the robot's iframe (Chromium normally marks an iframe and its ancestors `:hover` in the parent).
 
+## Knowing Remote Control is on (seen live 2026-11-22, MPI-15)
+
+- There is no "Remote Control is on" flag or event for mods. Turning it on in Desktop attached no surface: `$.session.surfaces()` stayed `desktop` and `session.attach` never fired.
+- What works: `prompt.submit`'s `e.origin.kind`. A message sent from the phone arrives as `bridge`; one typed in Desktop as `composer`. Muki's headset goes on with a `bridge` message and off with a `composer` one or after `REMOTE_IDLE_MS` (`brain/remote.ts`). So he only knows once you send something from the phone.
+
 ## Unknowns (to check)
 
 - ~~Does an edit to a `CLAUDE_CODE_PLUGIN_DIRS` mod reload mid-session?~~ Not by itself, but **`/reload-plugins`** reloads it (confirmed in Desktop 2026-11-22, see Loading).

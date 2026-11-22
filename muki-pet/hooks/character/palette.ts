@@ -12,6 +12,10 @@ export const COLORS = {
   cookie: '#d39a5c',
   cookieEdge: '#9a6332',
   chip: '#4b2c17',
+  // The Remote Control headset: its band and earpiece, the pads, the antenna tip.
+  headset: '#a9b5bc',
+  headsetPad: '#ff9f43',
+  antennaTip: '#7dffa0',
 }
 
 export const WHEEL_R = 11

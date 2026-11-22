@@ -22,7 +22,11 @@ export type RobotOptions = {
   // The paper pile (one paper per background task), and a visit to it if one
   // is playing: from which home, the visit's number, how far into it.
   pile?: { count: number; visit?: { from: number; n: number; elapsed: number } }
+  // His Remote Control headset (MPI-15): worn, or being put on or taken off.
+  headset?: Headset
 }
+
+export type Headset = 'on' | 'drop' | 'lift'
 
 // A visit still playing in this drawing (a finished one draws as no visit).
 export type ActiveVisit = { plan: VisitPlan; prop: Prop; from: number; n: number; elapsed: number }
