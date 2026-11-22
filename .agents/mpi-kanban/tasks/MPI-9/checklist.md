@@ -7,3 +7,4 @@ Done as the bug step of MPI-7's plan (on the current code, before Phase 1).
 - [x] golden re-recorded (intended), check 0, tests 22/22 (one raw-CSS test updated to .75s), validate passes
 - [ ] Fabio's look in the app: no two robots; watch for a blink with no robot after a redraw
 - [ ] Known, not fixed: a redraw during a cookie game ends the game (the new frame knows nothing of the click)
+- [ ] Fabio 2026-11-22 (reloaded chat): cookie during a redraw, then a fast return home and a little ghosting at the end. Wants him to stay where he ate and idle there (with MPI-6).
