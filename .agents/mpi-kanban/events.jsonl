@@ -47,3 +47,9 @@
 {"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-15", "at": "2026-11-22T21:58:28+00:00", "actor": "claude", "column": "todo", "title": "Headset when remote control is on"}
 {"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-15", "at": "2026-11-22T23:03:17+00:00", "actor": "claude", "from": "todo", "to": "doing"}
 {"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-15", "at": "2026-11-22T23:13:23+00:00", "actor": "claude", "from": "doing", "to": "done"}
+{"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-6", "at": "2026-11-22T23:06:21+00:00", "actor": "claude", "from": "todo", "to": "done", "reason": "Dropped by Fabio 2026-11-22: not worth building."}
+{"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-12", "at": "2026-11-22T23:15:33+00:00", "actor": "claude", "from": "todo", "to": "doing", "reason": "Implementation started."}
+{"schema": "mpi-kanban/event/v1", "type": "task.updated", "id": "MPI-12", "at": "2026-11-22T23:15:33+00:00", "actor": "claude", "detail": "plan, checklist, files.json; session title"}
+{"schema": "mpi-kanban/event/v1", "type": "checklist.updated", "id": "MPI-12", "at": "2026-11-22T23:23:07+00:00", "actor": "claude", "detail": "verified live by Fabio"}
+{"schema": "mpi-kanban/event/v1", "type": "validation.updated", "id": "MPI-12", "at": "2026-11-22T23:23:07+00:00", "actor": "claude", "detail": "verified live by Fabio"}
+{"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-12", "at": "2026-11-22T23:26:15+00:00", "actor": "claude", "from": "doing", "to": "done", "reason": "Verified live by Fabio; committed e768765."}

@@ -3,11 +3,11 @@
   "id": "MPI-12",
   "title": "Celebrate when Fabio confirms success",
   "description": "",
-  "column": "todo",
-  "maturity": "planned",
-  "status": "active",
+  "column": "done",
+  "maturity": "complete",
+  "status": "done",
   "created_at": "2026-11-22T16:30:29+00:00",
-  "updated_at": "2026-11-22T16:30:29+00:00",
+  "updated_at": "2026-11-22T23:26:15+00:00",
   "links": {
     "brief": "brief.md",
     "plan": "plan.md",
@@ -17,5 +17,6 @@
     "events": "events.jsonl",
     "handoffs": "handoffs/",
     "research": "research/"
-  }
+  },
+  "activeSessionTitle": "Cards to address besides headset"
 }

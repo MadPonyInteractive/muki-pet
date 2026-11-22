@@ -1,0 +1,16 @@
+{
+  "files": [
+    "muki-pet/hooks/character/confirm.ts",
+    "muki-pet/hooks/character/confirm.test.ts",
+    "muki-pet/hooks/brain/behaviours/celebrate.ts",
+    "muki-pet/hooks/brain/behaviours/celebrate.test.ts",
+    "muki-pet/hooks/brain/machine.ts",
+    "muki-pet/hooks/draw/features/celebrate.ts",
+    "muki-pet/hooks/draw/features/index.ts",
+    "muki-pet/hooks/draw/classes.ts",
+    "muki-pet/hooks/register.tsx",
+    "tools/golden.json",
+    "muki-pet/hooks/brain/types.ts",
+    "muki-pet/hooks/character/moods.ts"
+  ]
+}

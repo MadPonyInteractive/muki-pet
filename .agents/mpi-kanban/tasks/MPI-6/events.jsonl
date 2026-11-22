@@ -1,1 +1,2 @@
 {"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-6", "at": "2026-11-22T03:04:54+00:00", "actor": "claude", "column": "todo", "title": "Cookies return him to old spot"}
+{"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-6", "at": "2026-11-22T23:06:21+00:00", "actor": "claude", "from": "todo", "to": "done", "reason": "Dropped by Fabio 2026-11-22: not worth building."}
