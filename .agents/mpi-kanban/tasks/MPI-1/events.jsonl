@@ -1,0 +1,1 @@
+{"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-1", "at": "2026-11-22T03:04:40+00:00", "actor": "claude", "column": "todo", "title": "Ghost hunt: read redraw logs"}

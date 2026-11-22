@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Eyebot face prototype</title>
+<style>
+body{margin:0;background:#15191c;color:#cfd8dc;font-family:system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;padding:32px;gap:16px}
+.scr{background:#0b1216;border-radius:28px;border:6px solid #3a444b;width:420px;height:260px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.eyes{display:flex;gap:56px;transition:transform .25s ease-out}
+.eye{position:relative;width:var(--w,64px);height:var(--h,76px);background:#5ee7f0;border-radius:var(--r,22px);overflow:hidden;transition:all .3s cubic-bezier(.3,1.4,.5,1)}
+.eye.blink{transform:scaleY(.08)}
+.lt,.lb{position:absolute;background:#0b1216;transition:all .3s cubic-bezier(.3,1.4,.5,1)}
+.lt{left:-25%;width:150%;height:70%;top:0;transform:translateY(-115%)}
+.lb{left:-25%;width:150%;height:100%;bottom:0;border-radius:50%;transform:translateY(115%)}
+.happy .lb{transform:translateY(42%)}
+.sleepy .lt{transform:translateY(-35%)}
+.sad .eye:first-child .lt{transform:translateY(-35%) rotate(-20deg)}
+.sad .eye:last-child .lt{transform:translateY(-35%) rotate(20deg)}
+.angry .eye:first-child .lt{transform:translateY(-30%) rotate(22deg)}
+.angry .eye:last-child .lt{transform:translateY(-30%) rotate(-22deg)}
+.surprised{--w:58px;--h:96px;--r:30px}
+.row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+button{background:transparent;color:inherit;border:1px solid #4a555c;border-radius:8px;padding:6px 12px;cursor:pointer}
+button.on{border-color:#5ee7f0;color:#5ee7f0}
+</style></head><body>
+<div id="face" class="scr"><div class="eyes" id="eyes"><div class="eye"><div class="lt"></div><div class="lb"></div></div><div class="eye"><div class="lt"></div><div class="lb"></div></div></div></div>
+<div class="row" id="btns">
+<button data-m="neutral" class="on">Neutral</button><button data-m="happy">Happy</button><button data-m="sad">Sad</button>
+<button data-m="angry">Grumpy</button><button data-m="sleepy">Sleepy</button><button data-m="surprised">Surprised</button>
+</div>
+<script>
+var face=document.getElementById('face'),eyes=document.getElementById('eyes'),btns=document.querySelectorAll('#btns button');
+function setMood(m){face.className='scr '+m;btns.forEach(function(b){b.classList.toggle('on',b.dataset.m===m)})}
+btns.forEach(function(b){b.addEventListener('click',function(){setMood(b.dataset.m)})});
+function blink(){var e=document.querySelectorAll('.eye');e.forEach(function(x){x.classList.add('blink')});setTimeout(function(){e.forEach(function(x){x.classList.remove('blink')})},130);setTimeout(blink,2000+Math.random()*3000)}
+setTimeout(blink,1500);
+document.addEventListener('pointermove',function(ev){var r=face.getBoundingClientRect();var x=(ev.clientX-(r.left+r.width/2))/r.width*40,y=(ev.clientY-(r.top+r.height/2))/r.height*16;x=Math.max(-20,Math.min(20,x));y=Math.max(-8,Math.min(8,y));eyes.style.transform='translate('+Math.round(x)+'px,'+Math.round(y)+'px)'});
+</script></body></html>

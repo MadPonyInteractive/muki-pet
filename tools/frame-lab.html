@@ -1,0 +1,56 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Frame lab</title>
+<!--
+  Draws an SVG the way Claude Desktop 5.11492 draws an interactive Svg: the same
+  DOMPurify settings, the same CSP and wrapper, a sandbox="" iframe in a flex-column div.
+  A second copy has allow-same-origin so its insides can be read from the console (`dbg`).
+  Serve this folder (python -m http.server 8765 --bind 127.0.0.1) and open
+  /frame-lab.html?src=<svg file>&w=<px, 0 = stretch>&h=<px>. Default src: test.svg.
+  Keep the browser pane VISIBLE: a hidden pane has a 0-wide viewport and frozen animations.
+-->
+
+<body style="margin:0;padding:20px;background:#1e1e1e;color:#aaa;font:13px system-ui">
+<p id="info">loading</p>
+<div id="faithful"></div>
+<p>inspectable copy (allow-same-origin):</p>
+<div id="debug"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+<script>
+// Same sanitizer settings and frame wrapper as Claude Desktop 5.11492 (ion-dist.asar, Fp/Rp/Qp).
+const kp = ['animate', 'set', 'use'], Ap = ['script', 'foreignObject', 'image', 'a', 'iframe']
+function jp(e) { const t = e.trim().toLowerCase().split(':').at(-1) ?? ''; return t !== '' && t !== 'href' && !t.startsWith('on') }
+function Mp(e, t) { return e.startsWith('on') ? false : e === 'href' || e === 'xlink:href' ? t.trim().startsWith('#') : e !== 'attributename' || jp(t) }
+function scrub(src) {
+  const p = DOMPurify()
+  p.addHook('uponSanitizeAttribute', (_e, t) => { Mp(t.attrName, t.attrValue) || (t.keepAttr = false) })
+  const n = Array.from(p.sanitize(src, { USE_PROFILES: { svg: true, svgFilters: true }, ADD_TAGS: kp, ADD_ATTR: ['from', 'to', 'calcMode'], FORBID_TAGS: Ap, ALLOW_DATA_ATTR: false, ALLOW_UNKNOWN_PROTOCOLS: false, FORCE_BODY: true, RETURN_DOM_FRAGMENT: true }).childNodes).filter(e => e.nodeType !== Node.TEXT_NODE || e.textContent?.trim())
+  const [r] = n
+  return n.length === 1 && r instanceof Element && r.localName === 'svg' ? r.outerHTML : null
+}
+const CSP = "default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; font-src data:; script-src 'none'; form-action 'none'"
+const WRAP = ':root{color-scheme:light dark}html,body{margin:0;height:100%;background:transparent;overflow:hidden}body>svg{display:block;width:100%;height:100%}'
+function frame(svg, sandbox, w, h) {
+  const f = document.createElement('iframe')
+  f.setAttribute('sandbox', sandbox)
+  f.setAttribute('srcdoc', `<!doctype html><meta http-equiv="Content-Security-Policy" content="${CSP}"><style>${WRAP}</style>` + svg)
+  // Desktop's own style: no width when the Svg has no width prop (Hp).
+  f.style.cssText = `display:block;max-width:100%;border:0;${w ? `width:${w}px;` : ''}height:${h}px`
+  // Desktop puts it inside Box divs: display:flex, column.
+  const box = document.createElement('div')
+  box.style.cssText = 'display:flex;box-sizing:border-box;flex-direction:column;outline:1px dashed #444'
+  box.appendChild(f)
+  return box
+}
+const q = new URLSearchParams(location.search)
+fetch(q.get('src') ?? 'frame-lab-coin-test.svg').then(r => r.text()).then(src => {
+  const clean = scrub(src)
+  window.raw = src; window.clean = clean
+  if (!clean) { info.textContent = 'SCRUB FAILED: no svg root'; return }
+  info.textContent = `raw ${src.length} chars, after scrub ${clean.length} chars; tabindex kept: ${clean.includes('tabindex')}; style kept: ${clean.includes('<style')}`
+  const w = +(q.get('w') ?? 0), h = +(q.get('h') ?? 76)
+  faithful.appendChild(frame(clean, '', w, h))
+  debug.appendChild(window.dbgBox = frame(clean, 'allow-same-origin', w, h))
+  window.dbg = dbgBox.firstChild
+})
+</script>

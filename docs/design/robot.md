@@ -1,0 +1,107 @@
+# Robot design
+
+Decided with Fabio on 2026-11-21 (from his sketch). Overall goals and personality are in `CLAUDE.md`.
+
+## Where he lives
+
+His own band directly above the chat input (the `AbovePrompt` site), like a shelf he rolls along. Not a side pane.
+The band is shared with Fabio's usage-bar mod (`context-bar`): Eyebot sits on top, the bars stay just above the input.
+
+## Body (side view, cartoon)
+
+- Two spoked wheels (front and back), a small rounded chassis on top of them.
+- A thin neck rising from the chassis to the head.
+- Head = dark rounded screen with a grey bezel and two cyan rounded-rectangle eyes (same face as `prototype/face.html`).
+- Colours: bezel `#3a444b`, screen `#0b1216`, eyes `#5ee7f0`, tyres `#1c2328`, rims `#56626a`.
+- Drawn at 0.85 scale in a 76 px tall band, with a faint "shelf" line under the wheels.
+
+## Motion
+
+- **Home spot (2026-11-22):** he rests at his home spot (3.5 to 8.5 s), takes a short trip out (20 to 80 px, left or right; was up to 220 px, cut so a swap mid-trip can only jump him a little), looks around there (1 to 3.5 s), and rolls back home, at a varied speed. Starts and stops smoothly. Home starts in the middle of the band and moves when he visits a prop (the prop's spot becomes his new home). Before 2026-11-22 he roamed the whole band on one long route; that made mood changes jump or ghost, because each new drawing had to guess where he was on it.
+- Wheels spin in step with the distance rolled.
+- **Head lag:** the head is on a damped spring. Speeding up or cruising tips it back (rolling left leans it right), and stopping makes it swing forward past upright and settle. This was the key request from the sketch.
+- Eyes look where he's going while moving, and glance around while idle.
+- Blinks on two overlapping timers (4.7 s and 7.3 s), so blinks feel irregular, with an occasional double blink.
+
+## Mouse
+
+- Mouse anywhere over his band: he stops and his eyes follow the mouse left or right (graded by distance).
+- Mouse on him: happy "^ ^" eyes and a little hop.
+- Mouse leaves: he carries on from where he stopped.
+- Fabio confirmed all of the above in the app on 2026-11-22.
+
+## Touch (added 2026-11-22, Fabio asked for click and petting)
+
+- **Press on him (boop):** he squashes down, his eyes close into blissful "^ ^" crescents, pink cheeks appear, and hearts float up beside his head. The cursor is a grab hand.
+- **Hold and drag across him (petting):** his head leans toward your hand (four strips across him, ±4° and ±9°), so stroking left and right rocks his head along.
+- **Let go:** he springs back up with a little overshoot, wobbles back from a small lean (a springy transition; it used to be an animation, which also played on every new drawing under the old one and made his head ghost), and the blush fades slowly (starts after about 1 s, gone after about 3.5 s).
+- Pure CSS (`:active` plus `:hover`), because the frame has no scripts and doesn't send clicks to the mod.
+
+## Moods (milestone 2, added 2026-11-22)
+
+What Claude Code is doing sets his face. The looks are a table in `eyebot/hooks/robot.ts` (`MOOD_RULES`); the events are in `eyebot/hooks/register.tsx`.
+
+| When | Mood | Look | How long |
+| --- | --- | --- | --- |
+| You send a message (`turn.start`) | alert | eyes 18% bigger, a hop | 2.5 s, then focused |
+| Claude is working | focused | top lids down a little, eyes a bit narrower | until the turn ends |
+| A tool needs your OK (`tool.check` says ask) | curious | head tilted, eyes down toward the prompt, one eye bigger, one lid cocked | until you answer |
+| A tool fails or is refused | sad | top lids slanted down at the outer corners, eyes lower | 5 s |
+| Claude answers (`turn.complete`, `answer`) | happy | "^ ^" eyes, two hops | 6 s, then neutral |
+| The turn ends on an error or refusal | sad | as above | 5 s |
+| You stop the turn | neutral | | |
+| 5 min with no turn | sleepy | top lids half down | until 15 min |
+| 15 min with no turn | asleep | eyes closed to thin lines, stops rolling, floating "z"s; hovering opens them halfway | until the next turn |
+
+- Subagents' turns don't change his mood; their tool failures do.
+- Hover and touch win over any mood: touching him resets his face to rest under the happy look (built 2026-11-22; before that a mood's lids stayed on under it).
+- Each mood change swaps the drawing. The old drawing stays on top for 0.9 s while the new one loads under it; in the new one he stays hidden for 0.15 s, fades in over 0.25 s, and his eyes slide from the old face to the new one (0.45 s). Every new drawing starts him resting at home, so the two drawings agree on where he is unless he was out on a trip at that moment. He also does his little wiggle on each change. **Since 2026-11-22 (later) he takes no trips in the moods Claude's work flips between (alert, focused, curious, sad, asleep), and every drawing opens with at least 8 s at home**, longer than the passing moods last, so a swap out of those finds him home. **Fabio still sees a lot of ghosting** (see the current handoff): not solved.
+
+## Cookie game (built 2026-11-22, Fabio's idea; replaces the coin game; not yet seen live)
+
+- Click anywhere on the band where he isn't: a chocolate-chip cookie pops up there, he stops wandering and dashes to it (same dash as the coin had: 0.3 to 1.5 s, wheels spin, head leans back then swings, eyes on the cookie).
+- He eats it: a little mouth appears on his screen (eye colour, hidden otherwise) and chews four times; the cookie gets three bite marks with a crumb falling at each, then the last bit goes in. Then "^ ^", a blush and two hops.
+- He waits about 3 s after arriving, then rolls home at his wandering pace. The click is remembered for about 5.5 s more after that.
+- **While he goes for a cookie his mood's face is put aside** (Fabio, 2026-11-22: he was curious and the coin's joy mixed in). One feeling at a time.
+- **Cookies in a row:** a click before the last cookie's memory runs out counts as the next one in a row. **The 6th in a row makes him sick:** after eating it his eyes go green and squeeze, he leans back, lurches forward with his mouth wide open and a rainbow pours from his mouth to the ground into a little rainbow puddle; then dizzy eyes and droopy lids, the green fades, and he rolls home. Clicks are ignored while he's sick (and you can't pet him then: a click on him would end it).
+- A cookie wakes him from sleep.
+- A redraw from the hook (a mood change) ends a run and resets the count. Rare, accepted.
+- How it counts without script: `architecture/how-it-works.md` § Cookie game.
+
+## Props: what Claude is doing (built 2026-11-22, Fabio chose "add props")
+
+When Claude starts a tool (main agent only), a small prop pops up on the band and he goes to look at it. At most one every 12 s.
+
+| Tool | Prop |
+| --- | --- |
+| Read | file (page with lines) |
+| Grep, Glob, ToolSearch | magnifying glass |
+| Edit, Write, NotebookEdit | pencil |
+| Bash, PowerShell | terminal (`>_`) |
+| WebFetch, WebSearch, browser tools | globe |
+
+The visit (about 5.5 to 9 s): the prop pops up 110 to 230 px away on the side with more room; he spots it (eyes on it, a hop); he rolls over with his head leaning back and stops 32 px short; he leans in with a "?"; he nudges it (it wobbles); "!" and a happy squint; from spotting it until the "!" he wears the curious face (right eye bigger, left lid cocked; Fabio asked for this 2026-11-22), then his mood's face comes back; the prop poofs and he stays there: that spot is his new home (Fabio, 2026-11-22: no rushing back). His mood stays as it is throughout (focused during a turn). Mood and heat changes wait until the visit is over (a passing mood like happy then gets its full time).
+
+## Heat (built 2026-11-22, Fabio's idea)
+
+How full the context window is warms him up, on top of any mood:
+
+| Context | Level | Look |
+| --- | --- | --- |
+| under 15% | 0 | normal |
+| 15-25% | 1 | whole body (head bezel, neck, chassis, wheel rims and tyres) a bit reddish, lids 1 px heavier |
+| 25-35% | 2 | body redder, lids 2 px heavier, a sweat drop slides down one side of his head |
+| 35%+ | 3 | body red, lids 3.5 px heavier, sweat on both sides |
+
+No red cheeks (Fabio, 2026-11-22: not red cheeks all the time; the whole body, wheels too). Levels moved down the same day (were 30/50/70%): at 40% Fabio saw almost nothing and said he should really be suffering. Colours made stronger too.
+
+## Planned
+
+- **Mad (Fabio, 2026-11-22):** being booped too many times in a row, or being woken from sleep, makes him mad; a mad Eyebot dodges your hand and rolls away.
+- **Needs attention (Fabio, 2026-11-22):** if he gets no attention he gets sad, or throws a temper tantrum. Not designed yet: what counts as attention, how long until sad, what a tantrum looks like. The hook can't see clicks or hovers inside his frame (no script), so attention from the mouse needs a way out of the frame first. See the current handoff.
+
+## Known limits of v1
+
+- The route is one pre-made loop of about 62 s, so it repeats. If that's noticeable, re-plan the route now and then.
+- He can't roll toward the mouse; he only stops and looks.
+- He can't tell a click from a long hold, or count clicks (no script). A wiggle also plays once when the page first loads.

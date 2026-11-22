@@ -1,0 +1,66 @@
+# Mods API findings (Claude Code 2.1.321)
+
+What we learned about the API that matters for Eyebot. The API is early access and changes between versions; the authority is the types file the engine writes next to a loaded mod (`.claude-plugin/types/claude-code/index.d.ts`).
+
+## Drawing
+
+- **Desktop elements:** Box, Text, Button, Input, Select, Svg, Link, Code, Markdown, Client. The terminal has no `Svg`; it has `Raster` and `Image`.
+- **`Svg` without `isInteractive`** is drawn as an image. **With `isInteractive`** it goes in a sandboxed frame with no scripts: CSS animation, SMIL, `:hover` and `<title>` work, and scripts and event attributes are stripped. VS Code always draws an image (animation runs, hover doesn't).
+- **An interactive `Svg` gets no clicks to the hook.** The types say presses for plugins "go on an enclosing element". So touch reactions inside him are CSS only.
+- **`:active` and `:hover` while dragging (checked 2026-11-22 in the browser pane, Chromium):** press on one strip and drag, and `:active` stays on the pressed element and its ancestors while `:hover` moves to each strip under the pointer. Logged during a real drag: strip 2 then 3, with `.bot:active` true. That's what makes petting work without script.
+- **`Client`** (a module that runs inside the surface, with a frame clock `every`, pointer events `onPointer`, keys and `setState`) **can't draw `Svg`**. Its elements are only Box/Text/Button/Input/Select/Link/Code/Markdown. So it can't animate a vector robot. It could still serve as an invisible pointer catcher if we ever need exact mouse positions.
+- A hook's `$.state` writes redraw readers, but driving animation through `ui.render` redraws would mean a round trip per frame. Self-animating SVG avoids that.
+
+## The band above the prompt (`AbovePrompt`)
+
+- Raised on the terminal and Desktop only. Props include `bodyColumns` (width in cells), `maxRows`, `hasSurvey`, `isCollapsed` and `isWorking` (a turn is running; useful for moods).
+- **It's ONE site shared by every mod.** A hook that returns its own tree without `await next(e)` hides every mod beneath it. Proof: Fabio's `context-bar` did that, and Eyebot never showed (2026-11-21). A band hook must do `const other = await next(e)` and include `{other}` in its tree. Both mods now do.
+- In `claude plugin test`, a hook that calls `next(e)` needs a stand-in: `on('ui.render', ($, e) => <Box />)`, or the mount fails with "no implementation for ui.render".
+
+## Events used for moods (2026-11-22)
+
+- `turn.start` / `turn.complete` (main loop: no `e.agentId`). `turn.complete`'s `e.reason` is `answer`, `aborted`, `refusal` or `error`.
+- `tool.check`: `await next(e)` gives the verdict; `decision === 'ask'` with `e.approver === 'person'` and a `tool_use_id` means a permission prompt is about to show.
+- `tool.call`: `e.tool` is the tool's name, `e.agentId` is set in a subagent. In `claude plugin test`, a test's `on('tool.call', ...)` stand-in must return `{ result: ... }` or `{ deny }` (anything else is skipped: "no implementation for tool.call"). `await next(e)` resolves after the prompt and the tool; the result has `isError` when the tool failed, or `deny` when it was refused.
+- `$.clock.after(ms, fn)` returns `{ cancel }`; a reload cancels pending timers.
+- **Tests:** `claude plugin test` has no clock or turn engine underneath. Use `mock.clock(on, { now })` (with `advance`, `settle`) in every test that renders, or `ui.render` fails with "no implementation for clock.now". Raise turns with `$.turn.start({...})` / `$.turn.complete({...})` and give stand-ins `on('turn.start', (_$, e) => ({ turnId: e.turnId }))`.
+- **`@starting-style` works on a fresh SVG document in Chromium** (checked in the browser pane: lids transitioned from the previous mood's values after load). That's how a mood change slides instead of cutting.
+
+## Loading
+
+- Loading the plugin-authoring skill turns on hot reload for `~/.claude/dev-mods/<session-id>/`. Mods there load when a turn ends and reload on each edit, **in that session only**.
+- The engine writes the types next to a mod loaded through dev-mods hot reload: `<mod>/.claude-plugin/types/`. A mod loaded through `CLAUDE_CODE_PLUGIN_DIRS` got no types folder and still drew (2026-11-22), so a missing folder proves nothing. Use `claude plugin list` (`Status: loaded`).
+- **`CLAUDE_CODE_PLUGIN_DIRS` works for Eyebot** (2026-11-22): he draws in the Desktop band in every new chat.
+- **`/reload-plugins [--force]`** (found 2026-11-22 in the strings of the app's own Claude Code 2.1.321 binary, `%LOCALAPPDATA%/Claude-Data/claude_*/claude-code/2.1.321/*/claude.exe`): "Activate pending plugin changes in the current session". For a folder plugin its message says it "loads in place ... so edits there take effect at the next session start or /reload-plugins". **Confirmed 2026-11-22:** typed in the Desktop message box, it reloaded Eyebot's edits in the open chat. Refusals it can give: "no plugin reload is set up for this session, restart Claude Code to apply it" and "this session is a thin client (claude ssh, --remote)". `claude --version` on PATH (2.1.309, npm) is a different build from what Desktop runs.
+- A chat keeps the plugin list it started with. A chat started before a folder was added to `CLAUDE_CODE_PLUGIN_DIRS` doesn't get it (2026-11-22, Cubric-Vision chats). New chats do.
+- Claude can't screenshot the Claude app itself (computer use refuses it), so Fabio has to confirm what's on screen.
+
+## How Desktop really draws an interactive Svg (read from the app, 2026-11-22)
+
+Source: `C:\Program Files\WindowsApps\Claude_5.11492.2.0_x64__pzs8sxrjxfjjc\app\resources\ion-dist.asar` (readable; search it with a Node `Buffer.indexOf` script, plain grep is too slow). Functions named as in the minified code.
+
+- **The frame (`Qp`, `Rp`, `Fp`):** `<iframe sandbox="" referrerpolicy="no-referrer" loading="lazy" title=ALT aria-label=ALT srcdoc=...>`, styled `display:block;max-width:100%;border:0` plus `width:Npx;height:Npx` **only if** the Svg has `width`/`height` props. The srcdoc is `<!doctype html>` + a CSP meta (`default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; font-src data:; script-src 'none'; form-action 'none'`) + `<style>:root{color-scheme:light dark}html,body{margin:0;height:100%;background:transparent;overflow:hidden}body>svg{display:block;width:100%;height:100%}</style>` + the scrubbed SVG.
+- **The scrub:** DOMPurify, `USE_PROFILES:{svg,svgFilters}`, adds `animate`/`set`/`use`, forbids `script`, `foreignObject`, `image`, `a`, `iframe`, drops `on*` attributes and any non-`#` href. Over 131,072 characters, or anything that isn't one `<svg>` root, falls back to the alt text. **`tabindex` and `<style>` survive** (checked with the same settings in the frame lab).
+- **Redraws (`Zg` → `gm`/`hm`/`um`):** the band is updated by a DOM morph, not rebuilt. An old iframe is kept only if a new iframe is `isEqualNode` to it (same srcdoc, title, style: so same source, alt, width and height) and the chain of tag names up to the root matches. Ancestors are updated in place (attributes and inline style). **So an identical Svg keeps running across redraws, and any change to source, alt, width or height starts a brand-new frame**: blank until it loads, animation from its start. That is the mood-change flicker and teleport Fabio saw (2026-11-22).
+- After every morph, if an iframe has focus, the host blurs it.
+- **Box styles (`ap`):** `display:flex; flex-direction` (default row), width/height as number → `ch`/`lh` or a `"N%"` string, `position:"absolute"` with integer `top`/`left`/`right`/`bottom` (in `lh`/`ch`), `display:"none"`. A Box with an absolute Box child gets `position:relative`.
+- **No raw `div`:** the renderer and the engine's wire schema list `div`/`span`/`b` with a free `style` string, but a hook can't send one. `claude plugin test` (the app's own 2.1.321 binary) refuses it: `"div" is not an element (the elements are Box, Button, Input, Select, Svg, Code, Markdown, Client, Raster, Image, Text, Link, from $.ui.resolve(e))`. So a mod can't size a frame in exact px from outside.
+
+## CSS tricks checked in the frame lab (`tools/frame-lab.html`, 2026-11-22)
+
+- **Works: click focuses an SVG `<rect tabindex="0">`** in a `sandbox=""` frame, and `:focus`, `:focus-within` and `~` sibling rules follow it. An invisible element on top steals the click: give coins and decorations `pointer-events:none`.
+- **Works: focus that lets go by itself.** `.c:focus{animation:gone 0s 3s forwards} @keyframes gone{to{visibility:hidden}}`: at 3 s the element hides, the frame drops its focus (`focusout` fired), and it shows again. Gives a timed, self-ending state with no script.
+- **Works: transitions to a focus-set transform** (the "dash": 0 → 120 px over 0.5 s, and back when focus ends).
+- **Works: a frame with no `width` prop stretches** to the band in Desktop's flex-column Box, and keyframes in `calc(44px + u * (100vw - 88px))` follow the frame width. Height does not stretch (it stays 150 px without a `height` prop, in flex and in grid).
+- **Works in Chromium, but unreachable from a mod:** passing the mood as the frame width (container `width: calc(round(down, 100% - 32px, 32px) + 4k px)`, decoded inside with `@property --k` + `mod(100vw, 32px)` + `@container style(--k: 4px)`). Needs a raw `div` style, which the engine refuses. Note for any `@property`: write `syntax:'\3c length\3e'`, because a `<` inside an SVG `<style>` is parsed as a tag and silently empties the whole stylesheet.
+- **Fails: freezing an animated element with `transform:X!important` + a long transition.** Chromium starts no transition from an animation's value; the element snaps to X. So "stop under the mouse" must stay `animation-play-state:paused`, which is what puts the frame's clock behind the hook's guess.
+
+## Unknowns (to check)
+
+- ~~Does an edit to a `CLAUDE_CODE_PLUGIN_DIRS` mod reload mid-session?~~ Not by itself, but **`/reload-plugins`** reloads it (confirmed in Desktop 2026-11-22, see Loading).
+- The real width in px of a Desktop band cell (the guess is 8).
+- ~~Does Desktop restart an interactive `Svg` when it gets the same source again?~~ No, the morph keeps it (see above).
+- ~~Does swapping the source (a mood change) flicker in Desktop?~~ Yes: a new iframe, blank until loaded (Fabio saw it, and the code confirms it).
+- Fabio noticed a mood change waits while his pointer is over the band. Probably the host holds redraws during pointer interaction (`V.holds()` exists for Client modules); not confirmed for the band.
+- Does a `position:"absolute"` Box laid over the robot keep the old frame alive in the real app? The double buffer is built (2026-11-22) and `claude plugin test` shows two Svgs for 480 ms, then one; **confirmed in Desktop 2026-11-22: Fabio saw no flicker on mood changes after `/reload-plugins`.** So the morph keeps the old iframe in its absolute slot.
+- **The frame lab can't test `:focus` or animation timing while the browser pane is hidden** (2026-11-22): the document timeline stays at 0, and `:focus` doesn't match without window focus even when `activeElement` is the strip. Workarounds used: seek animations with `getAnimations()` + `currentTime`, and swap `:focus`/`:hover` for a class in the frame's `<svg> <style>` (the frame has two style elements; the first is Desktop's wrapper). **A hidden pane also has a 0-wide viewport** (nothing to hit-test or see): `resize_window` with a custom size (900x400) on the lab tab gives it a real viewport, so `elementFromPoint` and zoom screenshots work while hidden (2026-11-22).

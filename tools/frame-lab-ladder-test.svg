@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 76" width="600" height="76"><style>
+/* Counting clicks "in a row" with no script: six layers of strips. Layer k
+   takes clicks only while a layer k-1 strip has focus, so each click during a
+   running sequence climbs one layer. A focus ends by itself after 4 s. */
+.c{fill:#fff;fill-opacity:.04;pointer-events:all;outline:none;animation:gone 0s 4s forwards}
+.c:not(.L1){pointer-events:none}
+.L1:focus~.L2,.L2:focus~.L3,.L3:focus~.L4,.L4:focus~.L5,.L5:focus~.L6{pointer-events:all}
+.L6:focus{pointer-events:all;x:-3000px;width:6000px}
+@keyframes gone{to{visibility:hidden}}
+.n{display:none;font:bold 20px sans-serif;fill:#5ee7f0}
+.L1:focus~.cnt .n1,.L2:focus~.cnt .n2,.L3:focus~.cnt .n3,.L4:focus~.cnt .n4,.L5:focus~.cnt .n5,.L6:focus~.cnt .n6{display:inline}
+/* Each click moves him: odd layers use set A, even ones set B, so the
+   animation restarts on every click (same name would not restart). */
+.c1:focus,.c1:focus~*{--d:-200px}.c2:focus,.c2:focus~*{--d:-100px}.c3:focus,.c3:focus~*{--d:100px}.c4:focus,.c4:focus~*{--d:200px}
+.bot{transition:transform .4s}
+.L1:focus~.bot,.L3:focus~.bot,.L5:focus~.bot{transform:translateX(var(--d));animation:homeA 1s ease-in-out 2s forwards}
+.L2:focus~.bot,.L4:focus~.bot,.L6:focus~.bot{transform:translateX(var(--d));animation:homeB 1s ease-in-out 2s forwards}
+@keyframes homeA{from{transform:translateX(var(--d))}to{transform:none}}
+@keyframes homeB{from{transform:translateX(var(--d))}to{transform:none}}
+/* A cookie per layer, placed by the clicked strip's --d, bitten by a mask. */
+.cu{display:none;pointer-events:none;transform:translate(var(--d),-40px)}
+.L1:focus~.k1,.L2:focus~.k2,.L3:focus~.k3,.L4:focus~.k4,.L5:focus~.k5,.L6:focus~.k6{display:inline}
+.bt{transform:scale(0);transform-box:fill-box;transform-origin:center}
+.L1:focus~* .bt,.L2:focus~* .bt{animation:bite .2s ease-out 1s forwards}
+.L1:focus~* .bt2,.L2:focus~* .bt2{animation-delay:1.5s}
+@keyframes bite{to{transform:none}}
+</style>
+<defs>
+</defs>
+<g transform="translate(300,76)">
+<rect class="c c1 L1" tabindex="0" x="-300" y="-76" width="150" height="76"/><rect class="c c2 L1" tabindex="0" x="-150" y="-76" width="130" height="76"/><rect class="c c3 L1" tabindex="0" x="20" y="-76" width="130" height="76"/><rect class="c c4 L1" tabindex="0" x="150" y="-76" width="150" height="76"/>
+<g class="cu k1"><mask id="m1" maskUnits="userSpaceOnUse" x="-20" y="-20" width="40" height="40"><rect x="-20" y="-20" width="40" height="40" fill="#fff"/><circle class="bt" cx="8" cy="-6" r="5" fill="#000"/><circle class="bt bt2" cx="-8" cy="6" r="5" fill="#000"/></mask><circle r="8" fill="#c98a4b" mask="url(#m1)"/></g>
+<rect class="c c1 L2" tabindex="0" x="-300" y="-76" width="150" height="76"/><rect class="c c2 L2" tabindex="0" x="-150" y="-76" width="130" height="76"/><rect class="c c3 L2" tabindex="0" x="20" y="-76" width="130" height="76"/><rect class="c c4 L2" tabindex="0" x="150" y="-76" width="150" height="76"/>
+<g class="cu k2"><mask id="m2" maskUnits="userSpaceOnUse" x="-20" y="-20" width="40" height="40"><rect x="-20" y="-20" width="40" height="40" fill="#fff"/><circle class="bt" cx="8" cy="-6" r="5" fill="#000"/><circle class="bt bt2" cx="-8" cy="6" r="5" fill="#000"/></mask><circle r="8" fill="#c98a4b" mask="url(#m2)"/></g>
+<rect class="c c1 L3" tabindex="0" x="-300" y="-76" width="150" height="76"/><rect class="c c2 L3" tabindex="0" x="-150" y="-76" width="130" height="76"/><rect class="c c3 L3" tabindex="0" x="20" y="-76" width="130" height="76"/><rect class="c c4 L3" tabindex="0" x="150" y="-76" width="150" height="76"/>
+<rect class="c c1 L4" tabindex="0" x="-300" y="-76" width="150" height="76"/><rect class="c c2 L4" tabindex="0" x="-150" y="-76" width="130" height="76"/><rect class="c c3 L4" tabindex="0" x="20" y="-76" width="130" height="76"/><rect class="c c4 L4" tabindex="0" x="150" y="-76" width="150" height="76"/>
+<rect class="c c1 L5" tabindex="0" x="-300" y="-76" width="150" height="76"/><rect class="c c2 L5" tabindex="0" x="-150" y="-76" width="130" height="76"/><rect class="c c3 L5" tabindex="0" x="20" y="-76" width="130" height="76"/><rect class="c c4 L5" tabindex="0" x="150" y="-76" width="150" height="76"/>
+<rect class="c c1 L6" tabindex="0" x="-300" y="-76" width="150" height="76"/><rect class="c c2 L6" tabindex="0" x="-150" y="-76" width="130" height="76"/><rect class="c c3 L6" tabindex="0" x="20" y="-76" width="130" height="76"/><rect class="c c4 L6" tabindex="0" x="150" y="-76" width="150" height="76"/>
+<g class="cnt" transform="translate(-280,-50)"><text class="n n1">1</text><text class="n n2">2</text><text class="n n3">3</text><text class="n n4">4</text><text class="n n5">5</text><text class="n n6">6 BLEURGH</text></g>
+<g class="bot"><rect x="-12" y="-40" width="24" height="40" rx="6" fill="#5ee7f0"/></g>
+</g>
+</svg>

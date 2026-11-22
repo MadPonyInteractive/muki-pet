@@ -1,0 +1,6 @@
+{"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-1", "at": "2026-11-22T03:04:40+00:00", "actor": "claude", "column": "todo", "title": "Ghost hunt: read redraw logs"}
+{"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-2", "at": "2026-11-22T03:04:54+00:00", "actor": "claude", "column": "todo", "title": "Check cookie game live"}
+{"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-3", "at": "2026-11-22T03:04:54+00:00", "actor": "claude", "column": "todo", "title": "Remove DEBUG_LOG"}
+{"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-4", "at": "2026-11-22T03:04:54+00:00", "actor": "claude", "column": "todo", "title": "Heat level 1 at 15%"}
+{"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-5", "at": "2026-11-22T03:04:54+00:00", "actor": "claude", "column": "todo", "title": "Needs attention and boop anger"}
+{"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-6", "at": "2026-11-22T03:04:54+00:00", "actor": "claude", "column": "todo", "title": "Cookies return him to old spot"}

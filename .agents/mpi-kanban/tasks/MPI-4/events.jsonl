@@ -1,0 +1,1 @@
+{"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-4", "at": "2026-11-22T03:04:54+00:00", "actor": "claude", "column": "todo", "title": "Heat level 1 at 15%"}
