@@ -1,0 +1,21 @@
+{
+  "schema": "mpi-kanban/task-card/v1",
+  "id": "MPI-8",
+  "title": "Heat: review the hot looks, too hot at 25%",
+  "description": "Fabio 2026-11-22: at 25% context he already looks really hot. Show Fabio every heat level (h0-h3: colour, heavier lids, sweat) side by side, then retune levels/thresholds (brain/config.ts heatOf, draw/heat.ts). Related: MPI-4.",
+  "column": "todo",
+  "maturity": "planned",
+  "status": "active",
+  "created_at": "2026-11-22T06:15:04+00:00",
+  "updated_at": "2026-11-22T06:15:04+00:00",
+  "links": {
+    "brief": "brief.md",
+    "plan": "plan.md",
+    "checklist": "checklist.md",
+    "validation": "validation.md",
+    "files": "files.json",
+    "events": "events.jsonl",
+    "handoffs": "handoffs/",
+    "research": "research/"
+  }
+}

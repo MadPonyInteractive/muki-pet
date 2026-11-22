@@ -1,0 +1,1 @@
+{"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-9", "at": "2026-11-22T06:15:04+00:00", "actor": "claude", "column": "todo", "title": "Ghosts still show after the 3 fixes"}
