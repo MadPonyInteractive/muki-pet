@@ -6,7 +6,7 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
 const here = dirname(fileURLToPath(import.meta.url))
-const { robotSvg, BAND_HEIGHT } = await import(pathToFileURL(join(here, '..', 'eyebot', 'hooks', 'robot.ts')).href)
+const { robotSvg, BAND_HEIGHT } = await import(pathToFileURL(join(here, '..', 'eyebot', 'hooks', 'draw', 'index.ts')).href)
 
 const out = process.argv[2]
 if (!out) {

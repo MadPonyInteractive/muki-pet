@@ -1,0 +1,9 @@
+{
+  "schema": "mpi-kanban/task-files/v1",
+  "files": [
+    "eyebot/hooks/register.tsx",
+    "eyebot/hooks/robot.ts",
+    "docs/",
+    "C:/Users/Fabio/AppData/Local/Temp/claude/3bdd5bfd64bd65da/2f8b3f07-dd63-49a1-b106-0d6c9ad9888e/scratchpad/find.js"
+  ]
+}

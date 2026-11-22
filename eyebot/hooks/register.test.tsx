@@ -1,6 +1,6 @@
 import { expect, mock, test } from 'claude-code/testing'
 
-import { MOODS, PROPS, robotSvg, visitPlan } from './robot.ts'
+import { MOODS, PROPS, robotSvg, visitPlan } from './draw/index.ts'
 
 const BAND = {
   plugin: 'eyebot',
@@ -250,5 +250,41 @@ test('Claude reading a file drops a prop he goes to look at, at most every 12 s'
   expect(await cls()).toContain('p-terminal')
   await clock.advance(8000)
   expect(await cls()).toContain('m-happy')
+  await ui.unmount()
+})
+
+// Desktop draws a chat's last drawing again, from its start, when the chat is
+// opened; a visit there would replay beside the robot at his new home.
+test('once a visit is over, the band shows the plain drawing at his new home', async ($, on) => {
+  on('ui.render', emptyBand)
+  const clock = mock.clock(on, { now: 20_000_000 })
+  on('tool.call', () => ({ result: { content: 'ok' } }) as any)
+  const ui = await $.ui.mount({ ...BAND, surface: 'desktop' })
+  await clock.advance(1000)
+  await $.tool.call({ tool: 'Grep', tool_use_id: 'g1', pattern: 'x' } as any)
+  await clock.settle()
+  await clock.advance(1000)
+  expect(String((await ui.find({ type: 'Svg' }))?.props.source)).toContain(' vi p-lens')
+  await clock.advance(10_000)
+  await clock.settle()
+  await clock.advance(1000)
+  const all = await ui.findAll({ type: 'Svg' })
+  expect(all).toHaveLength(1)
+  expect(String(all[0].props.source)).not.toContain(' vi ')
+  await ui.unmount()
+})
+
+// Opening a chat goes through a narrower band first (784, then 792 px), and
+// Desktop rebuilds the band then anyway: an old drawing kept on top would only
+// restart at its own spot beside the new one.
+test('a new width replaces the drawing at once, with no old one on top', async ($, on) => {
+  on('ui.render', emptyBand)
+  const clock = mock.clock(on, { now: 30_000_000 })
+  const ui = await $.ui.mount({ ...BAND, surface: 'desktop', props: { ...BAND.props, bodyColumns: 98 } })
+  await clock.advance(1000)
+  await ui.redraw({ ...BAND.props, bodyColumns: 99 } as any)
+  const all = await ui.findAll({ type: 'Svg' })
+  expect(all).toHaveLength(1)
+  expect(all[0].props.width).toBe(792)
   await ui.unmount()
 })

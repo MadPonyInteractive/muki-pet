@@ -4,3 +4,6 @@
 {"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-4", "at": "2026-11-22T03:04:54+00:00", "actor": "claude", "column": "todo", "title": "Heat level 1 at 15%"}
 {"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-5", "at": "2026-11-22T03:04:54+00:00", "actor": "claude", "column": "todo", "title": "Needs attention and boop anger"}
 {"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-6", "at": "2026-11-22T03:04:54+00:00", "actor": "claude", "column": "todo", "title": "Cookies return him to old spot"}
+{"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-1", "at": "2026-11-22T03:22:26+00:00", "actor": "claude", "from": "todo", "to": "doing"}
+{"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-7", "at": "2026-11-22T06:04:51+00:00", "actor": "claude", "column": "todo", "title": "Refactor: small modules + mood state machine"}
+{"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-7", "at": "2026-11-22T06:05:08+00:00", "actor": "claude", "from": "todo", "to": "doing"}

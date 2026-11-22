@@ -1,0 +1,37 @@
+// Sizes, colours and timings every part of the drawing shares.
+
+export const BAND_HEIGHT = 76
+
+// Simulation frames per second for his wandering.
+export const FPS = 30
+export const WHEEL_R = 11
+// The robot is drawn at this scale inside the band.
+export const SCALE = 0.85
+// How close to either end of the band he may roll.
+export const EDGE = 44
+
+export const COLORS = {
+  bezel: '#3a444b',
+  screen: '#0b1216',
+  eye: '#5ee7f0',
+  tyre: '#1c2328',
+  rim: '#56626a',
+  blush: '#ff7aa8',
+  sweat: '#9fdcff',
+  cookie: '#d39a5c',
+  cookieEdge: '#9a6332',
+  chip: '#4b2c17',
+}
+
+// A new drawing loads under the old one, which stays on top for 0.9 s (see
+// band/frames.ts). He shows in the new one after this short delay and fades in,
+// so he is there well before the old one goes, even when the load is slow.
+export const FADE_IN = '.15s'
+// How he shows in a new drawing (the `rbin` keyframes are in body-css.ts).
+export const RBIN = `rbin .25s ease-out ${FADE_IN} backwards`
+
+// Easings for the cookie dash, the roll home, and the 1 s roll back after an
+// early blur.
+export const DASH = 'cubic-bezier(.6,0,.25,1)'
+export const ROLL = 'cubic-bezier(.45,0,.55,1)'
+export const BACK = '1s cubic-bezier(.45,0,.3,1)'

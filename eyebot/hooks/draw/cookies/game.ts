@@ -1,0 +1,85 @@
+// The cookie game. Narrow focusable strips travel with him on both sides; a
+// click focuses one, which (by its own rule) sets how far away it is (--d), how
+// far his wheels turn to get there (--w), how long the dash takes (--t) and
+// which way (--s), and how long the roll back takes (--r). The strip's focus
+// ends by itself a while after he is back.
+//
+// Counting cookies in a row, with no script: the strips come in six layers.
+// Layer k takes clicks only while a layer k-1 strip has focus, so each click
+// before the last cookie's focus ends climbs one layer, and the 6th one makes
+// him sick. Each layer has its own cookie (after the robot, so it's drawn in
+// front of him); it is hidden until its layer has focus, and showing it starts
+// its animations afresh. Worked out in tools/frame-lab-ladder-test.svg.
+//
+// The same strips carry the mouse reactions: `gN` says where his eyes look
+// while the mouse is over one (body-css.ts).
+
+import { BACK } from '../constants.ts'
+import { clamp, deg, r1 } from '../math.ts'
+import { cookie, cookieCss } from './cookie.ts'
+import { eatingCss, STAY_EAT, STAY_SICK } from './eating.ts'
+import { SICK_CSS } from './sick.ts'
+
+export const LAYERS = 6
+
+// The strips (`strips`, one set per layer, inside the robot's travelling group),
+// the cookies (`cookies`, after the robot) and all the game's CSS. `top` is the
+// ground's y and `H` the band height: each strip covers the band's full height.
+export function cookieGame(W: number, top: number, H: number): { css: string; strips: string; cookies: string } {
+  const extent = Math.max(W, 300)
+  const strips: Array<{ x: number; w: number; d: number; side: number }> = []
+  for (const side of [-1, 1]) {
+    for (let a = 26; a < extent; ) {
+      const w = a < 300 ? 24 : a < 800 ? 40 : 64
+      strips.push(side > 0 ? { x: a, w, d: a + w / 2, side } : { x: -(a + w), w, d: -(a + w / 2), side })
+      a += w
+    }
+  }
+  let css = ''
+  const one: string[] = []
+  strips.forEach(({ x, w, d, side }, i) => {
+    const far = Math.abs(d)
+    // Where his eyes look while the mouse is over this strip: 6 levels.
+    const g = (side < 0 ? 2 : 3) + side * (far < 80 ? 0 : far < 170 ? 1 : 2)
+    const t = Math.round(clamp(0.26 + far / 1100, 0.3, 1.5) * 100) / 100
+    const back = Math.round(clamp(far / 75, 1.2, 7) * 10) / 10
+    css += `.c${i}:focus,.c${i}:focus~*{--d:${d}px;--w:${r1(deg(d))}deg;--t:${t}s;--r:${back}s;--s:${side}}`
+    // y and height are set in CSS (the same for every strip), to save space.
+    one.push(`class="c c${i} g${g} L@" tabindex="0" x="${x}" width="${w}"`)
+  })
+  let strip = ''
+  let cookies = ''
+  for (let k = 1; k <= LAYERS; k++) {
+    strip += one.map(a => `<rect ${a.replace('@', String(k))}/>`).join('')
+    cookies += cookie(k)
+  }
+  return { css: css + gameCss(top, H), strips: strip, cookies }
+}
+
+// Dash to the cookie (head leaning back, eyes on it), eat it, joy, then roll
+// back; the strip lets go of the focus a while later.
+function gameCss(top: number, H: number): string {
+  return (
+    `.c{y:${-top}px;height:${H}px}` +
+    `.c:focus{animation:gone 0s calc(var(--t) + var(--r) + 5.5s) forwards}@keyframes gone{to{visibility:hidden}}` +
+    // Only the layer after the focused one takes clicks.
+    `.L2,.L3,.L4,.L5,.L6{pointer-events:none}` +
+    `.L1:focus~.L2,.L2:focus~.L3,.L3:focus~.L4,.L4:focus~.L5,.L5:focus~.L6{pointer-events:all}` +
+    `.cu{display:none;pointer-events:none;transform:translate(var(--d),-29px)}` +
+    `.L1:focus~.k1,.L2:focus~.k2,.L3:focus~.k3,.L4:focus~.k4,.L5:focus~.k5,.L6:focus~.k6{display:inline}` +
+    cookieCss(LAYERS) +
+    // His mouth: hidden until he eats.
+    `.mo{transform:scale(0);transform-box:fill-box;transform-origin:center}` +
+    `.bot{transition:transform ${BACK}}.sp{transition:transform ${BACK}}` +
+    // While he goes for a cookie, his mood's face is put aside: one feeling at
+    // a time (Fabio, 2026-11-22: curious mixed with the coin's joy).
+    `.c:focus~.bot .eye{transform:none;animation:none}.c:focus~.bot .top{transform:translateY(-3px);animation:none}` +
+    `.c:focus~.bot .pt{transform:none;animation:none}.c:focus~.bot .lid{transform:none}` +
+    // The roll back is an animation that ends where the focus-free style puts
+    // him, so nothing moves when the focus goes.
+    eatingCss('A', [1, 3, 5], STAY_EAT) +
+    eatingCss('B', [2, 4], STAY_EAT) +
+    eatingCss('C', [6], STAY_SICK) +
+    SICK_CSS
+  )
+}
