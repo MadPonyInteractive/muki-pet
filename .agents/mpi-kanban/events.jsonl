@@ -43,3 +43,4 @@
 {"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-5", "at": "2026-11-22T21:05:17+00:00", "actor": "claude", "from": "doing", "to": "doing", "reason": "Built and checked; waiting for Fabio's eye-test."}
 {"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-14", "at": "2026-11-22T21:19:23+00:00", "actor": "claude", "from": "todo", "to": "doing"}
 {"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-5", "at": "2026-11-22T23:00:07+00:00", "actor": "claude", "from": "doing", "to": "done", "reason": "Fabio saw lonely, mad, tantrum and kick live; one short pet calms a mad Muki (log); temp log removed, checks pass"}
+{"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-14", "at": "2026-11-22T23:01:05+00:00", "actor": "claude", "from": "doing", "to": "done"}
