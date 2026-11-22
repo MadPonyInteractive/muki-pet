@@ -34,6 +34,11 @@ export const propFor = (tool: string): Prop | undefined =>
 export const PROP_GAP = 12 * SECOND
 // A redraw waits this long past a visit's end, so the visit drawing is done.
 export const AFTER_VISIT_MS = 300
+// While your mouse is over the band (petting, cookies, he's watching you) the
+// band doesn't redraw: a new drawing would put him back home mid-game. After
+// the mouse leaves, it waits this long more, so a cookie he's still eating gets
+// finished (Fabio, 2026-11-22).
+export const NEAR_GRACE_MS = 3 * SECOND
 
 // Keys in the mod's store: his home spot, and the last context percentage seen.
 export const STORE_HOME = 'home'

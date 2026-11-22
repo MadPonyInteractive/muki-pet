@@ -10,12 +10,13 @@ import {
   ASLEEP_AFTER,
   FLASH_DEFAULT_MS,
   FLASH_MS,
+  NEAR_GRACE_MS,
   PROP_GAP,
   SECOND,
   SLEEPY_AFTER,
 } from './config.ts'
 
-export type TimerName = 'flash' | 'sleepy' | 'asleep' | 'visitEnd'
+export type TimerName = 'flash' | 'sleepy' | 'asleep' | 'visitEnd' | 'nearEnd'
 
 // A prop visit. Its end spot is his new home.
 export type Visit = { prop: Prop; from: number; n: number; start: number; end: number }
@@ -41,7 +42,13 @@ export type State = {
   visit?: Visit
   visits: number
   lastVisit: number
-  // A mood or heat change came during a visit and waits for its end.
+  // Your mouse is over the band, or left it less than NEAR_GRACE_MS ago: the
+  // band keeps its drawing (no redraws, no new props) so he isn't sent home
+  // mid-game.
+  near: boolean
+  nearGrace: boolean
+  // A mood or heat change came during a visit (or while you were near) and
+  // waits for its end.
   deferred: boolean
   // The visit-end timer is running.
   visitEndSet: boolean
@@ -55,6 +62,8 @@ export type Event =
   | { type: 'toolStart'; prop: Prop }
   | { type: 'toolDone'; failed: boolean }
   | { type: 'heat'; level: number }
+  // Your mouse came over the band (true) or left it (false).
+  | { type: 'near'; on: boolean }
   // A timer this machine started.
   | { type: 'timer'; name: TimerName }
   // Seen while drawing the band: change the state, never cause a redraw.
@@ -80,6 +89,8 @@ export const initialState = (): State => ({
   width: 0,
   visits: 0,
   lastVisit: -Infinity,
+  near: false,
+  nearGrace: false,
   deferred: false,
   visitEndSet: false,
 })
@@ -88,6 +99,9 @@ export const initialState = (): State => ({
 export const feeling = (s: State): Mood => (s.asking ? 'curious' : (s.flash ?? s.base))
 
 export const activeVisit = (s: State, now: number) => (s.visit && now < s.visit.end ? s.visit : undefined)
+
+// The band keeps the drawing it shows while you're with him.
+export const nearHold = (s: State) => s.near || s.nearGrace
 
 export function step(state: State, event: Event, now: number): { state: State; effects: Effect[] } {
   const s: State = { ...state }
@@ -107,8 +121,13 @@ export function step(state: State, event: Event, now: number): { state: State; e
     s.visitEndSet = true
     fx.push({ type: 'startTimer', name: 'visitEnd', ms })
   }
-  // A visit is never cut short: a redraw during one waits for its end.
+  // A visit is never cut short: a redraw during one waits for its end. Nor is
+  // your play with him: a redraw then waits until you've gone.
   const redraw = () => {
+    if (nearHold(s)) {
+      s.deferred = true
+      return
+    }
     const v = activeVisit(s, now)
     if (v) {
       s.deferred = true
@@ -124,7 +143,7 @@ export function step(state: State, event: Event, now: number): { state: State; e
     redraw()
   }
   const startVisit = (prop: Prop) => {
-    if (s.mood === 'asleep' || !s.width || now - s.lastVisit < PROP_GAP || activeVisit(s, now)) return
+    if (s.mood === 'asleep' || nearHold(s) || !s.width || now - s.lastVisit < PROP_GAP || activeVisit(s, now)) return
     const n = ++s.visits
     const plan = visitPlan(s.width, s.home, n)
     s.visit = { prop, from: s.home, n, start: now, end: now + plan.end * SECOND }
@@ -173,6 +192,19 @@ export function step(state: State, event: Event, now: number): { state: State; e
       if (event.failed) flash('sad')
       show()
       break
+    // Your mouse over the band holds every redraw; once it has left (and the
+    // grace is over), what waited is drawn.
+    case 'near':
+      if (event.on) {
+        s.near = true
+        s.nearGrace = false
+        fx.push({ type: 'cancelTimer', name: 'nearEnd' })
+      } else if (s.near) {
+        s.near = false
+        s.nearGrace = true
+        fx.push({ type: 'startTimer', name: 'nearEnd', ms: NEAR_GRACE_MS })
+      }
+      break
     case 'heat':
       s.heatKnown = true
       if (event.level !== s.heat) {
@@ -187,8 +219,21 @@ export function step(state: State, event: Event, now: number): { state: State; e
       } else if (event.name === 'sleepy' || event.name === 'asleep') {
         s.base = event.name
         show()
+      } else if (event.name === 'nearEnd') {
+        s.nearGrace = false
+        if (s.deferred) {
+          // A passing mood (happy, sad) that waited gets its full time from now.
+          if (s.flash) flash(s.flash)
+          s.deferred = false
+          redraw()
+        }
       } else {
         s.visitEndSet = false
+        // You're still with him: the plain drawing waits for you to go.
+        if (nearHold(s)) {
+          s.deferred = true
+          break
+        }
         // A passing mood (happy, sad) that waited gets its full time from now.
         if (s.deferred && s.flash) flash(s.flash)
         s.deferred = false

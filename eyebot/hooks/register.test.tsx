@@ -289,3 +289,33 @@ test('a new width replaces the drawing at once, with no old one on top', async (
   expect(all[0]!.props.width).toBe(792)
   await ui.unmount()
 })
+
+test('while your mouse is over the band (the sensor squeezed to 0 wide) a turn does not redraw him; after you go it does', async ($, on) => {
+  on('ui.render', emptyBand)
+  const clock = mock.clock(on, { now: 40_000_000 })
+  on('turn.start', (_$, e) => ({ turnId: e.turnId }))
+  const ui = await $.ui.mount({ ...BAND, surface: 'desktop' })
+  await clock.advance(1000)
+  const sensor = await ui.find({ type: 'Client' })
+  expect(sensor?.props.height).toBe(0) // takes no click from him
+  const shown = (await ui.find({ type: 'Svg' }))?.props.source
+
+  await ui.resize({ columns: 90, rows: 0 })
+  await ui.resize({ columns: 0, rows: 0 }) // the hover squeezes it: mouse over
+  await clock.settle()
+  await $.turn.start({ text: 'hi', turnId: 't-near' })
+  await clock.settle()
+  await clock.advance(1000)
+  const held = (await ui.findAll({ type: 'Svg' })).map(s => s.props.source)
+  expect(held).toEqual([shown])
+
+  await ui.resize({ columns: 90, rows: 0 }) // the mouse left
+  await clock.settle()
+  await clock.advance(1000)
+  expect((await ui.findAll({ type: 'Svg' })).map(s => s.props.source)).toEqual([shown])
+  await clock.advance(2500) // past the grace: the waiting mood is drawn
+  const after = (await ui.findAll({ type: 'Svg' })).map(s => s.props.source)
+  expect(after).not.toContain(undefined)
+  expect(after.some(s => s !== shown)).toBe(true)
+  await ui.unmount()
+})

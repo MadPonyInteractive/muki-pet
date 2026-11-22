@@ -3,8 +3,8 @@
 import { expect, test } from 'claude-code/testing'
 
 import { visitPlan } from '../draw/index.ts'
-import { FLASH_MS, PROP_GAP, SECOND } from './config.ts'
-import { feeling, initialState, step, type Effect, type Event, type State } from './machine.ts'
+import { FLASH_MS, NEAR_GRACE_MS, PROP_GAP, SECOND } from './config.ts'
+import { feeling, initialState, nearHold, step, type Effect, type Event, type State } from './machine.ts'
 
 const go = (s: State, event: Event, now = 0) => step(s, event, now)
 const has = (fx: Effect[], type: Effect['type'], name?: string) =>
@@ -96,4 +96,53 @@ test('a visit with nothing waiting still redraws at its end, so the band ends on
   let r = go(drawn(), { type: 'toolStart', prop: 'pencil' }, 1e6)
   r = go(r.state, { type: 'timer', name: 'visitEnd' }, r.state.visit!.end + 300)
   expect(r.effects).toEqual([{ type: 'redraw' }])
+})
+
+test('while your mouse is over him nothing redraws and no prop drops; what waited is drawn once you have gone', () => {
+  let r = go(drawn(), { type: 'near', on: true })
+  expect(r.effects).toContainEqual({ type: 'cancelTimer', name: 'nearEnd' })
+  r = go(r.state, { type: 'turnStart' })
+  expect(r.state.mood).toBe('alert')
+  expect(has(r.effects, 'redraw')).toBe(false)
+  r = go(r.state, { type: 'toolStart', prop: 'file' }, 50 * SECOND)
+  expect(r.state.visit).toBe(undefined)
+  r = go(r.state, { type: 'heat', level: 2 })
+  expect(has(r.effects, 'redraw')).toBe(false)
+
+  // Leaving starts the grace; still no redraw.
+  r = go(r.state, { type: 'near', on: false })
+  expect(r.effects).toContainEqual({ type: 'startTimer', name: 'nearEnd', ms: NEAR_GRACE_MS })
+  r = go(r.state, { type: 'timer', name: 'flash' })
+  expect(has(r.effects, 'redraw')).toBe(false)
+
+  // Back within the grace: the grace is off, the hold goes on.
+  r = go(r.state, { type: 'near', on: true })
+  expect(has(r.effects, 'cancelTimer', 'nearEnd')).toBe(true)
+  r = go(r.state, { type: 'near', on: false })
+  r = go(r.state, { type: 'timer', name: 'nearEnd' })
+  expect(r.effects).toEqual([{ type: 'redraw' }])
+  expect(nearHold(r.state)).toBe(false)
+})
+
+test('a passing mood that waited for you gets its full time once you have gone', () => {
+  let r = go(drawn(), { type: 'near', on: true })
+  r = go(r.state, { type: 'turnComplete', reason: 'answer' })
+  r = go(r.state, { type: 'near', on: false })
+  r = go(r.state, { type: 'timer', name: 'nearEnd' })
+  expect(r.effects).toContainEqual({ type: 'startTimer', name: 'flash', ms: FLASH_MS.happy })
+  expect(has(r.effects, 'redraw')).toBe(true)
+})
+
+test('a visit that ends while you are near waits for you, and leaving with nothing waiting redraws nothing', () => {
+  let r = go(drawn(), { type: 'toolStart', prop: 'pencil' }, 1e6)
+  r = go(r.state, { type: 'near', on: true })
+  r = go(r.state, { type: 'timer', name: 'visitEnd' }, r.state.visit!.end + 300)
+  expect(has(r.effects, 'redraw')).toBe(false)
+  r = go(r.state, { type: 'near', on: false })
+  r = go(r.state, { type: 'timer', name: 'nearEnd' }, 2e6)
+  expect(r.effects).toEqual([{ type: 'redraw' }])
+
+  r = go(drawn(), { type: 'near', on: true })
+  r = go(r.state, { type: 'near', on: false })
+  expect(go(r.state, { type: 'timer', name: 'nearEnd' }).effects).toEqual([])
 })

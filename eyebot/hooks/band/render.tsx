@@ -14,6 +14,8 @@ import { framesView, swapIn } from './frames.ts'
 const CELL_PX = 8
 // The alt is part of what Desktop compares to keep a frame, so it never changes.
 const ALT = 'Eyebot, a small robot on two wheels'
+// Cells the hover pulls the sensor's right edge in by: more than any band is wide.
+const NEAR_SQUEEZE = 9999
 
 const drawingFor = createDrawings()
 
@@ -55,7 +57,10 @@ export async function renderBand($: EngineInterface, e: Parameters<BandHook>[1],
 
   // The band is shared: what other mods draw here (the context bar) goes under him.
   const below = await next(e)
-  const { Box, Svg } = $.ui.resolve(e)
+  const ui = $.ui.resolve(e)
+  const { Box, Svg } = ui
+  // Not every surface's table has one; without it there's no sensor (no hold).
+  const Client = 'Client' in ui ? ui.Client : undefined
   const width = Math.max(240, e.props.bodyColumns * CELL_PX)
 
   await readHeat($)
@@ -83,11 +88,19 @@ export async function renderBand($: EngineInterface, e: Parameters<BandHook>[1],
     )
   }
 
+  // The keyed Box is a hover scope: while the mouse is anywhere over him (his
+  // frame included), the sensor's Box is squeezed to 0 wide, and band/sensor.ts
+  // tells the hooks. It is 0 tall, so it never takes a click from him.
   return (
     <Box flexDirection="column">
-      <Box flexDirection="column">
+      <Box key="eyebot" flexDirection="column">
         {slot(0)}
         {slot(1)}
+        {Client && (
+          <Box position="absolute" top={0} left={0} right={0} hover={{ right: NEAR_SQUEEZE }}>
+            <Client key="near" module="./sensor.ts" width="100%" height={0} />
+          </Box>
+        )}
       </Box>
       {below}
     </Box>

@@ -60,6 +60,12 @@ Source: `C:\Program Files\WindowsApps\Claude_5.11492.2.0_x64__pzs8sxrjxfjjc\app\
 - **Works in Chromium, but unreachable from a mod:** passing the mood as the frame width (container `width: calc(round(down, 100% - 32px, 32px) + 4k px)`, decoded inside with `@property --k` + `mod(100vw, 32px)` + `@container style(--k: 4px)`). Needs a raw `div` style, which the engine refuses. Note for any `@property`: write `syntax:'\3c length\3e'`, because a `<` inside an SVG `<style>` is parsed as a tag and silently empties the whole stylesheet.
 - **Fails: freezing an animated element with `transform:X!important` + a long transition.** Chromium starts no transition from an animation's value; the element snaps to X. So "stop under the mouse" must stay `animation-play-state:paused`, which is what puts the frame's clock behind the hook's guess.
 
+## Client modules in Desktop (read from `ion-dist.asar`, 2026-11-22, MPI-9)
+
+- Desktop does draw `Client` (`bm`/`wm` near offset 22,117,000): a holder element per Client, with `pointerdown/move/up/enter/leave` and `keydown` listeners, and a `ResizeObserver` on the holder that sends `resize` (columns, rows) to the module when its cell size changes.
+- Pointer events carry whole cells only (`Math.floor(clientX / cellWidth)`): **no `fine` sub-cell position in Desktop**, and `enter`/`leave` carry the last `move`'s cell. So a 1-row strip can't tell which way the pointer crossed it.
+- The trick Eyebot uses (MPI-9): the band's keyed Box is a hover scope; its hover squeezes an absolute 0-tall Box to 0 wide (`right: 9999`), and the `Client` inside sees the resize. 0 columns after having been wide = the pointer is over the band. **Unproven live:** whether the hover scope counts the pointer over the robot's iframe (Chromium normally marks an iframe and its ancestors `:hover` in the parent).
+
 ## Unknowns (to check)
 
 - ~~Does an edit to a `CLAUDE_CODE_PLUGIN_DIRS` mod reload mid-session?~~ Not by itself, but **`/reload-plugins`** reloads it (confirmed in Desktop 2026-11-22, see Loading).

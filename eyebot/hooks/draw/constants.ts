@@ -27,8 +27,11 @@ export const COLORS = {
 // band/frames.ts). He stays hidden in the new one until just before the old one
 // goes, then fades in fast. Showing him early (it was .15s) put two robots in
 // the band whenever the old drawing had him elsewhere, mid-cookie or out on a
-// trip, as the hook cannot know (MPI-9, 2026-11-22). The cost: a new drawing
-// that loads late leaves a short moment with no robot.
+// trip, as the hook cannot know (MPI-9, 2026-11-22). Tried .9s (no overlap at
+// all): he blinked out on every redraw, which is every few seconds while Claude
+// works (Fabio: "flickering a lot"), because the new frame also takes a moment
+// to load. Back to .75s: the 0.15 s overlap hides the load, and while your mouse
+// is over him (cookies, petting) the band doesn't redraw at all (`near`).
 export const FADE_IN = '.75s'
 // How he shows in a new drawing (the `rbin` keyframes are in body-css.ts).
 export const RBIN = `rbin .15s ease-out ${FADE_IN} backwards`

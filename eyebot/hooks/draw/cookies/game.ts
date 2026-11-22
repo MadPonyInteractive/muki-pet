@@ -27,7 +27,9 @@ export const LAYERS = 6
 // ground's y and `H` the band height: each strip covers the band's full height.
 export function cookieGame(W: number, top: number, H: number): { css: string; strips: string; cookies: string } {
   const extent = Math.max(W, 300)
-  const strips: Array<{ x: number; w: number; d: number; side: number }> = []
+  // One strip over his resting spot too: in a game a click on him falls through
+  // to the strips (see gameCss), and a gap there would drop the focus mid-roll.
+  const strips: Array<{ x: number; w: number; d: number; side: number }> = [{ x: -26, w: 52, d: 0, side: 1 }]
   for (const side of [-1, 1]) {
     for (let a = 26; a < extent; ) {
       const w = a < 300 ? 24 : a < 800 ? 40 : 64
@@ -65,6 +67,10 @@ function gameCss(top: number, H: number): string {
     // Only the layer after the focused one takes clicks.
     `.L2,.L3,.L4,.L5,.L6{pointer-events:none}` +
     `.L1:focus~.L2,.L2:focus~.L3,.L3:focus~.L4,.L4:focus~.L5,.L5:focus~.L6{pointer-events:all}` +
+    // In a game a click on him is another cookie where he is, not a boop: a
+    // touch strip taking the focus would drop his roll home mid-way, and he'd
+    // snap home (Fabio, 2026-11-22).
+    `.c:focus~.bot .p{pointer-events:none}` +
     `.cu{display:none;pointer-events:none;transform:translate(var(--d),-29px)}` +
     `.L1:focus~.k1,.L2:focus~.k2,.L3:focus~.k3,.L4:focus~.k4,.L5:focus~.k5,.L6:focus~.k6{display:inline}` +
     cookieCss(LAYERS) +

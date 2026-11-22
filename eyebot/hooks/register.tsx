@@ -7,12 +7,26 @@
 
 import type { Register } from 'claude-code'
 
+import { debugLog } from './band/debug-log.ts'
+import { framesView } from './band/frames.ts'
 import { renderBand } from './band/render.tsx'
 import { heatOf, propFor } from './brain/config.ts'
-import { send } from './brain/runtime.ts'
+import { brainState, send } from './brain/runtime.ts'
 
 export const register: Register = on => {
   on('ui.render', { component: 'AbovePrompt' }, renderBand)
+
+  // The band's sensor (band/sensor.ts): your mouse came over him or left.
+  on('ui.message', async ($, e, next) => {
+    try {
+      const data = e.data as { over?: unknown } | null
+      if (e.element === 'near' && typeof data?.over === 'boolean') {
+        await send($, { type: 'near', on: data.over })
+        debugLog($, `near ${data.over ? 'on' : 'off'}`, framesView(), brainState())
+      }
+    } catch {}
+    return next(e)
+  })
 
   // Heat: the context window filling up warms him.
   on('session.measure', async ($, e, next) => {
