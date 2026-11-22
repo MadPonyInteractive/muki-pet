@@ -8,3 +8,4 @@ Done as the bug step of MPI-7's plan (on the current code, before Phase 1).
 - [ ] Fabio's look in the app: no two robots; watch for a blink with no robot after a redraw
 - [ ] Known, not fixed: a redraw during a cookie game ends the game (the new frame knows nothing of the click)
 - [ ] Fabio 2026-11-22 (reloaded chat): cookie during a redraw, then a fast return home and a little ghosting at the end. Wants him to stay where he ate and idle there (with MPI-6).
+- [ ] Fabio 2026-11-22 (reloaded chat): sending a message with the mouse entering him: ghost + teleport about 100 px right. A redraw while he is away from home still jumps him home, and the fade overlap still shows two.
