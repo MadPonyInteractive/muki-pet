@@ -51,12 +51,12 @@ Optional later: classify the tone of Claude's last reply with `$.model.classify`
 1. Robot renders in the band above the prompt in Desktop: rolls around, head lag, idle blink, looks at the mouse.
 2. Moods driven by turn and tool events.
 3. Ping timer with a toast and a small speech bubble.
-4. Chat via an Input in the pane, with the personality prompt.
-5. Skins and personalities as data files, a settings panel, README, and tests.
-6. Terminal fallback (Raster) and VS Code check.
+4. ~~Chat via an Input in the pane, with the personality prompt.~~ Dropped 2026-11-22 (Fabio): he doesn't talk, and he uses no credits (no model or network calls); keep it that way.
+5. Skins and personalities as data files, a settings panel, README, and tests. (Skins: a good idea, not started.)
+6. ~~Terminal fallback (Raster) and VS Code check.~~ Dropped 2026-11-22 (Fabio): the terminal only takes still images, so his CSS motion can't work there; he stays a Desktop mod.
 
 ## Open questions for the user
 
-- Chat model for the companion: use the Claude Code session's model, or a separate small/local one (the user has an RTX 4060)?
-- Floating always-on-top overlay later (separate helper window), or stay in-pane?
+- ~~Chat model for the companion~~ Settled 2026-11-22: no chat (milestone 4 dropped).
+- ~~Floating always-on-top overlay later (separate helper window), or stay in-pane?~~ Settled 2026-11-22: he stays a mod in the band.
 - ~~Name for the character and the project.~~ Settled 2026-11-22: the robot is Muki (Fabio's first guinea pig); project, repo and plugin are `muki-pet` (github.com/MadPonyInteractive/muki-pet, private).
