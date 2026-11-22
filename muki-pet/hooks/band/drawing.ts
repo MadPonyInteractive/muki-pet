@@ -5,6 +5,7 @@
 
 import { activeVisit, drawingOptions, nearHold, type State } from '../brain/machine.ts'
 import { robotSvg, type Mood } from '../draw/index.ts'
+import { activePile } from '../brain/behaviours/papers.ts'
 
 export function createDrawings() {
   let cached = { key: '', width: 0, mood: 'neutral' as Mood, visit: undefined as number | undefined, source: '' }
@@ -13,19 +14,20 @@ export function createDrawings() {
     // While you're with him, the drawing shown stays (the host redraws the
     // band for its own reasons too); only a new width changes it.
     if (nearHold(s) && cached.source && cached.width === width) return cached.source
-    const active = activeVisit(s, now)
+    // A prop visit or a visit to the paper pile (never both at once).
+    const active = activeVisit(s, now) ?? activePile(s.slices.papers, now)
     // Mid-visit, only a new width makes a new drawing; the rest waits.
     if (active && cached.visit === active.start && cached.width === width) return cached.source
-    const key = `${width}|${s.mood}|${s.heat}|${s.home}`
+    const key = `${width}|${s.mood}|${s.heat}|${s.home}|${s.slices.papers.count}`
     // A visit drawing that outlived its visit is rebuilt as the plain one.
     if (cached.key !== key || (cached.visit !== undefined && !active)) {
-      const { visit } = drawingOptions(s, now)
+      const { visit, pile } = drawingOptions(s, now)
       cached = {
         key,
         width,
         mood: s.mood,
         visit: active?.start,
-        source: robotSvg(width, { mood: s.mood, from: cached.mood, heat: s.heat, home: s.home, visit }),
+        source: robotSvg(width, { mood: s.mood, from: cached.mood, heat: s.heat, home: s.home, visit, pile }),
       }
     }
     return cached.source

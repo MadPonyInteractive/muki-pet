@@ -14,6 +14,7 @@ Read this index first, then the latest file in `handoffs/`.
 ## Current files
 
 - [design/robot.md](design/robot.md): body, colours, motion, mouse reactions
+- [design/papers.md](design/papers.md): the paper pile, one paper per background task, and his eye-roll visit (MPI-14)
 - [architecture/how-it-works.md](architecture/how-it-works.md): the mod, the SVG, the dev loop
 - [research/mods-api.md](research/mods-api.md): what the mods API can and can't do for us
 - [log/2026-11-21.md](log/2026-11-21.md): day one

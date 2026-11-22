@@ -56,8 +56,11 @@ export class Hold extends Behaviour<HoldSlice> {
         s.deferred = true
         return
       }
-      // (visit.ts has the same test as activeVisit; it can't be imported here without a cycle.)
-      const v = ctx.state.slices.visit.visit
+      // (visit.ts and papers.ts have the same test as activeVisit/activePile;
+      // they can't be imported here without a cycle.)
+      const prop = ctx.state.slices.visit.visit
+      const pile = ctx.state.slices.papers.visit
+      const v = prop && ctx.now < prop.end ? prop : pile
       if (v && ctx.now < v.end) {
         s.deferred = true
         afterVisit(v.end - ctx.now + AFTER_VISIT_MS)

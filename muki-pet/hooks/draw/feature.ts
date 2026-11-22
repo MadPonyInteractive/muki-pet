@@ -19,6 +19,9 @@ export type RobotOptions = {
   // A prop he is visiting: from which home, the visit's number, and how far
   // into it this drawing starts. Its end spot is his home.
   visit?: { prop: Prop; from: number; n: number; elapsed: number }
+  // The paper pile (one paper per background task), and a visit to it if one
+  // is playing: from which home, the visit's number, how far into it.
+  pile?: { count: number; visit?: { from: number; n: number; elapsed: number } }
 }
 
 // A visit still playing in this drawing (a finished one draws as no visit).
@@ -42,8 +45,10 @@ export type DrawCtx = {
 //   behind    inside the travelling group, before the robot (invisible strips)
 //   front     inside the travelling group, after the robot (drawn in front)
 //   props     inside the moving group, before everything that travels (a prop)
+//   scene     on the ground line, outside the moving group: stays put while he
+//             wanders (the paper pile), drawn behind him
 // Within one place, features come in the order of the list.
-export type SlotName = 'head' | 'overHead' | 'ground' | 'zones' | 'behind' | 'front' | 'props'
+export type SlotName = 'head' | 'overHead' | 'ground' | 'zones' | 'behind' | 'front' | 'props' | 'scene'
 
 export type Feature = {
   name: string

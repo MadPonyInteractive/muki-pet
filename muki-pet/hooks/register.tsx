@@ -10,6 +10,7 @@ import type { Register } from 'claude-code'
 import { renderBand } from './band/render.tsx'
 import { heatOf } from './character/heat.ts'
 import { propFor } from './character/props.ts'
+import { sendPapers } from './brain/pile-store.ts'
 import { send } from './brain/runtime.ts'
 
 export const register: Register = on => {
@@ -63,6 +64,19 @@ export const register: Register = on => {
     try {
       const failed = 'deny' in result || Boolean((result as { isError?: boolean }).isError)
       await send($, { type: 'toolDone', failed })
+    } catch {}
+    return result
+  })
+
+  // The paper pile: at the end of every turn, one paper per background task
+  // still running (shells, sub-agents, monitors, workflows). A task that ends
+  // wakes Claude, and that turn's end takes its paper away. The count is
+  // saved per chat, so a reload of the mod still shows the pile.
+  on('classic.Stop', async ($, e, next) => {
+    const result = await next(e)
+    try {
+      const tasks = e.background_tasks
+      if (Array.isArray(tasks)) await sendPapers($, tasks.length)
     } catch {}
     return result
   })

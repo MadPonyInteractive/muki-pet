@@ -1,1 +1,2 @@
 {"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-14", "at": "2026-11-22T20:59:26+00:00", "actor": "claude", "column": "todo", "title": "Paper pile: one paper per background task, Muki rolls his eyes at it"}
+{"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-14", "at": "2026-11-22T21:19:23+00:00", "actor": "claude", "from": "todo", "to": "doing"}

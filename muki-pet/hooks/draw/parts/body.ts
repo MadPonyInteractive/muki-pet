@@ -26,7 +26,9 @@ export function robotMarkup(W: number, ground: number, defs: string, slots: Reco
   return (
     `<defs>${FACE_DEFS}${defs}</defs>` +
     `<line x1="0" y1="${ground + 0.5}" x2="${W}" y2="${ground + 0.5}" stroke="${COLORS.bezel}" stroke-opacity=".45"/>` +
-    `<g transform="translate(0,${ground})"><g class="${K.travel} ${K.loop}">` +
+    `<g transform="translate(0,${ground})">` +
+    slots.scene +
+    `<g class="${K.travel} ${K.loop}">` +
     slots.props +
     `<g class="${K.carry}">` +
     slots.behind +

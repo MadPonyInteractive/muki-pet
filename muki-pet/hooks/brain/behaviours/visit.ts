@@ -22,7 +22,9 @@ export class VisitBehaviour extends Behaviour<VisitSlice> {
   on(event: Event, slice: VisitSlice, ctx: Ctx): Result<VisitSlice> {
     const { state, now } = ctx
     if (event.type !== 'toolStart') return { slice, effects: [] }
-    if (state.mood === 'asleep' || held(state.slices.hold) || !state.width || now - slice.lastVisit < PROP_GAP || activeVisit(slice, now)) {
+    // (papers.ts imports this file, so the pile visit is tested inline.)
+    const pile = state.slices.papers.visit
+    if (state.mood === 'asleep' || held(state.slices.hold) || !state.width || now - slice.lastVisit < PROP_GAP || activeVisit(slice, now) || (pile && now < pile.end)) {
       return { slice, effects: [] }
     }
     const n = slice.visits + 1
