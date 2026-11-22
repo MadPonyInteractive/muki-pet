@@ -4,7 +4,7 @@ Fabio's idea, 2026-11-22: a pile of papers at the right-hand end of Muki's road,
 
 ## How it behaves
 
-- **Count:** the `classic.Stop` hook (`register.tsx`) gets `background_tasks` at the end of every turn: shells, sub-agents, monitors and workflows still running. One paper each, at most 6 (`MAX_PAPERS`). When a background task ends, Claude is woken, and that turn's end takes its paper away. The count is saved per chat (`brain/pile-store.ts`, store key `papers`, `{ <session id>: count }`, newest 20 chats), so a reload of the mod reads it back before the first drawing. Added 2026-11-22 after Fabio reloaded and the pile vanished while its task still ran. A turn end that comes in before that read wins over the saved count.
+- **Count:** the `classic.Stop` hook (`register.tsx`) gets `background_tasks` at the end of every turn: shells, sub-agents, monitors and workflows still running. One paper each, at most 6 (`MAX_PAPERS`). When a background task ends, Claude is woken, and that turn's end takes its paper away. The count is saved per chat (`brain/pile-store.ts`, store key `papers`, `{ <session id>: count }`, newest 20 chats), so a reload of the mod reads it back before the first drawing. Added 2026-11-22 after Fabio reloaded and the pile vanished while its task still ran. A turn end that comes in before that read wins over the saved count. A paper is also added the moment Claude starts background work (`tool.call`: Bash or PowerShell with `run_in_background`, Agent, Monitor, Workflow; `startsBackgroundTask` in `pile-store.ts`). Added 2026-11-22 after Fabio saw no paper during a long turn that had started a task, since `classic.Stop` only comes at the turn's end. That end still sets the real count. A shell that Claude Code moves to the background on its own (a timeout) still waits for the turn end.
 - **Pile:** drawn in the new `scene` slot (`draw/feature.ts`, `draw/parts/body.ts`), on the ground line outside the wandering group, so it stays put while he roams. Sheets lie flat with a fixed jitter; the top one has scribbles and lifts a corner every 6 s.
 - **Visits:** first visit 30 s after a pile appears (`PILE_FIRST`), then one every 3 to 6 minutes (`pileGap`), while papers remain. He goes only when Claude is idle (not working or asking), he isn't asleep, your mouse isn't on him, and no prop visit is running. Otherwise he tries again in 30 s.
 - **The visit** (`character/papers.ts` `pilePlan`, CSS in `draw/features/papers.ts`): he rolls to a spot beside the pile, leans toward it and looks at it. Then his eyes roll up and over from right to left, his top lids drop halfway (unimpressed), he shakes his head and rolls 120 to 240 px to the left. That spot is his new home. While he's there no prop visit starts, and redraws wait (`hold.ts`), just as for a prop visit.
@@ -17,6 +17,6 @@ Fabio's idea, 2026-11-22: a pile of papers at the right-hand end of Muki's road,
 
 ## Open
 
-- Fabio's eye-test of the faster eye-roll arc.
+- Live check of the early paper (a task started after a reload shows at once). Eye roll: Fabio, 2026-11-22, "good now".
 
 Seen live (Fabio, 2026-11-22): `classic.Stop` reaches the mod with `background_tasks` filled (a pile appeared for a running task), the visit plays, and the pile survives `/reload-plugins` (tested in another chat).

@@ -8,7 +8,7 @@ import { MAX_PAPERS, PILE_FIRST, PILE_RETRY, pileGap, pilePlan } from '../../cha
 import { SECOND } from '../../character/tuning.ts'
 import { robotSvg } from '../../draw/index.ts'
 import { drawingOptions, initialState, step, type Effect, type Event, type State } from '../machine.ts'
-import { readPapers, sendPapers, STORE_PAPERS } from '../pile-store.ts'
+import { addPaper, readPapers, sendPapers, startsBackgroundTask, STORE_PAPERS } from '../pile-store.ts'
 import { createBrain } from '../runtime.ts'
 
 const go = (s: State, event: Event, now = 0) => step(s, event, now)
@@ -116,6 +116,29 @@ test('a reload of the mod keeps the pile of this chat, and a newer turn end wins
   await sendPapers($, 0, fresh)
   await readPapers($, fresh)
   expect(fresh.state.slices.papers.count).toBe(0)
+})
+
+test('background work Claude starts adds a paper at once; the turn end sets the real count', async () => {
+  expect(startsBackgroundTask('Bash', { command: 'x', run_in_background: true })).toBe(true)
+  expect(startsBackgroundTask('PowerShell', { command: 'x', run_in_background: true })).toBe(true)
+  expect(startsBackgroundTask('Bash', { command: 'x' })).toBe(false)
+  expect(startsBackgroundTask('Agent', { prompt: 'x' })).toBe(true)
+  expect(startsBackgroundTask('Monitor', {})).toBe(true)
+  expect(startsBackgroundTask('Read', { file_path: 'x' })).toBe(false)
+
+  const saved: Record<string, unknown> = {}
+  const $ = {
+    clock: { now: async () => 0, after: () => ({ cancel() {} }) },
+    ui: { invalidate() {} },
+    session: { id: async () => 'chat-a' },
+    store: { get: async (k: string) => saved[k], set: async (k: string, v: unknown) => void (saved[k] = v) },
+  } as unknown as EngineInterface
+  const brain = createBrain()
+  await addPaper($, brain)
+  await addPaper($, brain)
+  expect(brain.state.slices.papers.count).toBe(2)
+  await sendPapers($, 1, brain)
+  expect(brain.state.slices.papers.count).toBe(1)
 })
 
 test('no papers, no pile in the drawing', () => {

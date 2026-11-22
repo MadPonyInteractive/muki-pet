@@ -10,7 +10,7 @@ import type { Register } from 'claude-code'
 import { renderBand } from './band/render.tsx'
 import { heatOf } from './character/heat.ts'
 import { propFor } from './character/props.ts'
-import { sendPapers } from './brain/pile-store.ts'
+import { addPaper, sendPapers, startsBackgroundTask } from './brain/pile-store.ts'
 import { send } from './brain/runtime.ts'
 
 export const register: Register = on => {
@@ -59,6 +59,8 @@ export const register: Register = on => {
     try {
       const prop = !e.agentId && propFor(e.tool)
       if (prop) await send($, { type: 'toolStart', prop })
+      // Background work Claude starts lands on the paper pile straight away.
+      if (!e.agentId && startsBackgroundTask(e.tool, e)) await addPaper($)
     } catch {}
     const result = await next(e)
     try {
