@@ -4,4 +4,4 @@
 - [x] Fabio decides the new thresholds: 20/30/40%, looks unchanged
 - [x] Retune `muki-pet/hooks/character/heat.ts` (the heat test needed no change)
 - [x] Tests pass, `claude plugin validate` passes
-- [ ] Fabio's eye-test in the app after `/reload-plugins`: not recorded. He closed the card with "end session" without saying what he saw (see validation.md)
+- [x] Fabio's eye-test in the app: seen live at 30% on 2026-11-22 (see validation.md)
