@@ -30,3 +30,8 @@
 {"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-8", "at": "2026-11-22T18:25:17+00:00", "actor": "claude", "from": "todo", "to": "doing", "reason": "Fabio picked it up: show the heat levels, then retune"}
 {"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-8", "at": "2026-11-22T18:36:16+00:00", "actor": "claude", "from": "doing", "to": "doing", "reason": "20/30/40 built and tested; waits on Fabio eye-test"}
 {"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-8", "at": "2026-11-22T19:09:08+00:00", "actor": "claude", "from": "doing", "to": "done", "reason": "Heat steps 20/30/40 built, tests 32/32, Fabio ended the session"}
+{"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-1", "at": "2026-11-22T19:13:43+00:00", "actor": "claude", "from": "doing", "to": "done", "reason": "Fabio: finished; ghost work continues in MPI-9"}
+{"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-2", "at": "2026-11-22T19:13:49+00:00", "actor": "claude", "from": "doing", "to": "done", "reason": "Fabio: cookie game finished"}
+{"schema": "mpi-kanban/event/v1", "type": "task.archived", "id": "MPI-1", "at": "2026-11-22T19:13:49+00:00", "actor": "claude", "column": "done", "folder": "kept", "reason": "Fabio: finished and archived"}
+{"schema": "mpi-kanban/event/v1", "type": "task.archived", "id": "MPI-2", "at": "2026-11-22T19:13:49+00:00", "actor": "claude", "column": "done", "folder": "kept", "reason": "Fabio: finished and archived"}
+{"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-9", "at": "2026-11-22T19:13:54+00:00", "actor": "claude", "from": "todo", "to": "doing", "reason": "Fabio picked it up after closing MPI-1/MPI-2"}

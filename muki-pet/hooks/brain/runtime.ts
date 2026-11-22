@@ -19,9 +19,9 @@ export const STORE_HEAT = 'context'
 
 type Timer = { cancel: () => void }
 
-export type Brain = { state: State; timers: Map<TimerName, Timer>; homeAsked: boolean }
+export type Brain = { state: State; timers: Map<TimerName, Timer>; homeLoad?: Promise<void> }
 
-export const createBrain = (): Brain => ({ state: initialState(), timers: new Map(), homeAsked: false })
+export const createBrain = (): Brain => ({ state: initialState(), timers: new Map() })
 
 // The mod's brain (one per load).
 const current = createBrain()
@@ -59,10 +59,15 @@ export async function readHeat($: EngineInterface, brain: Brain = current) {
 }
 
 // His saved home, once per load of the mod.
-export async function readHome($: EngineInterface, brain: Brain = current) {
-  // Set at once, so two renders in a row ask the store once.
-  if (brain.homeAsked) return
-  brain.homeAsked = true
+// Every render waits for the same read: opening a chat fires two renders at
+// once, and one that didn't wait drew him at the default spot, then the saved
+// spot came in and the old drawing stayed on top (two robots, MPI-9).
+export function readHome($: EngineInterface, brain: Brain = current) {
+  brain.homeLoad ??= loadHome($, brain)
+  return brain.homeLoad
+}
+
+async function loadHome($: EngineInterface, brain: Brain) {
   await send($, { type: 'homeSeen' }, brain)
   try {
     const home = await $.store.get(STORE_HOME)

@@ -10,6 +10,7 @@ import { expect, mock, test, type Mounted as TestMounted } from 'claude-code/tes
 
 import { K, heatLevel, moodClass, propClass } from './draw/classes.ts'
 import { MOODS, PROPS, robotSvg, visitPlan, type Mood, type Prop } from './draw/index.ts'
+import { STORE_HOME, createBrain, readHome } from './brain/runtime.ts'
 
 const BAND = {
   plugin: 'muki-pet',
@@ -318,4 +319,27 @@ test('while your mouse is over the band (the sensor squeezed to 0 wide) a turn d
   expect(after.some(s => s !== shown)).toBe(true)
   expect(after.some(s => moodOf(s) !== moodOf(shown))).toBe(true)
   await ui.unmount()
+})
+
+// Opening a chat fires two renders at once. One that didn't wait for his saved
+// spot drew him in the middle, then the saved spot came in and both showed.
+test('two renders at once both wait for his saved spot', async () => {
+  // The test engine has no store: a small fake with a slow one.
+  const saved: Record<string, unknown> = { [STORE_HOME]: 0.3 }
+  const $ = {
+    clock: { now: async () => 0, after: () => ({ cancel() {} }) },
+    ui: { invalidate() {} },
+    store: {
+      get: async (k: string) => {
+        for (let i = 0; i < 5; i++) await Promise.resolve()
+        return saved[k]
+      },
+      set: async () => {},
+    },
+  } as unknown as EngineInterface
+  const brain = createBrain()
+  const first = readHome($, brain)
+  await readHome($, brain)
+  expect(brain.state.home).toBe(0.3)
+  await first
 })
