@@ -35,3 +35,4 @@
 {"schema": "mpi-kanban/event/v1", "type": "task.archived", "id": "MPI-1", "at": "2026-11-22T19:13:49+00:00", "actor": "claude", "column": "done", "folder": "kept", "reason": "Fabio: finished and archived"}
 {"schema": "mpi-kanban/event/v1", "type": "task.archived", "id": "MPI-2", "at": "2026-11-22T19:13:49+00:00", "actor": "claude", "column": "done", "folder": "kept", "reason": "Fabio: finished and archived"}
 {"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-9", "at": "2026-11-22T19:13:54+00:00", "actor": "claude", "from": "todo", "to": "doing", "reason": "Fabio picked it up after closing MPI-1/MPI-2"}
+{"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-9", "at": "2026-11-22T19:38:27+00:00", "actor": "claude", "from": "doing", "to": "done", "reason": "Fabio: new chat shows him, no ghost"}

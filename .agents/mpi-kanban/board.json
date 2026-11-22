@@ -8,10 +8,9 @@
       "MPI-5",
       "MPI-6"
     ],
-    "doing": [
-      "MPI-9"
-    ],
+    "doing": [],
     "done": [
+      "MPI-9",
       "MPI-8",
       "MPI-13",
       "MPI-4",
