@@ -8,7 +8,7 @@
 | `hooks/hooks.json` | Names the hooks module: `{ "modules": ["./register.tsx"] }`. |
 | `hooks/register.tsx` | One `ui.render` hook on `AbovePrompt`. Draws the robot `Svg` (two slots, for the swap) and stacks whatever other mods drew (`await next(e)`) under it. Skips the terminal and surveys. Mood hooks, and `session.measure` for heat. |
 | `hooks/robot.ts` | Builds the robot as one SVG string, `robotSvg(width, { mood, from, at, heat })`. Pure: the same options always give the same string. |
-| `hooks/register.test.tsx` | 9 tests, run with `claude plugin test ./eyebot`. |
+| `hooks/register.test.tsx` | 12 tests, run with `claude plugin test ./eyebot`. |
 
 ## How the drawing works
 
@@ -52,6 +52,5 @@ The band reports its width in text cells (`bodyColumns`). The SVG width is `body
 
 - **Preview without the app:** `node tools/preview.mjs <out-folder>` writes `robot.svg` and `index.html`. Serve that folder (`python -m http.server 8765 --bind 127.0.0.1 --directory <out-folder>`) and open `http://127.0.0.1:8765/robot.svg` in the browser pane. Opening `file:///` gives a static snapshot.
 - **Checks:** `claude plugin validate ./eyebot` and `claude plugin test ./eyebot`. No TypeScript compiler is installed on this machine, so there's no type-check yet.
-- **Getting it to load in a chat:** see the current handoff. A mod written by the plugin-authoring skill lands in `~/.claude/dev-mods/<session-id>/` and loads **only in that session**. Fabio's permanent mods live in `~/.claude/mods/` and load everywhere through `CLAUDE_CODE_PLUGIN_DIRS` in `~/.claude/settings.json`.
+- **Getting it to load in a chat:** `eyebot/` in this repo loads in every chat through `CLAUDE_CODE_PLUGIN_DIRS` in `~/.claude/settings.json` (next to `~/.claude/mods/context-bar`). Edit it here directly. An old copy under `~/.claude/dev-mods/<session-id>/` (where the plugin-authoring skill first put it) loads only in its own session and is obsolete: don't edit it.
 - **After editing `eyebot/`, type `/reload-plugins` in the chat** to see the change without starting a new one.
-- If a session edits a dev-mods copy, copy it back into `eyebot/` here afterwards, or the two drift.
