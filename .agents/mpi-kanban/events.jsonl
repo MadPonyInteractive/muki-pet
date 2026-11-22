@@ -38,3 +38,4 @@
 {"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-9", "at": "2026-11-22T19:38:27+00:00", "actor": "claude", "from": "doing", "to": "done", "reason": "Fabio: new chat shows him, no ghost"}
 {"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-3", "at": "2026-11-22T19:39:22+00:00", "actor": "claude", "from": "todo", "to": "doing", "reason": "Fabio: ghost gone, remove the redraw log"}
 {"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-3", "at": "2026-11-22T19:40:03+00:00", "actor": "claude", "from": "doing", "to": "done", "reason": "Redraw log removed; checks pass"}
+{"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-14", "at": "2026-11-22T20:59:26+00:00", "actor": "claude", "column": "todo", "title": "Paper pile: one paper per background task, Muki rolls his eyes at it"}

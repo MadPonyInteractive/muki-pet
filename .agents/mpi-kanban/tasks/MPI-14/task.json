@@ -1,0 +1,21 @@
+{
+  "schema": "mpi-kanban/task-card/v1",
+  "id": "MPI-14",
+  "title": "Paper pile: one paper per background task, Muki rolls his eyes at it",
+  "description": "On the right end of his road, a small pile of papers on the floor, one per running background task (shell, subagent, monitor, workflow). Now and then Muki rolls over, looks at the pile, rolls his eyes (an 'ugh, work' face) and rolls away. Pile empties as tasks finish.",
+  "column": "todo",
+  "maturity": "idea",
+  "status": "active",
+  "created_at": "2026-11-22T20:59:26+00:00",
+  "updated_at": "2026-11-22T20:59:26+00:00",
+  "links": {
+    "brief": "brief.md",
+    "plan": "plan.md",
+    "checklist": "checklist.md",
+    "validation": "validation.md",
+    "files": "files.json",
+    "events": "events.jsonl",
+    "handoffs": "handoffs/",
+    "research": "research/"
+  }
+}
