@@ -5,7 +5,6 @@
     "todo": [
       "MPI-12",
       "MPI-9",
-      "MPI-8",
       "MPI-3",
       "MPI-5",
       "MPI-6"
@@ -15,6 +14,7 @@
       "MPI-1"
     ],
     "done": [
+      "MPI-8",
       "MPI-13",
       "MPI-4",
       "MPI-7",

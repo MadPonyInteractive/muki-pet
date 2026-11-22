@@ -89,12 +89,12 @@ How full the context window is warms him up, on top of any mood:
 
 | Context | Level | Look |
 | --- | --- | --- |
-| under 15% | 0 | normal |
-| 15-25% | 1 | whole body (head bezel, neck, chassis, wheel rims and tyres) a bit reddish, lids 1 px heavier |
-| 25-35% | 2 | body redder, lids 2 px heavier, a sweat drop slides down one side of his head |
-| 35%+ | 3 | body red, lids 3.5 px heavier, sweat on both sides |
+| under 20% | 0 | normal |
+| 20-29% | 1 | whole body (head bezel, neck, chassis, wheel rims and tyres) a bit reddish, lids 1 px heavier |
+| 30-39% | 2 | body redder, lids 2 px heavier, a sweat drop slides down one side of his head |
+| 40%+ | 3 | body red, lids 3.5 px heavier, sweat on both sides |
 
-No red cheeks (Fabio, 2026-11-22: not red cheeks all the time; the whole body, wheels too). Levels moved down the same day (were 30/50/70%): at 40% Fabio saw almost nothing and said he should really be suffering. Colours made stronger too.
+No red cheeks (Fabio, 2026-11-22: not red cheeks all the time; the whole body, wheels too). Levels moved down the same day (were 30/50/70%): at 40% Fabio saw almost nothing and said he should really be suffering. Colours made stronger too. Retuned again the same day to 20/30/40% (MPI-8): 15/25/35 made him red at 15% and too hot at 25%; the new steps match Fabio's context bar, and 40% is where he changes session, so a suffering Muki means "time for a new chat".
 
 ## Planned
 
