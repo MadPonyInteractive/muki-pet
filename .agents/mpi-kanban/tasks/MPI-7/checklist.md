@@ -12,14 +12,14 @@ Derived 2026-11-22 from `plan.md` (the large plan). The first refactor's list is
 
 ## Bugs on the current code
 
-- [ ] MPI-11 click does nothing (built, waiting on Fabio's look)
-- [ ] MPI-9 ghosts (built, waiting on Fabio's look)
+- [x] MPI-11 click does nothing (Fabio: okay, 2026-11-22)
+- [x] MPI-9 ghosts: no ghosting now; the rest parked until after the refactor (Fabio, 2026-11-22)
 - [x] MPI-10 cookie bites (Fabio: okay, 2026-11-22)
 
 ## Phase 1: One definition per thing (`character/`)
 
-- [ ] `character/` tables; brain no longer imports draw
-- [ ] Mood / Prop / heat types derived from the tables
+- [x] `character/` tables; brain no longer imports draw (golden identical, check 0, tests 26/26, validate)
+- [x] Mood / Prop / heat types derived from the tables (missing face / ms / rim fails `npm run check`)
 
 ## Parallel Batch
 

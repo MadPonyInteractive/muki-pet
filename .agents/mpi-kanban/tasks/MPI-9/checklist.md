@@ -18,3 +18,7 @@ Done as the bug step of MPI-7's plan (on the current code, before Phase 1).
 - [x] Built: `.c:focus~.bot .p{pointer-events:none}` + centre strip `c0`; frame lab hit test: in a game his body hits the next layer's strip, outside a game `.p`
 - [x] Fabio: "flickering a lot" while Claude worked: `FADE_IN` .9s blinked him out on every redraw; back to .75s
 - [ ] Fabio's look: no flicker while Claude works; click on him mid-roll = another cookie, no teleport; no two robots
+- [x] Fabio 2026-11-22 (after reload): no ghosting, being sick works.
+- [ ] **Fabio's decision 2026-11-22:** a click ON him must always do the same thing, a boop/pet, also while he eats or rolls home. A cookie only ever comes from clicking an empty spot. So undo "click on him mid-game = cookie" (`.c:focus~.bot .p{pointer-events:none}`), and solve the snap home it causes another way. The in-a-row ladder (sick) stays.
+- [ ] **Fabio 2026-11-22: cookies fail while Claude is thinking or running tools.** Sometimes he reaches the cookie and goes straight back to where he was; other times he never reaches it and is teleported back. So the hover hold does not cover a cookie game during Claude's work (teleporting is back; card stays open).
+- [ ] **Parked by Fabio 2026-11-22:** no animation or behaviour fixes until the MPI-7 refactor is done. Pick this up after it, in the new structure (cookies as a behaviour + feature).

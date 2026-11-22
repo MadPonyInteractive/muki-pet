@@ -3,7 +3,7 @@
 // and hearts float up. A click focuses a strip (tabindex), which starts the
 // boop wobble. The press, bliss and wobble rules are in body-css.ts.
 
-import { COLORS } from './constants.ts'
+import { COLORS } from '../character/palette.ts'
 
 // How far his head leans for each strip, left to right.
 const PETS = [-9, -4, 4, 9]

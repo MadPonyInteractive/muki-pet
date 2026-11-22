@@ -4,17 +4,10 @@
 // feels, when a prop visit runs and when the band redraws lives here, so a new
 // behaviour is a new event or a new case, not a new variable somewhere else.
 
-import { visitPlan, type Mood, type Prop } from '../draw/index.ts'
-import {
-  AFTER_VISIT_MS,
-  ASLEEP_AFTER,
-  FLASH_DEFAULT_MS,
-  FLASH_MS,
-  NEAR_GRACE_MS,
-  PROP_GAP,
-  SECOND,
-  SLEEPY_AFTER,
-} from './config.ts'
+import { visitPlan } from '../character/geometry.ts'
+import { passingMs, type Mood, type PassingMood } from '../character/moods.ts'
+import type { Prop } from '../character/props.ts'
+import { AFTER_VISIT_MS, ASLEEP_AFTER, NEAR_GRACE_MS, PROP_GAP, SECOND, SLEEPY_AFTER } from '../character/tuning.ts'
 
 export type TimerName = 'flash' | 'sleepy' | 'asleep' | 'visitEnd' | 'nearEnd'
 
@@ -25,7 +18,7 @@ export type State = {
   // What he feels: a lasting mood (neutral, focused, sleepy, asleep), a passing
   // one on top (alert, happy, sad), and curious while a question waits for you.
   base: Mood
-  flash?: Mood
+  flash?: PassingMood
   asking: boolean
   // What the band shows. Every drawing starts him resting at his home spot
   // (`home`, a share of the band), so a new drawing never has to guess how far
@@ -107,9 +100,9 @@ export function step(state: State, event: Event, now: number): { state: State; e
   const s: State = { ...state }
   const fx: Effect[] = []
 
-  const flash = (mood: Mood) => {
+  const flash = (mood: PassingMood) => {
     s.flash = mood
-    fx.push({ type: 'startTimer', name: 'flash', ms: FLASH_MS[mood] ?? FLASH_DEFAULT_MS })
+    fx.push({ type: 'startTimer', name: 'flash', ms: passingMs(mood) })
   }
   // Redraws once the visit is over. Always, even with nothing waiting: the
   // visit drawing gives way to a plain one at his new home, so the band's last

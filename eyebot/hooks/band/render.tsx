@@ -3,9 +3,9 @@
 
 import type { EngineInterface, MatchedHook } from 'claude-code'
 
-import { heatOf, STORE_HEAT, STORE_HOME } from '../brain/config.ts'
-import { brainState, note } from '../brain/runtime.ts'
-import { BAND_HEIGHT } from '../draw/index.ts'
+import { brainState, note, STORE_HEAT, STORE_HOME } from '../brain/runtime.ts'
+import { BAND_HEIGHT } from '../character/geometry.ts'
+import { heatOf } from '../character/heat.ts'
 import { debugLog } from './debug-log.ts'
 import { createDrawings } from './drawing.ts'
 import { framesView, swapIn } from './frames.ts'

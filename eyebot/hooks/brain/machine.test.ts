@@ -2,8 +2,9 @@
 
 import { expect, test } from 'claude-code/testing'
 
-import { visitPlan } from '../draw/index.ts'
-import { FLASH_MS, NEAR_GRACE_MS, PROP_GAP, SECOND } from './config.ts'
+import { visitPlan } from '../character/geometry.ts'
+import { passingMs } from '../character/moods.ts'
+import { NEAR_GRACE_MS, PROP_GAP, SECOND } from '../character/tuning.ts'
 import { feeling, initialState, nearHold, step, type Effect, type Event, type State } from './machine.ts'
 
 const go = (s: State, event: Event, now = 0) => step(s, event, now)
@@ -16,7 +17,7 @@ test('a turn: alert, focused once the flash ends, happy for the answer, then cal
   let r = go(drawn(), { type: 'turnStart' })
   expect(r.state.mood).toBe('alert')
   expect(has(r.effects, 'redraw')).toBe(true)
-  expect(r.effects).toContainEqual({ type: 'startTimer', name: 'flash', ms: FLASH_MS.alert })
+  expect(r.effects).toContainEqual({ type: 'startTimer', name: 'flash', ms: passingMs('alert') })
   expect(has(r.effects, 'cancelTimer', 'sleepy') && has(r.effects, 'cancelTimer', 'asleep')).toBe(true)
 
   r = go(r.state, { type: 'timer', name: 'flash' })
@@ -88,7 +89,7 @@ test('a mood change during a visit waits for its end, then gets its full time', 
 
   r = go(r.state, { type: 'timer', name: 'visitEnd' }, r.state.visit!.end + 300)
   expect(has(r.effects, 'redraw')).toBe(true)
-  expect(r.effects).toContainEqual({ type: 'startTimer', name: 'flash', ms: FLASH_MS.happy })
+  expect(r.effects).toContainEqual({ type: 'startTimer', name: 'flash', ms: passingMs('happy') })
   expect(r.state.deferred).toBe(false)
 })
 
@@ -129,7 +130,7 @@ test('a passing mood that waited for you gets its full time once you have gone',
   r = go(r.state, { type: 'turnComplete', reason: 'answer' })
   r = go(r.state, { type: 'near', on: false })
   r = go(r.state, { type: 'timer', name: 'nearEnd' })
-  expect(r.effects).toContainEqual({ type: 'startTimer', name: 'flash', ms: FLASH_MS.happy })
+  expect(r.effects).toContainEqual({ type: 'startTimer', name: 'flash', ms: passingMs('happy') })
   expect(has(r.effects, 'redraw')).toBe(true)
 })
 

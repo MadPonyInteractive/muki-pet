@@ -3,7 +3,7 @@
 // string and the surface has no reason to restart it. It keeps the mood it was
 // drawn with, for the face slide into the next one.
 
-import { SECOND } from '../brain/config.ts'
+import { SECOND } from '../character/tuning.ts'
 import { activeVisit, nearHold, type State } from '../brain/machine.ts'
 import { robotSvg, type Mood } from '../draw/index.ts'
 

@@ -2,8 +2,11 @@
 // sleep z's and blinking. Moods (moods.ts), heat (heat.ts), visits (visit.ts)
 // and the cookie game (cookies/) add their own rules on top.
 
-import { RBIN } from './constants.ts'
+import { FADE_IN } from '../character/tuning.ts'
 import { petCss } from './touch.ts'
+
+// How he shows in a new drawing: hidden until FADE_IN, then a fast fade.
+export const RBIN = `rbin .15s ease-out ${FADE_IN} backwards`
 
 // Where the eyes look while the mouse is over a strip, by its gaze level
 // (`gN`, set per strip in cookies/game.ts).

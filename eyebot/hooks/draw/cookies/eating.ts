@@ -5,7 +5,8 @@
 // (even), and the 6th cookie (set C) adds being sick (sick.ts). All times count
 // from the click; --t is the dash, he eats from there, and rolls home at `stay`.
 
-import { DASH, ROLL, RBIN } from '../constants.ts'
+import { DASH, ROLL } from '../../character/tuning.ts'
+import { RBIN } from '../body-css.ts'
 
 export const EAT = 'calc(var(--t) + .15s)'
 export const STAY_EAT = 'calc(var(--t) + 3s)'

@@ -1,7 +1,7 @@
 // Turns the simulated wandering (wander.ts) into CSS keyframes, cached per band
 // width, home spot and whether he roams.
 
-import { FPS } from './constants.ts'
+import { FPS } from '../character/tuning.ts'
 import { deg, pct, r1 } from './math.ts'
 import { simulate } from './wander.ts'
 

@@ -9,12 +9,12 @@
 | `hooks/register.tsx` | Wiring only: each Claude Code event goes to the brain (`send`), `ui.render` on `AbovePrompt` goes to `band/render.tsx`. |
 | `hooks/brain/machine.ts` | **The state machine** (refactor 2026-11-22, MPI-7). Pure `step(state, event, now)` → next state + effects (start/cancel timer, redraw, save home). Every rule about moods, visits and when to redraw. |
 | `hooks/brain/runtime.ts` | Holds the one state and its timers, runs the effects with `$`. |
-| `hooks/brain/config.ts` | Tunables: mood durations, sleep times, tool → prop, prop gap, heat levels, store keys. |
+| `hooks/character/` | **What he is, as data: one definition per thing** (MPI-7 Phase 1, 2026-11-22). `moods.ts` (each mood: lasting or passing, how long, stays home, face rules), `props.ts` (each prop: which tools drop it, its shape), `heat.ts` (each level: from which %, colours, lid droop, sweat; `heatOf`), `palette.ts` (colours, sizes), `tuning.ts` (timings: sleep, prop gap, near grace, fade-in, visit lead-in, easings), `geometry.ts` (band height, edge, `bandX`, `visitPlan`). Imports nothing from `brain/`, `draw/` or `band/`; both of those read it. The `Mood` and `Prop` types come from the tables, so a mood without a face or a passing mood without `ms` is a type error. |
 | `hooks/band/render.tsx` | The band: reads heat and home, picks the drawing, double buffer, JSX. |
 | `hooks/band/sensor.ts` | A `Client` surface module: tells the hooks when your mouse is over the band (see Moods § No redraw while you're with him). |
 | `hooks/band/frames.ts`, `drawing.ts` | Double buffer (two slots, 0.9 s swap); drawing cache per width/mood/heat/home. |
 | `hooks/band/debug-log.ts` | TEMPORARY redraw log (remove with MPI-3). |
-| `hooks/draw/index.ts` | `robotSvg(width, { mood, from, home, heat, visit })`, pure, plus a "where to change what" map of the other `draw/` files: `moods`, `wander`, `keyframes`, `visit`, `props`, `body`, `body-css`, `touch`, `heat`, `constants`, `math`, `cookies/` (`game`, `cookie`, `eating`, `sick`). |
+| `hooks/draw/index.ts` | `robotSvg(width, { mood, from, home, heat, visit })`, pure, plus a "where to change what" map of the other `draw/` files: `moods` (faces as CSS), `wander`, `keyframes`, `visit` (visit CSS), `body`, `body-css`, `touch`, `heat` (heat CSS, generated from `character/heat.ts`), `math`, `cookies/` (`game`, `cookie`, `eating`, `sick`). |
 | `hooks/register.test.tsx`, `hooks/brain/machine.test.ts` | 14 + 8 tests, run with `claude plugin test ./eyebot`. |
 | `tsconfig.json` | Type-check config: extends the engine-written `.claude-plugin/types/` (see Dev workflow). |
 

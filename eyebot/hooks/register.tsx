@@ -10,7 +10,8 @@ import type { Register } from 'claude-code'
 import { debugLog } from './band/debug-log.ts'
 import { framesView } from './band/frames.ts'
 import { renderBand } from './band/render.tsx'
-import { heatOf, propFor } from './brain/config.ts'
+import { heatOf } from './character/heat.ts'
+import { propFor } from './character/props.ts'
 import { brainState, send } from './brain/runtime.ts'
 
 export const register: Register = on => {

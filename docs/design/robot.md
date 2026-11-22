@@ -40,7 +40,7 @@ The band is shared with Fabio's usage-bar mod (`context-bar`): Eyebot sits on to
 
 ## Moods (milestone 2, added 2026-11-22)
 
-What Claude Code is doing sets his face. The looks are a table in `eyebot/hooks/robot.ts` (`MOOD_RULES`); the events are in `eyebot/hooks/register.tsx`.
+What Claude Code is doing sets his face. Each mood (its look, how long it lasts, whether he stays home) is one entry in `eyebot/hooks/character/moods.ts`; the events are in `eyebot/hooks/register.tsx` and `eyebot/hooks/brain/machine.ts`.
 
 | When | Mood | Look | How long |
 | --- | --- | --- | --- |

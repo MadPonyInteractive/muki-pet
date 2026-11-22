@@ -1,58 +1,12 @@
-// A prop visit: where the prop lands, where he stops beside it (his new home),
-// and the CSS that rolls him there, has him inspect it, and poofs it.
+// A prop visit's CSS: it rolls him to the prop, has him inspect it, and poofs
+// it. Where the prop lands and when each step runs is the plan, in
+// character/geometry.ts (visitPlan).
 
-import { EDGE } from './constants.ts'
-import { bandX, clamp, deg, r1 } from './math.ts'
-import { partTransform, type Mood } from './moods.ts'
-
-export type VisitPlan = {
-  fromX: number
-  toX: number
-  // His new home, as a share of the band.
-  toU: number
-  // The prop's x from his new home.
-  off: number
-  // Which way he goes: 1 right, -1 left.
-  s: number
-  // The roll there, its arrival, when he leaves the prop, and the visit's end,
-  // in seconds from the start.
-  go: number
-  arrive: number
-  leave: number
-  end: number
-}
-
-// A visit starts only after the swap that brings it in is over, so the old
-// drawing on top never shows him doing something else beside it. The swap is
-// 0.9 s by the hook's clock, and the redraw that ends it can reach the band late
-// while the app is busy, so the lead-in keeps a margin over it.
-const LEAD = 1.5
-
-// Where the prop goes and how the visit runs. He rolls from his home to the
-// prop, and the spot beside it becomes his new home (no trip back). Only the
-// width, the old home and the visit's number decide it, so the hook and every
-// drawing during one visit agree.
-export function visitPlan(width: number, fromU: number, n: number): VisitPlan {
-  const W = Math.round(width)
-  const fromX = Math.round(bandX(W, fromU))
-  const s = fromX < W / 2 ? 1 : -1
-  const X = clamp(fromX + s * (110 + 120 * ((n * 0.618034) % 1)), 30, W - 30)
-  const toX = Math.round(clamp(X - s * 32, EDGE, Math.max(EDGE, W - EDGE)))
-  const go = Math.round(clamp(Math.abs(toX - fromX) / 110, 0.7, 2.5) * 100) / 100
-  const arrive = 0.9 + go
-  const leave = arrive + 2.4
-  return {
-    fromX,
-    toX,
-    toU: W > 2 * EDGE ? (toX - EDGE) / (W - 2 * EDGE) : 0.5,
-    off: Math.round(X - toX),
-    s,
-    go,
-    arrive,
-    leave,
-    end: Math.round((leave + 0.7 + LEAD) * 100) / 100,
-  }
-}
+import { type VisitPlan } from '../character/geometry.ts'
+import { LEAD } from '../character/tuning.ts'
+import { clamp, deg, r1 } from './math.ts'
+import { partTransform } from './moods.ts'
+import type { Mood } from '../character/moods.ts'
 
 // The visit's CSS. Each part runs one keyframe track over the whole visit,
 // eased per step; `elapsed` picks a later start when a new drawing (a mood

@@ -3,7 +3,7 @@
 // files hook into: `.s` runs the wandering loop, `.ln`/`.pt`/`.tl` lean the
 // head, `.gz`/`.ey` move the eyes, `.eye`/`.top`/`.lid` shape the face.
 
-import { COLORS, SCALE, WHEEL_R } from './constants.ts'
+import { COLORS, SCALE, WHEEL_R } from '../character/palette.ts'
 import { r1 } from './math.ts'
 import { puddle, rainbow } from './cookies/sick.ts'
 import { sweat } from './heat.ts'

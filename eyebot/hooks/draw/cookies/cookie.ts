@@ -1,6 +1,6 @@
 // One cookie: its drawing, its bites and crumbs, and their CSS.
 
-import { COLORS } from '../constants.ts'
+import { COLORS } from '../../character/palette.ts'
 import { r1 } from '../math.ts'
 import { EAT } from './eating.ts'
 

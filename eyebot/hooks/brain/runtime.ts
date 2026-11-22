@@ -8,8 +8,11 @@
 
 import type { EngineInterface } from 'claude-code'
 
-import { STORE_HOME } from './config.ts'
 import { initialState, step, type Effect, type Event, type State, type TimerName } from './machine.ts'
+
+// Keys in the mod's store: his home spot, and the last context percentage seen.
+export const STORE_HOME = 'home'
+export const STORE_HEAT = 'context'
 
 type Timer = { cancel: () => void }
 

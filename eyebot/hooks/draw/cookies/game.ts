@@ -14,7 +14,7 @@
 // The same strips carry the mouse reactions: `gN` says where his eyes look
 // while the mouse is over one (body-css.ts).
 
-import { BACK } from '../constants.ts'
+import { BACK } from '../../character/tuning.ts'
 import { clamp, deg, r1 } from '../math.ts'
 import { cookie, cookieCss } from './cookie.ts'
 import { eatingCss, STAY_EAT, STAY_SICK } from './eating.ts'

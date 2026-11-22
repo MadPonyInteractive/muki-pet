@@ -1,7 +1,8 @@
 // His wandering, simulated frame by frame: where he is, how his head leans on
 // its spring, and where his eyes look. keyframes.ts turns it into CSS.
 
-import { EDGE, FPS } from './constants.ts'
+import { EDGE } from '../character/geometry.ts'
+import { FPS } from '../character/tuning.ts'
 import { clamp, ease, mulberry32 } from './math.ts'
 
 type Segment = { kind: 'idle'; dur: number } | { kind: 'move'; to: number; dur: number }

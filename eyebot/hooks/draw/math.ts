@@ -1,8 +1,8 @@
 // Small number helpers shared by the drawing code.
 
-import { EDGE, WHEEL_R } from './constants.ts'
+import { WHEEL_R } from '../character/palette.ts'
 
-export const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v))
+export { bandX, clamp } from '../character/geometry.ts'
 
 // Minimum-jerk easing: starts and stops with zero speed and zero acceleration.
 export const ease = (u: number) => u * u * u * (10 + u * (-15 + 6 * u))
@@ -15,9 +15,6 @@ export const pct = (i: number, n: number) => `${Math.round((i / n) * 100000) / 1
 
 // How far a wheel turns, in degrees, to roll `px` pixels.
 export const deg = (px: number) => (px / WHEEL_R) * (180 / Math.PI)
-
-// A share of the band (0 = left end, 1 = right end) as an x in pixels.
-export const bandX = (W: number, u: number) => EDGE + clamp(u, 0, 1) * Math.max(0, W - 2 * EDGE)
 
 // A list of [selector, declarations] as CSS.
 export const rules = (list: Array<[string, string]>) => list.map(([sel, decl]) => `${sel}{${decl}}`).join('')
