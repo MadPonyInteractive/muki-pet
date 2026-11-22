@@ -9,4 +9,4 @@ Fabio, 2026-11-22: the robot is **Muki** (his first guinea pig); the project, re
 - [x] `~/.claude/settings.json` CLAUDE_CODE_PLUGIN_DIRS points at `muki-pet`
 - [x] Checks: npm run check 0, golden identical, plugin test, plugin validate
 - [x] Commit and push
-- [ ] Fabio types `/reload-plugins` (his saved home spot starts fresh once: the store file is named by plugin)
+- [x] Fabio: he shows in a new chat (2026-11-22). Open chats keep the old plugin path until a new chat; `/reload-plugins` does not re-read it.

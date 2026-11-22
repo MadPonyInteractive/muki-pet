@@ -4,3 +4,4 @@
 - Repo: github.com/MadPonyInteractive/muki-pet (private), origin repointed, fetch works.
 - `~/.claude/settings.json` CLAUDE_CODE_PLUGIN_DIRS now ends in `/muki-pet`; JSON valid.
 - Left as history: docs/log, docs/handoffs and old card files still say eyebot.
+- Fabio, 2026-11-22: Muki shows in a brand-new chat. The chat open during the rename lost him after `/reload-plugins` (9 plugins, 1 load error): open chats keep the CLAUDE_CODE_PLUGIN_DIRS path they started with.
