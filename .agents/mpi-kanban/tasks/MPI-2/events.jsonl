@@ -1,2 +1,3 @@
 {"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-2", "at": "2026-11-22T03:04:54+00:00", "actor": "claude", "column": "todo", "title": "Check cookie game live"}
 {"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-2", "at": "2026-11-22T17:11:29+00:00", "actor": "claude", "from": "todo", "to": "doing", "reason": "Fabio: clicking on him kept feeding him. Fixed (click on him mid-game feeds nothing, hand cursor); waiting for his eye-test."}
+{"schema": "mpi-kanban/event/v1", "type": "attention.required", "id": "MPI-2", "at": "2026-11-22T18:19:47+00:00", "actor": "claude", "reason": "Fabio eye-test still needed: feed him 6 in a row - does the count feel right, the rainbow, any jump while he rolls home?"}

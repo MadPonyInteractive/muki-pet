@@ -26,3 +26,4 @@
 {"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-13", "at": "2026-11-22T17:43:00+00:00", "actor": "MPI-7 Parallel Batch", "from": "todo", "to": "doing", "reason": "Fabio: rename to Muki / muki-pet"}
 {"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-13", "at": "2026-11-22T17:44:40+00:00", "actor": "MPI-13 rename", "from": "doing", "to": "doing", "reason": "Renamed and pushed; waiting on Fabio's /reload-plugins"}
 {"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-13", "at": "2026-11-22T17:49:33+00:00", "actor": "MPI-13 rename", "from": "doing", "to": "done", "reason": "Fabio: Muki shows in a new chat"}
+{"schema": "mpi-kanban/event/v1", "type": "attention.required", "id": "MPI-2", "at": "2026-11-22T18:19:47+00:00", "actor": "claude", "reason": "Fabio eye-test still needed: feed him 6 in a row - does the count feel right, the rainbow, any jump while he rolls home?"}

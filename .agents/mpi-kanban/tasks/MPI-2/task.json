@@ -7,7 +7,7 @@
   "maturity": "in-progress",
   "status": "active",
   "created_at": "2026-11-22T03:04:54+00:00",
-  "updated_at": "2026-11-22T17:11:29+00:00",
+  "updated_at": "2026-11-22T18:19:47+00:00",
   "links": {
     "brief": "brief.md",
     "plan": "plan.md",
@@ -17,5 +17,10 @@
     "events": "events.jsonl",
     "handoffs": "handoffs/",
     "research": "research/"
+  },
+  "attention": {
+    "state": "required",
+    "reason": "Fabio eye-test still needed: feed him 6 in a row - does the count feel right, the rainbow, any jump while he rolls home?",
+    "updated_at": "2026-11-22T18:19:47+00:00"
   }
 }
