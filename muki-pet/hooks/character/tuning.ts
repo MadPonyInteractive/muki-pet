@@ -7,6 +7,22 @@ export const MINUTE = 60 * SECOND
 export const SLEEPY_AFTER = 5 * MINUTE
 export const ASLEEP_AFTER = 15 * MINUTE
 
+// He needs attention (Fabio, 2026-11-22). Play = your mouse over the band for
+// PLAY_MS or more (a pet or a cookie; the hook can't tell them apart). With no
+// play he gets lonely, then mad, then throws tantrums. Over 30% context he has
+// no energy to get mad: he only gets lonely, TIRED_LONELY after the last play.
+// Shortened 2026-11-22 (was 20/28/35 min): Fabio found 35 min too long.
+export const PLAY_MS = 5 * SECOND
+export const LONELY_AFTER = 10 * MINUTE
+export const MAD_AFTER = 15 * MINUTE
+export const TANTRUM_AFTER = 20 * MINUTE
+export const TIRED_LONELY = 10 * MINUTE
+// The heat level from which he is tired (30% context, character/heat.ts): no
+// anger, and he rolls slowly.
+export const TIRED_HEAT = 2
+// How much slower he rolls when tired.
+export const TIRED_SLOW = 1.8
+
 // At most one prop this often, so the band stays calm and swaps stay rare.
 export const PROP_GAP = 12 * SECOND
 // A redraw waits this long past a visit's end, so the visit drawing is done.

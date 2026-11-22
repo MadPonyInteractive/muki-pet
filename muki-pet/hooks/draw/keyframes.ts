@@ -51,13 +51,13 @@ function eyeKeyframes(xs: number[], ys: number[]): string {
 
 const routes = new Map<string, { kf: string; loop: string }>()
 
-// His wandering around one home spot on one band width: the keyframes (`mv`
+// His wandering around one home spot on one band width (`slow` > 1 when tired): the keyframes (`mv`
 // position, `tl` head tilt, `wh` wheels, `ey` eyes) and the loop length in s.
-export function routeAround(W: number, homeX: number, roam: boolean) {
-  const key = `${W}|${homeX}|${roam}`
+export function routeAround(W: number, homeX: number, roam: boolean, slow = 1) {
+  const key = `${W}|${homeX}|${roam}|${slow}`
   let r = routes.get(key)
   if (!r) {
-    const t = simulate(W, homeX, 7, roam)
+    const t = simulate(W, homeX, 7, roam, slow)
     r = {
       kf:
         keyframes('mv', t.x, 0.4, v => `translateX(${r1(v)}px)`) +

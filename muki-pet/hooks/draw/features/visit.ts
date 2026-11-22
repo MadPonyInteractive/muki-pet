@@ -61,6 +61,7 @@ function cues(v: VisitPlan) {
 // change) comes in the middle of it. While he checks the prop out he wears the
 // curious face, then goes back to the face of his mood.
 export function visitCss(v: VisitPlan, elapsed: number, mood: Mood): string {
+  if (KICKING.includes(mood)) return kickCss(v, elapsed)
   // The visit's own time runs from the end of the lead-in.
   const T = r2(v.end - LEAD)
   elapsed -= LEAD
@@ -119,6 +120,52 @@ export function visitCss(v: VisitPlan, elapsed: number, mood: Mood): string {
       [c.start, 'transform:scale(0)'], [c.popIn, 'transform:scale(1.18)'], [c.popped, 'transform:none'], [c.nudge, 'transform:none'],
       [c.nudgeLeft, 'transform:rotate(-14deg)'], [c.nudgeRight, 'transform:rotate(10deg)'], [c.nudgeBack, 'transform:none'],
       [c.leave, 'transform:none;opacity:1'], [c.puff, 'transform:scale(1.25);opacity:1'], [c.gone, 'transform:scale(0);opacity:0'], [E, 'transform:scale(0);opacity:0'],
+    ])
+  )
+}
+
+// Mad, he kicks the prop away instead (Fabio, 2026-11-22, MPI-5): he glares at
+// it, dashes over, hits it hard (his body jerks into it, his head snaps at it)
+// and it flies off spinning, out of the band. He keeps his mood's face (no "?"
+// or "!"), gives one satisfied hop, and stays there as usual. Same plan and
+// timings as a normal visit, so the hook and the drawing still agree; only
+// the look differs.
+const KICKING: Mood[] = ['mad', 'tantrum']
+
+function kickCss(v: VisitPlan, elapsed: number): string {
+  const T = r2(v.end - LEAD)
+  elapsed -= LEAD
+  const { track } = timeline(T)
+  const run = (name: string) => `animation:${name} ${T}s ease-in-out ${r2(-elapsed)}s both`
+  const { s, arrive: A } = v
+  const E = T
+  const from = v.fromX - v.toX
+  const tx = (px: number) => `transform:translateX(${px}px)`
+  const rot = (d: number) => `transform:rotate(${r1(d)}deg)`
+  // He glares a moment, then dashes in half the time a calm visit takes.
+  const dash = r2(Math.max(0.9, A - v.go * 0.5))
+  const hit = A + 0.06
+  return (
+    `.${K.loop}{animation-delay:${r2(T - elapsed)}s;animation-fill-mode:backwards}` +
+    `.${K.prop}{display:inline}` +
+    // The dash, and a jerk into the kick.
+    `.${K.carry}{${run('vx')}}` +
+    track('vx', [[0, tx(from)], [dash, tx(from)], [A, tx(0)], [hit, tx(s * 7)], [A + 0.3, tx(0)], [E, tx(0)]]) +
+    `.${K.visitWheel}{${run('vw')}}` +
+    track('vw', [[0, rot(deg(from))], [dash, rot(deg(from))], [A, rot(0)], [hit, rot(deg(s * 7))], [A + 0.3, rot(0)], [E, rot(0)]]) +
+    // Head: leans back into the dash, snaps at the prop, then back.
+    `.${K.visiting} .${K.lean}{${run('vl')}}` +
+    track('vl', [[0, rot(0)], [dash, rot(0)], [dash + 0.1, rot(-s * 14)], [A - 0.05, rot(-s * 10)], [hit, rot(s * 24)], [A + 0.45, rot(s * 8)], [A + 1.1, rot(0)], [E, rot(0)]]) +
+    // Eyes on the prop, then following it as it flies.
+    `.${K.visiting} .${K.gaze}{${run('vg')}}` +
+    track('vg', [[0, 'transform:none'], [0.35, `transform:translate(${s * 5}px,0)`], [A + 0.2, `transform:translate(${s * 5}px,-2px)`], [A + 0.7, `transform:translate(${s * 6}px,-3px)`], [A + 1.3, 'transform:none'], [E, 'transform:none']]) +
+    `.${K.visiting} .${K.hop}{animation:hop .5s ease-out ${r2(A + 0.9 - elapsed)}s}` +
+    // The prop: pops in, shivers while he glares, then flies off spinning.
+    `.${K.propAnim}{${run('vpa')}}` +
+    track('vpa', [
+      [0, 'transform:scale(0)'], [0.3, 'transform:scale(1.18)'], [0.45, 'transform:none'], [dash - 0.2, 'transform:none'], [dash - 0.1, 'transform:rotate(-6deg)'], [dash, 'transform:rotate(5deg)'], [dash + 0.1, 'transform:none'],
+      [hit, 'transform:none;opacity:1'], [A + 0.35, `transform:translate(${s * 130}px,-38px) rotate(${s * 300}deg);opacity:1`],
+      [A + 0.75, `transform:translate(${s * 280}px,-14px) rotate(${s * 620}deg);opacity:0`], [E, `transform:translate(${s * 280}px,-14px);opacity:0`],
     ])
   )
 }

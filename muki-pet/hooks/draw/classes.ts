@@ -47,6 +47,10 @@ export const K = {
   // Touch.
   pet: 'p', // a touch strip over him
   heart: 'hrt', // a floating heart
+  // A tantrum: steam puffs and a red "!!" over his head.
+  steam: 'stm',
+  puff: 'pf',
+  bang: 'bng',
   // Sleep and visit marks over his head.
   zz: 'zz',
   z1: 'z1',
@@ -58,6 +62,10 @@ export const K = {
   prop: 'vp', // the prop's position
   propAnim: 'vpa', // the prop's own pop, nudge and poof
   visiting: 'vi', // on the svg root while a visit plays
+  // The paper pile (one paper per background task).
+  pile: 'pl',
+  pileTop: 'plf', // the top sheet, lifting a corner now and then
+  pileVisit: 'pv', // on the svg root while he visits the pile
   // Heat.
   sweat: 'sw',
   sweat1: 'sw1',
@@ -78,6 +86,7 @@ export const K = {
 // Families of classes with a number. Each prefix is its own letter(s) so the
 // families can't meet each other or the table above.
 export const petZone = (i: number) => `p${i}` // touch strip i (which way the head leans)
+export const boopLayer = (k: number) => `q${k}` // touch-strip layer k (boops in a row)
 export const stripNo = (i: number) => `c${i}` // cookie strip i (its distance)
 export const gazeLevel = (i: number) => `g${i}` // where the eyes look over a strip
 export const layerNo = (k: number) => `L${k}` // cookie-game layer k

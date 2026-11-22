@@ -11,6 +11,7 @@
 
 import { BAND_HEIGHT, bandX, visitPlan } from '../character/geometry.ts'
 import { moodDef } from '../character/moods.ts'
+import { TIRED_HEAT, TIRED_SLOW } from '../character/tuning.ts'
 import { K, moodClass } from './classes.ts'
 import type { DrawCtx, RobotOptions, SlotName } from './feature.ts'
 import { FEATURES } from './features/index.ts'
@@ -28,7 +29,9 @@ export function robotSvg(width: number, options: RobotOptions = {}): string {
   // A visit that is over is drawn as the plain drawing at its end spot.
   const visit = plan && options.visit && options.visit.elapsed < plan.end ? { plan, ...options.visit } : undefined
   const d: DrawCtx = { W, ground, H: BAND_HEIGHT, options, mood, visit }
-  const route = routeAround(W, plan ? plan.toX : Math.round(bandX(W, options.home ?? 0.5)), !moodDef(mood).still)
+  // Tired (30% context and over) he rolls slowly.
+  const slow = (options.heat ?? 0) >= TIRED_HEAT ? TIRED_SLOW : 1
+  const route = routeAround(W, plan ? plan.toX : Math.round(bandX(W, options.home ?? 0.5)), !moodDef(mood).still, slow)
 
   const each = (pick: (f: (typeof FEATURES)[number]) => string | undefined) => FEATURES.map(pick).join('')
   const slot = (name: SlotName) => each((f) => f.slots?.[name]?.(d))
@@ -40,6 +43,7 @@ export function robotSvg(width: number, options: RobotOptions = {}): string {
     behind: slot('behind'),
     front: slot('front'),
     props: slot('props'),
+    scene: slot('scene'),
   }
   const roots = [moodClass(mood), ...FEATURES.map((f) => f.rootClass?.(d)).filter(Boolean)].join(' ')
 

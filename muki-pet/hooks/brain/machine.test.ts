@@ -4,7 +4,9 @@ import { expect, test } from 'claude-code/testing'
 
 import { visitPlan } from '../character/geometry.ts'
 import { passingMs } from '../character/moods.ts'
-import { NEAR_GRACE_MS, PROP_GAP, SECOND } from '../character/tuning.ts'
+import {
+  LONELY_AFTER, MAD_AFTER, MINUTE, NEAR_GRACE_MS, PLAY_MS, PROP_GAP, SECOND, TANTRUM_AFTER, TIRED_HEAT, TIRED_LONELY,
+} from '../character/tuning.ts'
 import { ACTIVITY_TABLE, advance, type ActivityState } from './activity.ts'
 import { Hold } from './behaviours/hold.ts'
 import { Reaction } from './behaviours/reaction.ts'
@@ -52,9 +54,10 @@ test('no redraw when nothing he shows changes', () => {
   expect(go(drawn(), { type: 'heat', level: 0 }).effects).toEqual([])
 })
 
-test('what the band sees changes the state and never asks for anything', () => {
+test('what the band sees changes the state and never asks for a redraw', () => {
   for (const event of [{ type: 'band', width: 500 }, { type: 'heatSeen', level: 2 }, { type: 'homeSeen', home: 0.2 }] as Event[]) {
-    expect(go(drawn(), event).effects).toEqual([])
+    // (Heat 2 moves his attention timer: tired, he gets lonely sooner.)
+    expect(go(drawn(), event).effects.filter(f => f.type !== 'startTimer')).toEqual([])
   }
   expect(go(drawn(), { type: 'heatSeen', level: 2 }).state.heat).toBe(2)
   expect(go(drawn(), { type: 'homeSeen', home: 0.2 }).state.home).toBe(0.2)
@@ -139,12 +142,13 @@ test('a passing mood that waited for you gets its full time once you have gone',
 })
 
 test('a visit that ends while you are near waits for you, and leaving with nothing waiting redraws nothing', () => {
-  let r = go(drawn(), { type: 'toolStart', prop: 'pencil' }, 1e6)
+  let r = go(drawn(), { type: 'toolStart', prop: 'pencil' }, 3e5)
   r = go(r.state, { type: 'near', on: true })
   r = go(r.state, { type: 'timer', name: 'hold.visitEnd' }, r.state.slices.visit.visit!.end + 300)
   expect(has(r.effects, 'redraw')).toBe(false)
   r = go(r.state, { type: 'near', on: false })
-  r = go(r.state, { type: 'timer', name: 'hold.nearEnd' }, 2e6)
+  // (Before LONELY_AFTER: he isn't lonely yet, attention.ts.)
+  r = go(r.state, { type: 'timer', name: 'hold.nearEnd' }, 4e5)
   expect(r.effects).toEqual([{ type: 'redraw' }])
 
   r = go(drawn(), { type: 'near', on: true })
@@ -215,4 +219,40 @@ test('hold: a wanted redraw waits for a visit or for you, and is drawn once', ()
   const done = b.on({ type: 'timer', name: 'hold.nearEnd' }, gone.slice, ctx(s))
   expect(done.effects).toEqual([{ type: 'emit', event: { type: 'released' } }, { type: 'redraw' }])
   expect(done.slice.deferred).toBe(false)
+})
+
+test('attention: with no play he gets lonely, then mad, then throws tantrums; play ends it', () => {
+  const at = (s: State, min: number) => go(s, { type: 'timer', name: 'attention.next' }, min * MINUTE)
+  let s = drawn()
+  expect(s.mood).toBe('neutral')
+  let r = at(s, LONELY_AFTER / MINUTE)
+  expect(r.state.mood).toBe('lonely')
+  expect(has(r.effects, 'redraw')).toBe(true)
+  expect(r.effects).toContainEqual({ type: 'startTimer', name: 'attention.next', ms: MAD_AFTER - LONELY_AFTER })
+  expect(at(r.state, MAD_AFTER / MINUTE).state.mood).toBe('mad')
+  s = at(r.state, TANTRUM_AFTER / MINUTE).state
+  expect(s.mood).toBe('tantrum')
+  // A quick pass of the mouse is not play.
+  r = go(s, { type: 'near', on: true }, 40 * MINUTE)
+  r = go(r.state, { type: 'near', on: false }, 40 * MINUTE + PLAY_MS - 1)
+  expect(r.state.mood).toBe('tantrum')
+  // Play is: the mood waits for the hold, then he's fine and the clock restarts.
+  r = go(r.state, { type: 'near', on: true }, 41 * MINUTE)
+  r = go(r.state, { type: 'near', on: false }, 41 * MINUTE + PLAY_MS)
+  expect(r.state.mood).toBe('neutral')
+  expect(r.effects).toContainEqual({ type: 'startTimer', name: 'attention.next', ms: LONELY_AFTER })
+})
+
+test('attention: tired (30% context) he only gets lonely, sooner, and never mad; asleep he shows none', () => {
+  let s = go(drawn(), { type: 'heat', level: TIRED_HEAT }).state
+  let r = go(s, { type: 'timer', name: 'attention.next' }, TIRED_LONELY)
+  expect(r.state.mood).toBe('lonely')
+  r = go(r.state, { type: 'timer', name: 'attention.next' }, TANTRUM_AFTER + MINUTE)
+  expect(r.state.mood).toBe('lonely')
+  // Cooler again: the full ladder from the same clock.
+  expect(go(r.state, { type: 'heat', level: 1 }, TANTRUM_AFTER + MINUTE).state.mood).toBe('tantrum')
+  s = go(drawn(), { type: 'turnComplete', reason: 'answer' }).state
+  s = go(s, { type: 'timer', name: 'reaction.flash' }).state
+  s = go(s, { type: 'timer', name: 'activity.asleep' }, LONELY_AFTER).state
+  expect(s.mood).toBe('asleep')
 })

@@ -15,7 +15,7 @@
 // while the mouse is over one (parts/face.ts).
 
 import { BACK, DASH, ROLL } from '../../../character/tuning.ts'
-import { K, gazeLevel, heartNo, layerNo, cookieNo, stripNo } from '../../classes.ts'
+import { K, boopLayer, gazeLevel, heartNo, layerNo, cookieNo, stripNo } from '../../classes.ts'
 import { clamp, deg, r1 } from '../../math.ts'
 import { cookie, cookieCss } from './cookie.ts'
 import { LET_GO } from './cues.ts'
@@ -95,7 +95,8 @@ function gameCss(top: number, H: number): string {
     `${pressed}{cursor:grabbing}` +
     `${pressed}~${bot} .${K.heart}{animation:hrt 1.1s ease-out infinite}` +
     `${pressed}~${bot} .${heartNo(1)}{animation-delay:.37s}${pressed}~${bot} .${heartNo(2)}{animation-delay:.74s}` +
-    layers.map((n) => `${focused(n)}~${bot} .${K.pet}{animation:tch${n % 2 ? 'A' : 'B'} 0s calc(${STAY_EAT} + var(--r)) forwards}`).join('') +
+    // Only the first boop layer: the others climb from it (features/touch.ts).
+    layers.map((n) => `${focused(n)}~${bot} .${boopLayer(1)}{animation:tch${n % 2 ? 'A' : 'B'} 0s calc(${STAY_EAT} + var(--r)) forwards}`).join('') +
     // Only the focused strip and the layer after it take clicks.
     `${layers.slice(1).map((n) => `.${layerNo(n)}`).join(',')}{pointer-events:none}` +
     `svg:has(${c}:focus) ${c}{pointer-events:none}` +

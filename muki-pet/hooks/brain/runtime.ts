@@ -10,6 +10,7 @@
 import type { EngineInterface } from 'claude-code'
 
 import { heatOf } from '../character/heat.ts'
+import { attentionLog } from './debug-log.ts'
 import { initialState, step } from './machine.ts'
 import type { Effect, Event, State, TimerName } from './types.ts'
 
@@ -35,6 +36,7 @@ export function brainState(brain: Brain = current): State {
 export async function send($: EngineInterface, event: Event, brain: Brain = current) {
   const now = await $.clock.now()
   const next = step(brain.state, event, now)
+  attentionLog($, now, event, brain.state, next.state, next.effects)
   brain.state = next.state
   for (const fx of next.effects) run($, brain, fx)
 }

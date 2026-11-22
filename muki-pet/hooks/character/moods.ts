@@ -66,6 +66,40 @@ export const MOOD_TABLE = {
       ['.gz', 'transform:translate(1px,2px)'],
     ],
   },
+  // He wants attention (brain/behaviours/attention.ts): lonely, then mad, then
+  // tantrums. Lonely is the sad face, lasting until you play with him.
+  lonely: {
+    kind: 'lasting',
+    still: false,
+    face: [
+      ['.topL', 'transform:translateY(4px) rotate(-24deg)'],
+      ['.topR', 'transform:translateY(4px) rotate(24deg)'],
+      ['.gz', 'transform:translateY(3px)'],
+    ],
+  },
+  // Angry: the top lids slant down at the inner corners.
+  mad: {
+    kind: 'lasting',
+    still: false,
+    face: [
+      ['.topL', 'transform:translateY(4px) rotate(20deg)'],
+      ['.topR', 'transform:translateY(4px) rotate(-20deg)'],
+      ['.eye', 'transform:scaleY(.92)'],
+    ],
+  },
+  // Mad, and every 2 min a stomp-and-steam tantrum (draw/features/tantrum.ts).
+  tantrum: {
+    kind: 'lasting',
+    still: true,
+    face: [
+      ['.topL', 'transform:translateY(4px) rotate(20deg)'],
+      ['.topR', 'transform:translateY(4px) rotate(-20deg)'],
+      ['.eye', 'transform:scaleY(.92)'],
+      ['.stm', 'display:inline'],
+      ['.hop', 'animation:stomp 120s linear 2s infinite'],
+      ['.pt', 'animation:shake 120s linear 2s infinite'],
+    ],
+  },
   sleepy: { kind: 'lasting', still: false, face: [['.top', 'transform:translateY(6px)']] },
   asleep: {
     kind: 'lasting',

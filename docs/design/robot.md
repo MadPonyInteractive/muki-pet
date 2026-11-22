@@ -81,7 +81,7 @@ When Claude starts a tool (main agent only), a small prop pops up on the band an
 | Bash, PowerShell | terminal (`>_`) |
 | WebFetch, WebSearch, browser tools | globe |
 
-The visit (about 5.5 to 9 s): the prop pops up 110 to 230 px away on the side with more room; he spots it (eyes on it, a hop); he rolls over with his head leaning back and stops 32 px short; he leans in with a "?"; he nudges it (it wobbles); "!" and a happy squint; from spotting it until the "!" he wears the curious face (right eye bigger, left lid cocked; Fabio asked for this 2026-11-22), then his mood's face comes back; the prop poofs and he stays there: that spot is his new home (Fabio, 2026-11-22: no rushing back). His mood stays as it is throughout (focused during a turn). Mood and heat changes wait until the visit is over (a passing mood like happy then gets its full time).
+The visit (about 5.5 to 9 s): the prop pops up 110 to 230 px away on the side with more room; he spots it (eyes on it, a hop); he rolls over with his head leaning back and stops 32 px short; he leans in with a "?"; he nudges it (it wobbles); "!" and a happy squint; from spotting it until the "!" he wears the curious face (right eye bigger, left lid cocked; Fabio asked for this 2026-11-22), then his mood's face comes back; the prop poofs and he stays there: that spot is his new home (Fabio, 2026-11-22: no rushing back). His mood stays as it is throughout (focused during a turn). **Mad (mad or tantrum mood), he kicks it instead** (Fabio, 2026-11-22, MPI-5): he glares at it while it shivers, dashes over in half the time, jerks into it with his head snapping at it, and it flies off spinning out of the band; no "?"/"!" and no curious face, one satisfied hop, then he stays there. Same plan and timings, so only the drawing differs (`kickCss` in `draw/features/visit.ts`). Mood and heat changes wait until the visit is over (a passing mood like happy then gets its full time).
 
 ## Heat (built 2026-11-22, Fabio's idea)
 
@@ -96,16 +96,25 @@ How full the context window is warms him up, on top of any mood:
 
 No red cheeks (Fabio, 2026-11-22: not red cheeks all the time; the whole body, wheels too). Levels moved down the same day (were 30/50/70%): at 40% Fabio saw almost nothing and said he should really be suffering. Colours made stronger too. Retuned again the same day to 20/30/40% (MPI-8): 15/25/35 made him red at 15% and too hot at 25%; the new steps match Fabio's context bar, and 40% is where he changes session, so a suffering Muki means "time for a new chat".
 
-## Planned
+## Needs attention, mad, tired (built 2026-11-22, MPI-5, Fabio's design; not yet seen live)
 
-- **Mad (Fabio, 2026-11-22):** being booped too many times in a row, or being woken from sleep, makes him mad; a mad Muki dodges your hand and rolls away.
-- **Needs attention (Fabio, 2026-11-22):** if he gets no attention he gets sad, or throws a temper tantrum. Not designed yet: what counts as attention, how long until sad, what a tantrum looks like. The hook can't see clicks or hovers inside his frame (no script), so attention from the mouse needs a way out of the frame first. See the current handoff.
+Context level is his energy. Attention is a pet or a cookie.
+
+- **Under 30% context (he has energy):**
+  - With no attention: **lonely** (the sad face, lasting) after 10 min, **mad** (angry lids: top lids slanted down at the inner corners, eyes a little squinted) at 15 min, **tantrum** from 20 min (Fabio, same day: first 20/28/35 min, 35 was too long). A tantrum: every 2 min, about 5 s of jumping from side to side and landing squashed like stomping (made bigger the same day: Fabio wanted it more obvious, "jump around more"; first it only rocked on his wheels), head shaking "no", four steam puffs off his head and a red "!!" flashing; angry face in between. He stays home in it.
+  - **5 boops in a row** (each within 1.5 s of the last) make him **mad for 15 s**: angry face that stays angry under your hand, no hop, no hearts, no blush, and he dodges your hand, sliding his body 30 px away from the side the mouse is on.
+  - **Woken from sleep:** your mouse on him while he's asleep gets the angry face (no hop, the z's stop) instead of the happy one, for as long as it's there.
+- **Over 30% context (no energy):** he can't get mad: no boop anger, no waking anger, no tantrum. With no attention for 10 min he's lonely. He rolls slowly (trips take 1.8x as long). Boops work as before.
+- A pet or a cookie calms him at once inside the drawing (touch wins over any mood). For the next drawing, the hook counts your mouse over the band for 5 s or more as attention and restarts the clock: it can't tell a pet from a cookie or from just resting the mouse there.
+- Asleep, he shows none of it; the clock keeps running, so if you were away long he may wake up mid-tantrum.
+- Passing moods (alert, happy, sad) and a question waiting for you still show over these.
+- Timings: `character/tuning.ts`; faces: `character/moods.ts` (`lonely`, `mad`, `tantrum`).
 
 ## Known limits of v1
 
 - The route is one pre-made loop of about 62 s, so it repeats. If that's noticeable, re-plan the route now and then.
 - He can't roll toward the mouse; he only stops and looks.
-- He can't tell a click from a long hold, or count clicks (no script). A wiggle also plays once when the page first loads.
+- He can't tell a click from a long hold (no script). Clicks are counted with focus ladders (cookies, boops). A wiggle also plays once when the page first loads.
 
 
 ## Showing up in a new drawing (2026-11-22, MPI-9)

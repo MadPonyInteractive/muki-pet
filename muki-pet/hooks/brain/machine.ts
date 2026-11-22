@@ -10,8 +10,10 @@
 // new file and one line in BEHAVIOURS.
 
 import { initialActivity, advance, activityMood } from './activity.ts'
+import { Attention } from './behaviours/attention.ts'
 import type { Behaviour } from './behaviours/behaviour.ts'
 import { held, Hold } from './behaviours/hold.ts'
+import { Papers } from './behaviours/papers.ts'
 import { Reaction } from './behaviours/reaction.ts'
 import { activeVisit as activeOf, VisitBehaviour } from './behaviours/visit.ts'
 import type { DrawingOptions, Effect, Event, MoodVote, State, Visit } from './types.ts'
@@ -21,10 +23,12 @@ export type { Effect, Event, State, TimerName, Visit } from './types.ts'
 // In the order they run. The hold goes last: it decides about redraws after
 // the others have said what changed.
 const reaction = new Reaction()
+const attention = new Attention()
 const visit = new VisitBehaviour()
+const papers = new Papers()
 const hold = new Hold()
 // Each is keyed in State.slices by its name.
-const BEHAVIOURS: Array<Behaviour<any>> = [reaction, visit, hold]
+const BEHAVIOURS: Array<Behaviour<any>> = [reaction, attention, visit, papers, hold]
 
 export const initialState = (): State => ({
   activity: initialActivity(),
@@ -34,7 +38,7 @@ export const initialState = (): State => ({
   heatKnown: false,
   homeKnown: false,
   width: 0,
-  slices: { reaction: reaction.initial(), visit: visit.initial(), hold: hold.initial() },
+  slices: { reaction: reaction.initial(), attention: attention.initial(), visit: visit.initial(), papers: papers.initial(), hold: hold.initial() },
 })
 
 // The mood that wins: the highest priority among the activity's and the behaviours' votes.
@@ -60,7 +64,7 @@ export function drawingOptions(s: State, now: number): DrawingOptions {
 export function step(state: State, event: Event, now: number): { state: State; effects: Effect[] } {
   const s: State = { ...state, slices: { ...state.slices } }
   const fx: Effect[] = []
-  // Heat is the one thing besides his mood that makes the band want a redraw.
+  // Heat and the paper pile are the things besides his mood that make the band want a redraw.
   let heatChanged = false
 
   // One event through the activity and every behaviour. `top` is the event
@@ -92,7 +96,8 @@ export function step(state: State, event: Event, now: number): { state: State; e
     fx.push(...next.effects)
 
     for (const b of BEHAVIOURS) {
-      const wants = top && (heatChanged || feeling(s) !== s.mood)
+      // A paper more or less in the pile is drawn too.
+      const wants = top && (heatChanged || feeling(s) !== s.mood || s.slices.papers.count !== state.slices.papers.count)
       const r = b.on(ev, s.slices[b.name as keyof State['slices']], { now, state: s, wants })
       Object.assign(s.slices, { [b.name]: r.slice })
       if (r.home !== undefined) s.home = r.home

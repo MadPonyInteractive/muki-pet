@@ -5,12 +5,14 @@
 import type { Mood } from '../character/moods.ts'
 import type { Prop } from '../character/props.ts'
 import type { ActivityState } from './activity.ts'
+import type { AttentionSlice } from './behaviours/attention.ts'
 import type { HoldSlice } from './behaviours/hold.ts'
 import type { ReactionSlice } from './behaviours/reaction.ts'
+import type { PapersSlice } from './behaviours/papers.ts'
 import type { VisitSlice } from './behaviours/visit.ts'
 
 // Timers are namespaced by whoever owns them.
-export type TimerName = 'activity.sleepy' | 'activity.asleep' | 'reaction.flash' | 'hold.visitEnd' | 'hold.nearEnd'
+export type TimerName = 'activity.sleepy' | 'activity.asleep' | 'reaction.flash' | 'hold.visitEnd' | 'hold.nearEnd' | 'attention.next' | 'papers.next'
 
 export type Event =
   // From Claude Code.
@@ -20,6 +22,8 @@ export type Event =
   | { type: 'toolStart'; prop: Prop }
   | { type: 'toolDone'; failed: boolean }
   | { type: 'heat'; level: number }
+  // Background tasks still running at the end of a turn (the paper pile).
+  | { type: 'papers'; count: number }
   // Your mouse came over the band (true) or left it (false).
   | { type: 'near'; on: boolean }
   // A timer this machine started.
@@ -65,7 +69,7 @@ export type State = {
   // The band's width in px, 0 until it is first drawn. A visit needs it.
   width: number
   // One slice per behaviour, under its name.
-  slices: { reaction: ReactionSlice; visit: VisitSlice; hold: HoldSlice }
+  slices: { reaction: ReactionSlice; attention: AttentionSlice; visit: VisitSlice; papers: PapersSlice; hold: HoldSlice }
 }
 
 // What a behaviour is told besides the event.
@@ -89,4 +93,7 @@ export type MoodVote = { mood: Mood; priority: number }
 
 // What a behaviour adds to the drawing (the brain never imports draw/; this
 // has the shape of draw's options).
-export type DrawingOptions = { visit?: { prop: Prop; from: number; n: number; elapsed: number } }
+export type DrawingOptions = {
+  visit?: { prop: Prop; from: number; n: number; elapsed: number }
+  pile?: { count: number; visit?: { from: number; n: number; elapsed: number } }
+}

@@ -2,16 +2,46 @@
 // he hops; while the button is held (petting), the strip under the hand says
 // which way his head leans into it, and hearts float up. A click focuses a
 // strip (tabindex), which starts the boop wobble.
+//
+// Boops in a row (MPI-5): the strips come in BOOP_LAYERS layers, like the
+// cookie game's. A layer takes clicks only while a strip of the layer below
+// has focus, and a focus lasts IN_A_ROW, so each click before then climbs a
+// layer. The top layer is wider and makes him mad (features/mad.ts). Tired
+// (30% context and over) he has no energy for it: the ladder is off.
 
 import { COLORS } from '../../character/palette.ts'
-import { K, heartNo, petZone } from '../classes.ts'
+import { K, boopLayer, heartNo, heatLevel, petZone } from '../classes.ts'
 import type { Feature } from '../feature.ts'
 
 // How far his head leans for each strip, left to right.
 const PETS = [-9, -4, 4, 9]
 
+export const BOOP_LAYERS = 5
+// How long a boop's focus lasts: a click before then is the next in a row.
+const IN_A_ROW = '1.5s'
+// How long he stays mad (the top layer's focus).
+const MAD_FOR = '15s'
+const layers = Array.from({ length: BOOP_LAYERS }, (_, i) => i + 1)
+
+// The top layer is wider, so he can dodge your hand inside it.
 const petZones = () =>
-  PETS.map((_, i) => `<rect class="${K.pet} ${petZone(i)}" x="${-26 + i * 13}" y="-66" width="13" height="68" tabindex="0"/>`).join('')
+  layers
+    .map((k) => {
+      const w = k < BOOP_LAYERS ? 13 : 35
+      return PETS.map((_, i) => `<rect class="${K.pet} ${petZone(i)} ${boopLayer(k)}" x="${-2 * w + i * w}" y="-66" width="${w}" height="68" tabindex="0"/>`).join('')
+    })
+    .join('')
+
+const ladderCss = (bot: string) =>
+  `${layers.slice(1).map((k) => `.${boopLayer(k)}`).join(',')}{pointer-events:none}` +
+  layers.slice(1).map((k) => `${bot}:has(>.${boopLayer(k - 1)}:focus)>.${boopLayer(k)}{pointer-events:all}`).join('') +
+  // Mad: the whole top layer takes the mouse, so he can dodge it.
+  `${bot}:has(>.${boopLayer(BOOP_LAYERS)}:focus)>.${boopLayer(BOOP_LAYERS)}{pointer-events:all}` +
+  `${bot}:not(:active)>.${K.pet}:focus{animation-duration:${IN_A_ROW}}` +
+  `${bot}:not(:active)>.${boopLayer(BOOP_LAYERS)}:focus{animation-duration:${MAD_FOR}}` +
+  // Tired: one layer, and the old quick hand-back of the focus.
+  `.${heatLevel(2)} .${boopLayer(2)},.${heatLevel(3)} .${boopLayer(2)}{pointer-events:none!important}` +
+  `.${heatLevel(2)} ${bot}:not(:active)>.${K.pet}:focus,.${heatLevel(3)} ${bot}:not(:active)>.${K.pet}:focus{animation-duration:.8s}`
 
 const petCss = () => PETS.map((deg, i) => `.${K.bot}:active>.${petZone(i)}:hover~.${K.body} .${K.petTilt}{transform:rotate(${deg}deg)}`).join('')
 
@@ -61,7 +91,8 @@ const touchCss = () =>
   `${bot}:not(:active)>.${K.pet}:focus{animation:pend .8s step-end forwards}` +
   `@keyframes boing{0%{transform:scale(1.07,.9)}35%{transform:scale(.95,1.06)}65%{transform:scale(1.02,.98)}100%{transform:none}}` +
   `@keyframes wob{0%{transform:rotate(-4deg)}22%{transform:rotate(5deg)}45%{transform:rotate(-3deg)}68%{transform:rotate(1.5deg)}100%{transform:none}}` +
-  `@keyframes pend{to{visibility:hidden}}`
+  `@keyframes pend{to{visibility:hidden}}` +
+  ladderCss(bot)
 
 export const touch: Feature = {
   name: 'touch',

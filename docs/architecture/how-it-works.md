@@ -56,6 +56,8 @@ Why this way, and not a frame-by-frame redraw: see `research/mods-api.md`.
   - **Smooth face change:** in the new frame `.bot` is hidden for 0.15 s and fades in over 0.25 s, and each face part that differs gets `animation: fN .45s ease-out .15s backwards` with `@keyframes fN{from{transform:<old face>}}`. (Until 2026-11-22 this was `@starting-style`, which would play while the new frame is still hidden under the old one.) The alert and happy hops wait 0.2 s for the same reason. (First built with 0.38 s and a 480 ms overlap; too tight when the app is busy, see the log.)
 - `robotSvg(width, { mood, from, at, heat })`: the route is simulated once; the body CSS is cached per width; only the root classes, the mood CSS and the delay change. A width or heat change passes `from = mood`, so the face doesn't slide.
 - Every mood hook calls `next(e)` and returns its result untouched, with the mood code in `try`, so it can never block or change a tool call or turn.
+- **Attention (2026-11-22, MPI-5):** `behaviours/attention.ts` keeps `since` (the last play: a `near` on/off pair at least `PLAY_MS` apart, or the first event seen) and votes `lonely`/`mad`/`tantrum` at priority 15 (over the activity's 10, under passing moods' 20). One timer, `attention.next`, is restarted only when the next step's time changes. The steps depend on heat: `TIRED_HEAT` (2, i.e. 30%) and over has only `lonely` after `TIRED_LONELY`. Asleep it votes nothing. Its redraws go through the hold like any mood change.
+- **Slow when tired:** `compose.ts` passes `slow = TIRED_SLOW` to `routeAround` at heat 2+, which stretches every roll in `wander.ts` (same random sequence, so the cool drawings are unchanged).
 
 ## Cookie game: counting clicks in a row with no script (2026-11-22)
 
@@ -66,6 +68,16 @@ Why this way, and not a frame-by-frame redraw: see `research/mods-api.md`.
 - **The 6th:** its focused strip grows to cover the whole band (`x`/`width` in CSS) so further clicks hit it and change nothing, and the robot ignores the pointer while he's sick.
 - Lab proof: `tools/frame-lab-ladder-test.svg` (ladder, alternating names, mask bites, the growing 6th strip). Checked with `:focus` swapped for a class; the real click-to-focus was already proven by the coin game.
 - Size: 78K characters at a 3000 px band (limit 131,072).
+
+## Boops in a row and mad (2026-11-22, MPI-5)
+
+- The four touch strips come in five layers (`q1`..`q5`, `features/touch.ts`), the same trick as the cookie ladder: a layer takes clicks only while `.bot:has(>.q(k-1):focus)`, and a focused strip hides (dropping its focus) after `IN_A_ROW` (1.5 s, was 0.8 s for the single layer). So each click within 1.5 s climbs a layer. `q5` is wider (4 x 35 px) and its focus lasts 15 s: that is mad. While a `q5` has focus all of `q5` takes the mouse, so hovering its outer strips says which side the hand is on.
+- `features/mad.ts`: the angry face for `.mv .bot>.q5:focus~.bd` and for `.m-asleep.h0/.h1 .mv .bot:hover` (woken), with `.mv` in front so it beats touch's happy-face rules; the dodge is a `.bd` transform with a springy transition.
+- Tired (`.h2`/`.h3`): `q2` never takes clicks (`!important`) and the focus hands back after 0.8 s as before.
+- The cookie game's "touch strips come back" animation (`tchA`/`tchB`) now goes on `q1` only; on all `.p` it would have made the wide `q5` clickable after a cookie.
+- `features/tantrum.ts`: the steam and "!!" marks (shown by the tantrum mood) and the `stomp`/`shake`/`puff`/`bang` keyframes, 120 s cycles with the burst in the first 4 s, generated in code.
+- Lab proof (hidden pane, `:focus`/`:hover` swapped for classes, transitions off): five hit-test-and-focus clicks on him climb `q1`..`q5`; `q5`'s hide is 15 s; angry lids under hover; dodge +30 px from the left strips, -30 px from the right; asleep hover = angry, no hop, no z's; at heat 2 the clicks stay on `q1` with 0.8 s. `tools/frame-lab-boop-test.svg` is the drawing used.
+- Size: widest drawing 97,780 characters (was 92,330), limit 131,072.
 
 ## Band width
 

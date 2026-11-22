@@ -7,8 +7,11 @@
 import type { Feature } from '../feature.ts'
 import { cookies } from './cookies/index.ts'
 import { heat } from './heat.ts'
+import { mad } from './mad.ts'
+import { papers } from './papers.ts'
 import { sleep } from './sleep.ts'
+import { tantrum } from './tantrum.ts'
 import { touch } from './touch.ts'
 import { visit } from './visit.ts'
 
-export const FEATURES: readonly Feature[] = [touch, sleep, heat, visit, cookies]
+export const FEATURES: readonly Feature[] = [touch, sleep, tantrum, mad, heat, visit, papers, cookies]

@@ -21,7 +21,8 @@ export type Tracks = { x: number[]; tilt: number[]; eyeX: number[]; eyeY: number
 // a swap out of one of those always finds him at home.
 const FIRST_REST = 8
 
-export function simulate(width: number, home: number, seed: number, roam = true): Tracks {
+// `slow` stretches every roll (he's tired over 30% context).
+export function simulate(width: number, home: number, seed: number, roam = true, slow = 1): Tracks {
   const rand = mulberry32(seed)
   const lo = EDGE
   const hi = Math.max(lo + 1, width - EDGE)
@@ -39,9 +40,9 @@ export function simulate(width: number, home: number, seed: number, roam = true)
     const want = 20 + rand() * 60
     if ((dir < 0 ? home - lo : hi - home) < 40) dir = -dir
     const to = clamp(home + dir * want, lo, hi)
-    const out = Math.max(1, Math.abs(to - home) / (55 + rand() * 60))
+    const out = slow * Math.max(1, Math.abs(to - home) / (55 + rand() * 60))
     const stay = 1 + rand() * 2.5
-    const back = Math.max(1, Math.abs(to - home) / (55 + rand() * 60))
+    const back = slow * Math.max(1, Math.abs(to - home) / (55 + rand() * 60))
     plan.push({ kind: 'idle', dur: rest }, { kind: 'move', to, dur: out }, { kind: 'idle', dur: stay }, { kind: 'move', to: home, dur: back })
     planned += rest + out + stay + back
   }
