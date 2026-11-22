@@ -110,8 +110,11 @@ function gameCss(top: number, H: number): string {
     `${bot}{transition:transform ${BACK}}.${K.spin}{transition:transform ${BACK}}` +
     // While he goes for a cookie, his mood's face is put aside: one feeling at
     // a time (Fabio, 2026-11-22: curious mixed with the coin's joy).
-    `${c}:focus~${bot} .${K.eye}{transform:none;animation:none}${c}:focus~${bot} .${K.top}{transform:translateY(-3px);animation:none}` +
-    `${c}:focus~${bot} .${K.petTilt}{transform:none;animation:none}${c}:focus~${bot} .${K.lid}{transform:none}` +
+    // (Plain eyes come at once; when the focus goes, face.ts holds them GLOW
+    // before his mood's eyes come back.)
+    `${c}:focus~${bot} .${K.eye}{transform:none;animation:none;transition:transform .45s ease-out}` +
+    `${c}:focus~${bot} .${K.top}{transform:translateY(-3px);animation:none;transition:transform .45s ease-out}` +
+    `${c}:focus~${bot} .${K.petTilt}{transform:none;animation:none;transition:transform .45s ease-out}${c}:focus~${bot} .${K.lid}{transform:none}` +
     // The roll back is an animation that ends where the focus-free style puts
     // him, so nothing moves when the focus goes.
     eatingCss('A', [1, 3, 5], STAY_EAT) +

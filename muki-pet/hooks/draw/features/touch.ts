@@ -43,7 +43,7 @@ const ladderCss = (bot: string) =>
   `.${heatLevel(2)} .${boopLayer(2)},.${heatLevel(3)} .${boopLayer(2)}{pointer-events:none!important}` +
   `.${heatLevel(2)} ${bot}:not(:active)>.${K.pet}:focus,.${heatLevel(3)} ${bot}:not(:active)>.${K.pet}:focus{animation-duration:.8s}`
 
-const petCss = () => PETS.map((deg, i) => `.${K.bot}:active>.${petZone(i)}:hover~.${K.body} .${K.petTilt}{transform:rotate(${deg}deg)}`).join('')
+const petCss = () => PETS.map((deg, i) => `.${K.bot}:active>.${petZone(i)}:hover~.${K.body} .${K.petTilt}{transform:rotate(${deg}deg);transition:transform .45s ease-out}`).join('')
 
 // A small heart that floats up while he is being petted.
 function heart(i: number, x: number, y: number): string {
@@ -60,8 +60,13 @@ const bot = `.${K.bot}`
 const touchCss = () =>
   `${bot}:hover .${K.eyesRoam}{transform:translateY(-2px)!important}` +
   // Touch wins over any mood: his face goes back to rest under the happy look.
-  `.${K.travel} ${bot}:hover .${K.eye}{transform:none}.${K.travel} ${bot}:hover .${K.top}{transform:translateY(-3px)}` +
-  `.${K.travel} ${bot}:hover .${K.gaze}{transform:none}.${K.travel} ${bot}:hover .${K.petTilt}{transform:none}` +
+  // Eyes, lids and head start after .3 s (a mouse just crossing him doesn't
+  // count), and once you go they stay plain for GLOW (face.ts) before his
+  // mood's eyes come back (Fabio, 2026-11-22).
+  `.${K.travel} ${bot}:hover .${K.eye}{transform:none;transition:transform .45s ease-out .3s}` +
+  `.${K.travel} ${bot}:hover .${K.top}{transform:translateY(-3px);transition:transform .45s ease-out .3s}` +
+  `.${K.travel} ${bot}:hover .${K.gaze}{transform:none}` +
+  `.${K.travel} ${bot}:hover .${K.petTilt}{transform:none;transition:transform .45s ease-out .3s}` +
   `${bot}:hover .${K.lid}{transform:translateY(-8px)}` +
   `${bot}:hover .${K.hop}{animation:hop .5s ease-out}` +
   // Touch: a press squashes him and closes his eyes in bliss, a drag pets him.

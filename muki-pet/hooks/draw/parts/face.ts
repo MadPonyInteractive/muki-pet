@@ -4,6 +4,7 @@
 // faces (moods.ts) and touch reactions (features/touch.ts) change these parts.
 
 import { COLORS } from '../../character/palette.ts'
+import { GLOW } from '../../character/tuning.ts'
 import { K, gazeLevel } from '../classes.ts'
 
 // One eye: the eye itself, a top lid hidden above it (slides down for angry,
@@ -41,7 +42,12 @@ export const faceCss = () =>
   `.${K.strip}:hover~.${K.bot} .${K.eyesRoam}{transform:none!important}` +
   gazeCss() +
   `.${K.lid}{transition:transform .25s ease-out}` +
-  `.${K.top}{transform:translateY(-3px)}.${K.eye},.${K.top},.${K.petTilt}{transition:transform .45s ease-out}` +
+  // Going back to his mood's eyes waits GLOW: after a pet (touch.ts) or a
+  // cookie (cookies/game.ts) put his face to rest, the plain eyes stay a
+  // while. A transition never plays on load, so no redraw is needed (and none
+  // may be: CLAUDE.md, no redraw from play). Mood changes slide by animation
+  // (draw/moods.ts), so this delay doesn't touch them.
+  `.${K.top}{transform:translateY(-3px)}.${K.eye},.${K.top},.${K.petTilt}{transition:transform .45s ease-out ${GLOW}}` +
   // Blinking: two overlapping rhythms. (`.b1`/`.b2` are taken: the cookie
   // bites once used them too and ran the blink instead of the bite; classes.ts
   // keeps every name apart now.)

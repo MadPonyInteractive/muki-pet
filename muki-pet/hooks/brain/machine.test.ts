@@ -141,6 +141,20 @@ test('a passing mood that waited for you gets its full time once you have gone',
   expect(has(r.effects, 'redraw')).toBe(true)
 })
 
+// Rule (docs/architecture/how-it-works.md § No redraw from play): play happens
+// while he may be out on a wander trip, and any redraw then jumps him home. His
+// reaction to play lives in the drawing's CSS (draw/features/touch.ts), never
+// in a brain mood. A 'pleased' mood here teleported him (Fabio, 2026-11-22).
+test('play with him while he wanders never redraws him', () => {
+  let r = go(drawn(), { type: 'near', on: true })
+  r = go(r.state, { type: 'near', on: false }, PLAY_MS)
+  expect(r.state.mood).toBe('neutral')
+  expect(has(r.effects, 'redraw')).toBe(false)
+  r = go(r.state, { type: 'timer', name: 'hold.nearEnd' }, PLAY_MS + NEAR_GRACE_MS)
+  expect(has(r.effects, 'redraw')).toBe(false)
+  expect(r.state.mood).toBe('neutral')
+})
+
 test('a visit that ends while you are near waits for you, and leaving with nothing waiting redraws nothing', () => {
   let r = go(drawn(), { type: 'toolStart', prop: 'pencil' }, 3e5)
   r = go(r.state, { type: 'near', on: true })

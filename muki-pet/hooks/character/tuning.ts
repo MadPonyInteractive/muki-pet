@@ -57,6 +57,14 @@ export const LEAD = 1.5
 // Simulation frames per second for his wandering.
 export const FPS = 30
 
+// After a pet or a cookie his eyes stay plain and open this long before his
+// mood's eyes (sleepy, sad, curious, ...) come back, so he doesn't seem to
+// ignore you once your hand is gone (Fabio, 2026-11-22: "at least 10 to 20
+// seconds"; no mouth or blush). Pure CSS (a delayed transition back,
+// draw/parts/face.ts), never a brain mood: a mood would redraw him, and a
+// redraw while he's out on a trip jumps him home.
+export const GLOW = '15s'
+
 // Easings for the cookie dash, the roll home, and the 1 s roll back after an
 // early blur.
 export const DASH = 'cubic-bezier(.6,0,.25,1)'

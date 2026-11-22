@@ -8,6 +8,7 @@ Task board: `.agents/mpi-kanban/board.json`. Project profile: `.agents/mpi-kanba
 
 - Edit the mod in `muki-pet/` only; never a `~/.claude/dev-mods/` copy.
 - `robotSvg()` stays pure, and motion lives in CSS keyframes: never animate through `ui.render` redraws or place him with the hook's clock.
+- Every new drawing starts him at his home spot, so a redraw while he's out on a trip makes him jump. Never add a redraw (a brain mood, a timer) triggered by the user's play (pet, boop, cookie): his reaction to play goes in the drawing's CSS. See `docs/architecture/how-it-works.md` § No redraw from play.
 - Every hook calls `next(e)` and returns its result untouched, inside `try`.
 - Original character: no Emo / Wall-E look, no Claude branding or mascot; label it "unofficial".
 
