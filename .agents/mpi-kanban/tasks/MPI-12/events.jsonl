@@ -1,0 +1,1 @@
+{"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-12", "at": "2026-11-22T16:30:29+00:00", "actor": "claude", "column": "todo", "title": "Celebrate when Fabio confirms success"}

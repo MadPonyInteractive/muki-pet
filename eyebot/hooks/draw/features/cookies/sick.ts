@@ -10,9 +10,9 @@ import { CUE, LET_GO_SICK } from './cues.ts'
 const L6 = `.${layerNo(6)}:focus`
 
 export const SICK_CSS =
-  `${L6}{pointer-events:all;x:-5000px;width:12000px;animation:gone 0s calc(var(--t) + var(--r) + ${LET_GO_SICK}s) forwards}` +
+  `${L6}{x:-5000px;width:12000px;cursor:auto;transform:none;transition:none;animation:gone 0s calc(var(--t) + var(--r) + ${LET_GO_SICK}s) forwards}` +
   // No petting him mid-sick (a click on him would end it): clicks go to the strip.
-  `${L6}~.${K.bot},${L6}~.${K.bot} .${K.pet}{pointer-events:none}` +
+  `${L6}~.${K.bot},${L6}~.${K.bot} .${K.pet}{pointer-events:none}${L6}~.${K.bot} .${K.pet}{animation:none}` +
   `${L6}~.${K.bot} .${K.eye}{animation:sickc 5.8s ease-out ${afterDash(CUE.ill)},squeeze 2.9s ease-in-out ${afterDash(CUE.ill)}}` +
   `${L6}~.${K.bot} .${K.top}{animation:droop 3s ease-in-out ${afterDash(CUE.dizzy)}}` +
   `@keyframes sickc{8%,80%{fill:#a5e05a}}` +

@@ -1,1 +1,2 @@
 {"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-8", "at": "2026-11-22T06:15:04+00:00", "actor": "claude", "column": "todo", "title": "Heat: review the hot looks, too hot at 25%"}
+{"schema": "mpi-kanban/event/v1", "type": "task.updated", "id": "MPI-8", "at": "2026-11-22T17:06:05+00:00", "actor": "claude", "summary": "Merged MPI-4 (red at 15%) into this card at Fabio's request."}

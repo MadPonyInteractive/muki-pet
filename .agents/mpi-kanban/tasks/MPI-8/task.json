@@ -1,13 +1,13 @@
 {
   "schema": "mpi-kanban/task-card/v1",
   "id": "MPI-8",
-  "title": "Heat: review the hot looks, too hot at 25%",
-  "description": "Fabio 2026-11-22: at 25% context he already looks really hot. Show Fabio every heat level (h0-h3: colour, heavier lids, sweat) side by side, then retune levels/thresholds (brain/config.ts heatOf, draw/heat.ts). Related: MPI-4.",
+  "title": "Heat: retune the hot looks (red at 15%, too hot at 25%)",
+  "description": "Fabio 2026-11-22: at 25% context he already looks really hot, and he's red at 15% (level 1 starts at 15% by design, reddish-brown). Show Fabio every heat level (h0-h3: colour, heavier lids, sweat) side by side, then retune levels and thresholds: is level 1 too strong, or should it start later? Code: character/heat.ts (and wherever heatOf lives now). Merged from MPI-4 on 2026-11-22.",
   "column": "todo",
   "maturity": "planned",
   "status": "active",
   "created_at": "2026-11-22T06:15:04+00:00",
-  "updated_at": "2026-11-22T06:15:04+00:00",
+  "updated_at": "2026-11-22T17:06:05+00:00",
   "links": {
     "brief": "brief.md",
     "plan": "plan.md",

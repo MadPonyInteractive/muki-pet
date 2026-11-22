@@ -14,8 +14,8 @@
 // The same strips carry the mouse reactions: `gN` says where his eyes look
 // while the mouse is over one (parts/face.ts).
 
-import { BACK } from '../../../character/tuning.ts'
-import { K, gazeLevel, layerNo, cookieNo, stripNo } from '../../classes.ts'
+import { BACK, DASH, ROLL } from '../../../character/tuning.ts'
+import { K, gazeLevel, heartNo, layerNo, cookieNo, stripNo } from '../../classes.ts'
 import { clamp, deg, r1 } from '../../math.ts'
 import { cookie, cookieCss } from './cookie.ts'
 import { LET_GO } from './cues.ts'
@@ -53,12 +53,12 @@ export function cookieGame(W: number, top: number, H: number): { css: string; st
     // y and height are set in CSS (the same for every strip), to save space.
     one.push(`class="${K.strip} ${stripNo(i)} ${gazeLevel(g)} L@" tabindex="0" x="${x}" width="${w}"`)
   })
+  // Layers top-down: L6 first, L1 last, so a focused strip lies over the next
+  // layer's strips (see gameCss: it rides with him and takes clicks on him).
   let strip = ''
   let cookies = ''
-  for (let k = 1; k <= LAYERS; k++) {
-    strip += one.map(a => `<rect ${a.replace('L@', layerNo(k))}/>`).join('')
-    cookies += cookie(k)
-  }
+  for (let k = LAYERS; k >= 1; k--) strip += one.map(a => `<rect ${a.replace('L@', layerNo(k))}/>`).join('')
+  for (let k = 1; k <= LAYERS; k++) cookies += cookie(k)
   return {
     css: `.${K.strip}{fill:#000;fill-opacity:0;pointer-events:all;outline:none}` + css + gameCss(top, H),
     strips: strip,
@@ -73,16 +73,34 @@ const focused = (n: number) => `.${layerNo(n)}:focus`
 function gameCss(top: number, H: number): string {
   const bot = `.${K.bot}`
   const c = `.${K.strip}`
+  const pressed = `${c}:focus:active:not(.${layerNo(LAYERS)})`
   return (
     `${c}{y:${-top}px;height:${H}px}` +
-    `${c}:focus{animation:gone 0s calc(var(--t) + var(--r) + ${LET_GO}s) forwards}@keyframes gone{to{visibility:hidden}}` +
-    // Only the layer after the focused one takes clicks.
-    `${layers.slice(1).map((n) => `.${layerNo(n)}`).join(',')}{pointer-events:none}` +
-    `${layers.slice(0, -1).map((n) => `${focused(n)}~.${layerNo(n + 1)}`).join(',')}{pointer-events:all}` +
-    // In a game a click on him is another cookie where he is, not a boop: a
-    // touch strip taking the focus would drop his roll home mid-way, and he'd
-    // snap home (Fabio, 2026-11-22).
+    // A click on him mid-game feeds nothing (Fabio, 2026-11-22, second pick):
+    // the focused strip shrinks to his size and rides with him, over the next
+    // layer, so a click on him hits the strip that already has focus and
+    // nothing changes. A boop there would move the focus, drop his roll home
+    // mid-way and snap him home, so the touch strips step aside.
+    `${c}:focus{x:-26px;width:52px;cursor:grab;transform:translateX(var(--d));transition:transform var(--t) ${DASH};` +
+    `animation:gone 0s calc(var(--t) + var(--r) + ${LET_GO}s) forwards,ride var(--r) ${ROLL} ${STAY_EAT} forwards,` +
+    `aside 0s calc(${STAY_EAT} + var(--r)) forwards}` +
+    `@keyframes gone{to{visibility:hidden}}@keyframes ride{from{transform:translateX(var(--d))}to{transform:none}}` +
+    // Once he is home the strip steps aside and his touch strips come back (a
+    // boop can't snap him now), while the focus still waits for the next cookie.
+    // (Odd and even layers use different names, so each cookie restarts it.)
+    `@keyframes aside{to{pointer-events:none;cursor:auto}}@keyframes tchA{to{pointer-events:all}}@keyframes tchB{to{pointer-events:all}}` +
     `${c}:focus~${bot} .${K.pet}{pointer-events:none}` +
+    // Petting him while he's out (the press is on the riding strip, which keeps
+    // the focus): hearts float up, the game goes on. Not while he's sick.
+    `${pressed}{cursor:grabbing}` +
+    `${pressed}~${bot} .${K.heart}{animation:hrt 1.1s ease-out infinite}` +
+    `${pressed}~${bot} .${heartNo(1)}{animation-delay:.37s}${pressed}~${bot} .${heartNo(2)}{animation-delay:.74s}` +
+    layers.map((n) => `${focused(n)}~${bot} .${K.pet}{animation:tch${n % 2 ? 'A' : 'B'} 0s calc(${STAY_EAT} + var(--r)) forwards}`).join('') +
+    // Only the focused strip and the layer after it take clicks.
+    `${layers.slice(1).map((n) => `.${layerNo(n)}`).join(',')}{pointer-events:none}` +
+    `svg:has(${c}:focus) ${c}{pointer-events:none}` +
+    `${layers.slice(0, -1).map((n) => `svg:has(${focused(n)}) .${layerNo(n + 1)}`).join(',')}{pointer-events:all}` +
+    `svg:has(${c}:focus) ${c}:focus{pointer-events:all}` +
     `.${K.cookie}{display:none;pointer-events:none;transform:translate(var(--d),-29px)}` +
     `${layers.map((n) => `${focused(n)}~.${cookieNo(n)}`).join(',')}{display:inline}` +
     cookieCss(LAYERS) +
