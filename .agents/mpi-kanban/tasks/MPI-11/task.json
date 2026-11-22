@@ -1,0 +1,21 @@
+{
+  "schema": "mpi-kanban/task-card/v1",
+  "id": "MPI-11",
+  "title": "Clicking him does nothing: no wobble",
+  "description": "Fabio 2026-11-22, after /reload-plugins on the refactored code (37f4866): clicking the character does nothing. He used to wobble while being clicked. Regression to find on the current code (press rules are in eyebot/hooks/draw/body-css.ts: .bot:active .sq / .wg, pet strips in draw/touch.ts, markup in draw/body.ts). Not diagnosed yet. The getting-annoyed-after-many-clicks part is card MPI-5 (never built).",
+  "column": "todo",
+  "maturity": "planned",
+  "status": "active",
+  "created_at": "2026-11-22T06:59:51+00:00",
+  "updated_at": "2026-11-22T06:59:51+00:00",
+  "links": {
+    "brief": "brief.md",
+    "plan": "plan.md",
+    "checklist": "checklist.md",
+    "validation": "validation.md",
+    "files": "files.json",
+    "events": "events.jsonl",
+    "handoffs": "handoffs/",
+    "research": "research/"
+  }
+}
