@@ -32,7 +32,7 @@ Built and committed (2026-11-22), not pushed: MPI-14's commit must land first (a
 
 Next action: read the newest `%TEMP%/claude/muki-pet-attention.log.*` for this chat and check with Fabio:
 1. DONE 2026-11-22 22:02: lonely shows over heat 2 (log and Fabio). Was: over 30% his lonely face may not show: the heat's droopy lid (`.tw`, features/heat.ts) probably covers the sad slant. Fabio: "I don't think sad goes over the tired." Check in the frame lab (mood lonely, heat 2) and make the lonely slant win.
-2. "He stayed angry after petting and cookies" (another chat, before the log existed): not reproduced; suspected boop-mad from clicking him. Ask Fabio to press-and-drag to pet a mad Muki under 30% and read the log.
+2. FOUND 2026-11-22 22:05: the hover sensor loses the mouse 1-3 s into play, so PLAY_MS 5 s rarely fired; now 1 s (0749657), check live after a reload. Was: "He stayed angry after petting and cookies" (another chat, before the log existed): not reproduced; suspected boop-mad from clicking him. Ask Fabio to press-and-drag to pet a mad Muki under 30% and read the log.
 3. Fabio's look at the bigger tantrum and the kick in the app (a chat under 30%).
 4. Remove the TEMPORARY log (`brain/debug-log.ts` and its call in `brain/runtime.ts`) before the card closes.
 
