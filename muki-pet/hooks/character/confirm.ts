@@ -1,0 +1,61 @@
+// Whether your message says "it worked" (MPI-12): then he celebrates. Exact
+// and cheap, no model call. Only a short message counts, so "it works, but..."
+// or a long reply that happens to start with "perfect" does not.
+//
+// A bare "1" is the "looks right" answer to a verify prompt. "Yes" alone is
+// not: it agrees to a plan, it doesn't say something worked.
+
+// The phrases, lower case, without punctuation.
+const PHRASES = new Set([
+  '1',
+  'works',
+  'it works',
+  'that works',
+  'worked',
+  'it worked',
+  'that worked',
+  'working',
+  'its working',
+  'works now',
+  'it works now',
+  'works perfectly',
+  'works great',
+  'perfect',
+  'perfecto',
+  'looks good',
+  'looks right',
+  'looks great',
+  'looks perfect',
+  'all good',
+  'lgtm',
+  'nailed it',
+  'that did it',
+  'fixed',
+  'its fixed',
+  'great',
+  'excellent',
+  'awesome',
+  'brilliant',
+  'amazing',
+  'nice',
+  'yay',
+])
+
+// One filler word in front still counts: "yes it works", "wow perfect".
+const LEAD = /^(yes|yep|yeah|ok|okay|oh|wow|great|nice|cool|ah) /
+
+// Longer than this is a real message, not a cheer.
+const MAX_LENGTH = 40
+
+export function isConfirmation(text: string): boolean {
+  // "works?" asks, it doesn't confirm.
+  if (text.length > MAX_LENGTH || text.includes('?')) return false
+  const words = text
+    .toLowerCase()
+    .replace(/[’']/g, '')
+    // Punctuation and emoji become spaces.
+    .replace(/[^a-z0-9 ]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+  return PHRASES.has(words) || PHRASES.has(words.replace(LEAD, ''))
+}

@@ -46,6 +46,20 @@ export const MOOD_TABLE = {
       ['.hop', 'animation:hop .5s ease-out 1s 2'],
     ],
   },
+  // You said it worked (brain/behaviours/celebrate.ts): happy eyes, he jumps
+  // from side to side and wiggles his head, fireworks go off behind him
+  // (draw/features/celebrate.ts has the keyframes and the fireworks).
+  celebrate: {
+    kind: 'passing',
+    ms: 6500,
+    still: true,
+    face: [
+      ['.lid', 'transform:translateY(-7px)'],
+      ['.eye', 'transform:scale(1.12)'],
+      ['.hop', 'animation:party 1.2s ease-in-out 1s 4'],
+      ['.pt', 'animation:cheer .6s ease-in-out 1s 8'],
+    ],
+  },
   sad: {
     kind: 'passing',
     ms: 5000,

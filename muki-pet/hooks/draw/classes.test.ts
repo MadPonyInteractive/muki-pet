@@ -52,6 +52,8 @@ test('every class a drawing uses is in the registry, and every registered name i
   // A visit to the paper pile (MPI-14).
   const pile = robotSvg(784, { mood: 'happy', pile: { count: 3, visit: { from: 0.1, n: 1, elapsed: 0 } } })
   for (const m of pile.matchAll(/class="([^"]+)"/g)) for (const c of m[1]!.split(' ')) used.add(c)
+  // The fireworks of a celebration (MPI-12).
+  for (const m of robotSvg(784, { mood: 'celebrate' }).matchAll(/class="([^"]+)"/g)) for (const c of m[1]!.split(' ')) used.add(c)
   expect([...used].filter((c) => !known.has(c))).toEqual([])
   expect(values.filter((v) => !used.has(v))).toEqual([])
 })

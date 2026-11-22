@@ -5,6 +5,7 @@
 // last so their rules and the rainbow come after the others.
 
 import type { Feature } from '../feature.ts'
+import { celebrate } from './celebrate.ts'
 import { cookies } from './cookies/index.ts'
 import { headsetFeature } from './headset.ts'
 import { heat } from './heat.ts'
@@ -15,4 +16,4 @@ import { tantrum } from './tantrum.ts'
 import { touch } from './touch.ts'
 import { visit } from './visit.ts'
 
-export const FEATURES: readonly Feature[] = [touch, sleep, tantrum, mad, heat, headsetFeature, visit, papers, cookies]
+export const FEATURES: readonly Feature[] = [touch, sleep, tantrum, mad, heat, headsetFeature, celebrate, visit, papers, cookies]

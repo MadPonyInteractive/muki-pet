@@ -12,6 +12,7 @@
 import { initialActivity, advance, activityMood } from './activity.ts'
 import { Attention } from './behaviours/attention.ts'
 import type { Behaviour } from './behaviours/behaviour.ts'
+import { Celebrate } from './behaviours/celebrate.ts'
 import { held, Hold } from './behaviours/hold.ts'
 import { Papers } from './behaviours/papers.ts'
 import { Reaction } from './behaviours/reaction.ts'
@@ -23,12 +24,13 @@ export type { Effect, Event, State, TimerName, Visit } from './types.ts'
 // In the order they run. The hold goes last: it decides about redraws after
 // the others have said what changed.
 const reaction = new Reaction()
+const celebrate = new Celebrate()
 const attention = new Attention()
 const visit = new VisitBehaviour()
 const papers = new Papers()
 const hold = new Hold()
 // Each is keyed in State.slices by its name.
-const BEHAVIOURS: Array<Behaviour<any>> = [reaction, attention, visit, papers, hold]
+const BEHAVIOURS: Array<Behaviour<any>> = [reaction, celebrate, attention, visit, papers, hold]
 
 export const initialState = (): State => ({
   activity: initialActivity(),
@@ -38,7 +40,7 @@ export const initialState = (): State => ({
   heatKnown: false,
   homeKnown: false,
   width: 0,
-  slices: { reaction: reaction.initial(), attention: attention.initial(), visit: visit.initial(), papers: papers.initial(), hold: hold.initial() },
+  slices: { reaction: reaction.initial(), celebrate: celebrate.initial(), attention: attention.initial(), visit: visit.initial(), papers: papers.initial(), hold: hold.initial() },
 })
 
 // The mood that wins: the highest priority among the activity's and the behaviours' votes.

@@ -1,0 +1,35 @@
+// The celebration through the whole machine (MPI-12).
+
+import { expect, test } from 'claude-code/testing'
+
+import { passingMs } from '../../character/moods.ts'
+import { initialState, step, type State } from '../machine.ts'
+
+const drawn = (): State => step(initialState(), { type: 'band', width: 720 }, 0).state
+
+test('"it worked" makes him celebrate over the alert and the work, then he settles', () => {
+  let r = step(drawn(), { type: 'turnStart', confirmed: true }, 0)
+  expect(r.state.mood).toBe('celebrate')
+  expect(r.effects).toContainEqual({ type: 'redraw' })
+  expect(r.effects).toContainEqual({ type: 'startTimer', name: 'celebrate.end', ms: passingMs('celebrate') })
+  // The alert's flash ending doesn't cut it short.
+  r = step(r.state, { type: 'timer', name: 'reaction.flash' }, 2500)
+  expect(r.state.mood).toBe('celebrate')
+  r = step(r.state, { type: 'timer', name: 'celebrate.end' }, passingMs('celebrate'))
+  expect(r.state.mood).toBe('focused')
+})
+
+test('any other message is the usual alert', () => {
+  expect(step(drawn(), { type: 'turnStart', confirmed: false }, 0).state.mood).toBe('alert')
+  expect(step(drawn(), { type: 'turnStart' }, 0).state.mood).toBe('alert')
+})
+
+test('with your mouse on him the party waits, and gets its full time once you go', () => {
+  let r = step(drawn(), { type: 'near', on: true }, 0)
+  r = step(r.state, { type: 'turnStart', confirmed: true }, 100)
+  expect(r.effects).not.toContainEqual({ type: 'redraw' })
+  r = step(r.state, { type: 'near', on: false }, 200)
+  r = step(r.state, { type: 'timer', name: 'hold.nearEnd' }, 9000)
+  expect(r.effects).toContainEqual({ type: 'redraw' })
+  expect(r.effects).toContainEqual({ type: 'startTimer', name: 'celebrate.end', ms: passingMs('celebrate') })
+})

@@ -8,6 +8,7 @@
 import type { Register } from 'claude-code'
 
 import { renderBand } from './band/render.tsx'
+import { isConfirmation } from './character/confirm.ts'
 import { heatOf } from './character/heat.ts'
 import { propFor } from './character/props.ts'
 import { addPaper, sendPapers, startsBackgroundTask } from './brain/pile-store.ts'
@@ -45,11 +46,12 @@ export const register: Register = on => {
     return next(e)
   })
 
-  // You sent a message (sub-agents' turns don't count).
+  // You sent a message (sub-agents' turns don't count). A short "it worked"
+  // makes him celebrate.
   on('turn.start', async ($, e, next) => {
     if (!e.agentId) {
       try {
-        await send($, { type: 'turnStart' })
+        await send($, { type: 'turnStart', confirmed: isConfirmation(e.text) })
       } catch {}
     }
     return next(e)

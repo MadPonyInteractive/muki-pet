@@ -71,6 +71,9 @@ export const K = {
   headsetTip: 'hst', // the antenna's blinking tip
   headsetDrop: 'hsd', // on the svg root while it drops on
   headsetLift: 'hsl', // on the svg root while it lifts off
+  // A celebration: fireworks behind him.
+  fireworks: 'fw',
+  burst: 'fwb', // one firework's sparks, growing and fading
   // Heat.
   sweat: 'sw',
   sweat1: 'sw1',

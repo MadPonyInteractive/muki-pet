@@ -6,17 +6,19 @@ import type { Mood } from '../character/moods.ts'
 import type { Prop } from '../character/props.ts'
 import type { ActivityState } from './activity.ts'
 import type { AttentionSlice } from './behaviours/attention.ts'
+import type { CelebrateSlice } from './behaviours/celebrate.ts'
 import type { HoldSlice } from './behaviours/hold.ts'
 import type { ReactionSlice } from './behaviours/reaction.ts'
 import type { PapersSlice } from './behaviours/papers.ts'
 import type { VisitSlice } from './behaviours/visit.ts'
 
 // Timers are namespaced by whoever owns them.
-export type TimerName = 'activity.sleepy' | 'activity.asleep' | 'reaction.flash' | 'hold.visitEnd' | 'hold.nearEnd' | 'attention.next' | 'papers.next'
+export type TimerName = 'activity.sleepy' | 'activity.asleep' | 'reaction.flash' | 'hold.visitEnd' | 'hold.nearEnd' | 'attention.next' | 'papers.next' | 'celebrate.end'
 
 export type Event =
   // From Claude Code.
-  | { type: 'turnStart' }
+  // `confirmed`: your message said it worked (character/confirm.ts).
+  | { type: 'turnStart'; confirmed?: boolean }
   | { type: 'turnComplete'; reason: string }
   | { type: 'toolAsk' }
   | { type: 'toolStart'; prop: Prop }
@@ -69,7 +71,7 @@ export type State = {
   // The band's width in px, 0 until it is first drawn. A visit needs it.
   width: number
   // One slice per behaviour, under its name.
-  slices: { reaction: ReactionSlice; attention: AttentionSlice; visit: VisitSlice; papers: PapersSlice; hold: HoldSlice }
+  slices: { reaction: ReactionSlice; celebrate: CelebrateSlice; attention: AttentionSlice; visit: VisitSlice; papers: PapersSlice; hold: HoldSlice }
 }
 
 // What a behaviour is told besides the event.
