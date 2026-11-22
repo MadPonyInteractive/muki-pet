@@ -1,7 +1,7 @@
 // How hot he runs from how full the context window is, one entry per level:
 // from which percentage, the colours of his bezel, chassis, rims and tyres, how
 // far his top lids droop (px), and how many sweat drops show (0, 1 or 2).
-// Level 0 is his plain look (palette.ts). draw/heat.ts turns this into CSS.
+// Level 0 is his plain look (palette.ts). draw/features/heat.ts turns this into CSS.
 // Cool under 15%, warm from 15, red and sweating from 25, suffering from 35%
 // (Fabio, 2026-11-22: at 40% he should really be suffering).
 

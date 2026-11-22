@@ -23,14 +23,14 @@ Derived 2026-11-22 from `plan.md` (the large plan). The first refactor's list is
 
 ## Parallel Batch
 
-- [ ] Brain: named states + behaviours
-- [ ] Drawing: features, class registry, timeline
+- [x] Brain: named states + behaviours (trace-equal on 837,736 steps; tests 30)
+- [x] Drawing: features, class registry, timeline (golden re-recorded for CSS order only; tests 33)
 
 ## Phase 2: Tests and contributor docs
 
-- [ ] `register.test.tsx` asserts behaviour, not CSS strings
-- [ ] how-it-works.md + how-to-add.md
-- [ ] Fabio eye-test after `/reload-plugins`
+- [x] `register.test.tsx` asserts behaviour, not CSS strings (32/32; reversed, shuffled, alone, doubled all pass; class rename breaks no register test)
+- [x] how-it-works.md + how-to-add.md (mood recipe: one file, type-check 0)
+- [x] Fabio eye-test after `/reload-plugins` ("1, looks the same", 2026-11-22)
 
 ## First refactor (commit 37f4866, done)
 

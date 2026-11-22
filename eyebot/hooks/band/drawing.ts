@@ -3,8 +3,7 @@
 // string and the surface has no reason to restart it. It keeps the mood it was
 // drawn with, for the face slide into the next one.
 
-import { SECOND } from '../character/tuning.ts'
-import { activeVisit, nearHold, type State } from '../brain/machine.ts'
+import { activeVisit, drawingOptions, nearHold, type State } from '../brain/machine.ts'
 import { robotSvg, type Mood } from '../draw/index.ts'
 
 export function createDrawings() {
@@ -20,7 +19,7 @@ export function createDrawings() {
     const key = `${width}|${s.mood}|${s.heat}|${s.home}`
     // A visit drawing that outlived its visit is rebuilt as the plain one.
     if (cached.key !== key || (cached.visit !== undefined && !active)) {
-      const visit = active && { prop: active.prop, from: active.from, n: active.n, elapsed: (now - active.start) / SECOND }
+      const { visit } = drawingOptions(s, now)
       cached = {
         key,
         width,

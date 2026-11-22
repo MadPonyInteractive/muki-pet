@@ -1,5 +1,5 @@
 // Props: small things that pop up for what Claude is doing. He rolls over and
-// inspects one ("?", a nudge, "!"); draw/visit.ts runs the visit. One entry per
+// inspects one ("?", a nudge, "!"); draw/features/visit.ts runs the visit. One entry per
 // prop: the Claude Code tools that drop it (`match` catches tool names not
 // listed, by pattern), and its drawing, standing on the ground at x = 0.
 

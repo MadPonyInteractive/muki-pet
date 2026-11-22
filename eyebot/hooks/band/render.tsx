@@ -3,9 +3,8 @@
 
 import type { EngineInterface, MatchedHook } from 'claude-code'
 
-import { brainState, note, STORE_HEAT, STORE_HOME } from '../brain/runtime.ts'
+import { brainState, readHeat, readHome, send } from '../brain/runtime.ts'
 import { BAND_HEIGHT } from '../character/geometry.ts'
-import { heatOf } from '../character/heat.ts'
 import { debugLog } from './debug-log.ts'
 import { createDrawings } from './drawing.ts'
 import { framesView, swapIn } from './frames.ts'
@@ -18,35 +17,6 @@ const ALT = 'Eyebot, a small robot on two wheels'
 const NEAR_SQUEEZE = 9999
 
 const drawingFor = createDrawings()
-
-// Heat on every redraw, as the context bar does: the live figure, or the last
-// one saved (a fresh reload has none until the next response).
-async function readHeat($: EngineInterface) {
-  try {
-    let percent = (await $.session.usage()).context.percent
-    if (percent !== undefined) {
-      void Promise.resolve()
-        .then(() => $.store.set(STORE_HEAT, percent))
-        .catch(() => {})
-    } else if (!brainState().heatKnown) {
-      const saved = await $.store.get(STORE_HEAT)
-      if (typeof saved === 'number') percent = saved
-    }
-    note({ type: 'heatSeen', level: percent === undefined ? undefined : heatOf(percent) })
-  } catch {
-    // No usage figures (the test engine): he stays as he is.
-  }
-}
-
-// His saved home, once per load of the mod.
-async function readHome($: EngineInterface) {
-  if (brainState().homeKnown) return
-  note({ type: 'homeSeen' })
-  try {
-    const home = await $.store.get(STORE_HOME)
-    if (typeof home === 'number' && home >= 0 && home <= 1) note({ type: 'homeSeen', home })
-  } catch {}
-}
 
 type BandHook = MatchedHook<'ui.render', { component: 'AbovePrompt' }>
 
@@ -65,7 +35,7 @@ export async function renderBand($: EngineInterface, e: Parameters<BandHook>[1],
 
   await readHeat($)
   await readHome($)
-  note({ type: 'band', width })
+  await send($, { type: 'band', width })
   let now = 0
   try {
     now = await $.clock.now()

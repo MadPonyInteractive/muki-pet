@@ -3,27 +3,28 @@
 
 import { moodDef, type Mood } from '../character/moods.ts'
 import { FADE_IN } from '../character/tuning.ts'
+import { K } from './classes.ts'
 import { rules } from './math.ts'
 
 // The resting transform of every part a mood moves: where a slide from the
 // last mood starts when that mood left the part alone.
 const REST: Array<[string, string]> = [
-  ['.eye', 'transform:none'],
-  ['.top', 'transform:translateY(-3px)'],
-  ['.lid', 'transform:none'],
-  ['.gz', 'transform:none'],
-  ['.pt', 'transform:none'],
+  [`.${K.eye}`, 'transform:none'],
+  [`.${K.top}`, 'transform:translateY(-3px)'],
+  [`.${K.lid}`, 'transform:none'],
+  [`.${K.gaze}`, 'transform:none'],
+  [`.${K.petTilt}`, 'transform:none'],
 ]
 
 // Each face part, and the mood selectors that reach it (later ones win).
 const PARTS: Array<[string, string[]]> = [
-  ['.eyeL', ['.eye', '.eyeL']],
-  ['.eyeR', ['.eye', '.eyeR']],
-  ['.topL', ['.top', '.topL']],
-  ['.topR', ['.top', '.topR']],
-  ['.lid', ['.lid']],
-  ['.gz', ['.gz']],
-  ['.pt', ['.pt']],
+  [`.${K.eyeL}`, [`.${K.eye}`, `.${K.eyeL}`]],
+  [`.${K.eyeR}`, [`.${K.eye}`, `.${K.eyeR}`]],
+  [`.${K.topL}`, [`.${K.top}`, `.${K.topL}`]],
+  [`.${K.topR}`, [`.${K.top}`, `.${K.topR}`]],
+  [`.${K.lid}`, [`.${K.lid}`]],
+  [`.${K.gaze}`, [`.${K.gaze}`]],
+  [`.${K.petTilt}`, [`.${K.petTilt}`]],
 ]
 
 // The transform a mood gives the part reached by `sels`.

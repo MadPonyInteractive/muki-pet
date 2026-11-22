@@ -1,8 +1,9 @@
 // One cookie: its drawing, its bites and crumbs, and their CSS.
 
-import { COLORS } from '../../character/palette.ts'
-import { r1 } from '../math.ts'
-import { EAT } from './eating.ts'
+import { COLORS } from '../../../character/palette.ts'
+import { K, biteNo, cookieNo, crumbNo, layerNo } from '../../classes.ts'
+import { r1 } from '../../math.ts'
+import { biteDelay, gulpDelay } from './cues.ts'
 
 // The whole cookie, drawn once in <defs> and used by every layer's cookie.
 export const COOKIE_DEF =
@@ -24,12 +25,12 @@ const BITES: Array<[number, number]> = [
 // mouth.
 export function cookie(k: number): string {
   return (
-    `<g class="cu k${k}"><g class="cc"><use href="#ck" mask="url(#bt${k})"/></g>` +
+    `<g class="${K.cookie} ${cookieNo(k)}"><g class="${K.cookieCore}"><use href="#ck" mask="url(#bt${k})"/></g>` +
     `<mask id="bt${k}" maskUnits="userSpaceOnUse" x="-10" y="-10" width="20" height="20">` +
     `<rect x="-10" y="-10" width="20" height="20" fill="#fff"/>` +
-    BITES.map(([x, y], i) => `<circle class="bt bt${i}" cx="${x}" cy="${y}" r="3.6"/>`).join('') +
+    BITES.map(([x, y], i) => `<circle class="${K.bite} ${biteNo(i)}" cx="${x}" cy="${y}" r="3.6"/>`).join('') +
     `</mask>` +
-    BITES.map(([x], i) => `<circle class="crm r${i}" cx="${r1(x * 0.6)}" cy="-4" r="1.1"/>`).join('') +
+    BITES.map(([x], i) => `<circle class="${K.crumb} ${crumbNo(i)}" cx="${r1(x * 0.6)}" cy="-4" r="1.1"/>`).join('') +
     `</g>`
   )
 }
@@ -37,19 +38,19 @@ export function cookie(k: number): string {
 // The cookie pops in, is bitten and crumbs fall, then he gulps the rest.
 export function cookieCss(layers: number): string {
   return (
-    `.cc{animation:cpop .35s cubic-bezier(.3,1.8,.5,1) backwards,cgulp .22s ease-in calc(${EAT} + 1.1s) forwards}` +
+    `.${K.cookieCore}{animation:cpop .35s cubic-bezier(.3,1.8,.5,1) backwards,cgulp .22s ease-in ${gulpDelay} forwards}` +
     `@keyframes cpop{from{transform:scale(0)}}@keyframes cgulp{to{transform:translateY(-7px) scale(0)}}` +
     // A mask's content is styled and animated even while its cookie is hidden
     // (masks ignore display:none), so a bite animation set on .bt alone ran at
     // load and every cookie came out already bitten (Fabio, 2026-11-22). The
     // animation's name is only set while that cookie's layer has focus, so it
     // starts with the click; the .btN delays still apply.
-    `.bt{transform:scale(0);transform-box:fill-box;transform-origin:center;animation-duration:.12s;animation-timing-function:ease-out;animation-fill-mode:forwards}` +
-    `${Array.from({ length: layers }, (_, i) => `.L${i + 1}:focus~.k${i + 1} .bt`).join(',')}{animation-name:bite}` +
-    `.bt0{animation-delay:calc(${EAT} + .05s)}.bt1{animation-delay:calc(${EAT} + .4s)}.bt2{animation-delay:calc(${EAT} + .75s)}` +
+    `.${K.bite}{transform:scale(0);transform-box:fill-box;transform-origin:center;animation-duration:.12s;animation-timing-function:ease-out;animation-fill-mode:forwards}` +
+    `${Array.from({ length: layers }, (_, i) => `.${layerNo(i + 1)}:focus~.${cookieNo(i + 1)} .${K.bite}`).join(',')}{animation-name:bite}` +
+    `.${biteNo(0)}{animation-delay:${biteDelay(0)}}.${biteNo(1)}{animation-delay:${biteDelay(1)}}.${biteNo(2)}{animation-delay:${biteDelay(2)}}` +
     `@keyframes bite{to{transform:none}}` +
-    `.crm{fill:${COLORS.cookieEdge};opacity:0;animation:crumb .6s ease-in}` +
-    `.r0{animation-delay:calc(${EAT} + .05s)}.r1{animation-delay:calc(${EAT} + .4s)}.r2{animation-delay:calc(${EAT} + .75s)}` +
+    `.${K.crumb}{fill:${COLORS.cookieEdge};opacity:0;animation:crumb .6s ease-in}` +
+    `.${crumbNo(0)}{animation-delay:${biteDelay(0)}}.${crumbNo(1)}{animation-delay:${biteDelay(1)}}.${crumbNo(2)}{animation-delay:${biteDelay(2)}}` +
     `@keyframes crumb{0%{opacity:1}100%{opacity:0;transform:translateY(28px)}}`
   )
 }

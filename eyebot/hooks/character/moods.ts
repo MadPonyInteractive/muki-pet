@@ -9,7 +9,7 @@
 //   redraw never catches him away from home.
 // - face: CSS rules on the face parts. `.eye`/`.eyeL`/`.eyeR` are the eyes,
 //   `.top`/`.topL`/`.topR` the top lids (hidden above the eye at rest), `.lid`
-//   the bottom lids, `.gz` where the eyes sit, `.pt` the head's lean. Hover and
+//   the bottom lids, `.gz` where the eyes sit, `.pt` the head's lean, `.hop` the little jump. Hover and
 //   touch rules are more specific, so they still win over a mood.
 
 type Rule = [string, string]

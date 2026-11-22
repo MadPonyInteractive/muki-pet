@@ -32,7 +32,7 @@ export type VisitPlan = {
 // Where the prop goes and how the visit runs. He rolls from his home to the
 // prop, and the spot beside it becomes his new home (no trip back). Only the
 // width, the old home and the visit's number decide it, so the hook and every
-// drawing during one visit agree. The visit's CSS is in draw/visit.ts.
+// drawing during one visit agree. The visit's CSS is in draw/features/visit.ts.
 export function visitPlan(width: number, fromU: number, n: number): VisitPlan {
   const W = Math.round(width)
   const fromX = Math.round(bandX(W, fromU))
