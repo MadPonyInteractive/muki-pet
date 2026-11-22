@@ -1,0 +1,21 @@
+{
+  "schema": "mpi-kanban/task-card/v1",
+  "id": "MPI-16",
+  "title": "Skins: other looks for Muki as data files",
+  "description": "Fabio, 2026-11-22: skins are a good idea. Let people give Muki another look (colours, screen and eye shapes, maybe body parts) from a plain data file, so others can contribute skins. Start from character/palette.ts and the face/body parts in draw/parts/. Open questions: what a skin may change (colours only, or shapes too), and how the user picks one (a settings panel, or a setting in plugin options). Keep it original (no Emo / Wall-E / Claude looks). He stays a Desktop mod with no model calls.",
+  "column": "todo",
+  "maturity": "idea",
+  "status": "active",
+  "created_at": "2026-11-22T23:38:52+00:00",
+  "updated_at": "2026-11-22T23:38:52+00:00",
+  "links": {
+    "brief": "brief.md",
+    "plan": "plan.md",
+    "checklist": "checklist.md",
+    "validation": "validation.md",
+    "files": "files.json",
+    "events": "events.jsonl",
+    "handoffs": "handoffs/",
+    "research": "research/"
+  }
+}

@@ -53,3 +53,4 @@
 {"schema": "mpi-kanban/event/v1", "type": "checklist.updated", "id": "MPI-12", "at": "2026-11-22T23:23:07+00:00", "actor": "claude", "detail": "verified live by Fabio"}
 {"schema": "mpi-kanban/event/v1", "type": "validation.updated", "id": "MPI-12", "at": "2026-11-22T23:23:07+00:00", "actor": "claude", "detail": "verified live by Fabio"}
 {"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-12", "at": "2026-11-22T23:26:15+00:00", "actor": "claude", "from": "doing", "to": "done", "reason": "Verified live by Fabio; committed e768765."}
+{"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-16", "at": "2026-11-22T23:38:52+00:00", "actor": "claude", "column": "todo", "title": "Skins: other looks for Muki as data files"}
