@@ -1,0 +1,21 @@
+{
+  "schema": "mpi-kanban/task-card/v1",
+  "id": "MPI-17",
+  "title": "Review fixes, public-readiness and the README with pictures",
+  "description": "From the 2026-11-22 codebase review: three likely bugs (render hook safety net, heat shared across chats, curious ending early), safety-net gaps (golden coverage, headset redraw), stale docs, what a public repo needs (LICENCE, icon, CI, reduced motion), small tidying, and last a real README with PNGs of his states. Plan in plan.md.",
+  "column": "todo",
+  "maturity": "planned",
+  "status": "active",
+  "created_at": "2026-11-22T23:50:55+00:00",
+  "updated_at": "2026-11-22T23:50:55+00:00",
+  "links": {
+    "brief": "brief.md",
+    "plan": "plan.md",
+    "checklist": "checklist.md",
+    "validation": "validation.md",
+    "files": "files.json",
+    "events": "events.jsonl",
+    "handoffs": "handoffs/",
+    "research": "research/"
+  }
+}

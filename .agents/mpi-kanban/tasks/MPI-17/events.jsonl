@@ -1,0 +1,1 @@
+{"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-17", "at": "2026-11-22T23:50:55+00:00", "actor": "claude", "column": "todo", "title": "Review fixes, public-readiness and the README with pictures"}
