@@ -1,4 +1,4 @@
-# Eyebot (working name)
+# Muki (project and plugin: muki-pet)
 
 An unofficial, open-source companion mod for Claude Code: a small robot pet whose face is two big expressive eyes. Work in progress.
 

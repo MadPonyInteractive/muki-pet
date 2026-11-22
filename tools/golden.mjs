@@ -10,7 +10,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const file = join(here, 'golden.json')
-const { robotSvg, visitPlan, MOODS, PROPS } = await import(pathToFileURL(join(here, '..', 'eyebot', 'hooks', 'draw', 'index.ts')).href)
+const { robotSvg, visitPlan, MOODS, PROPS } = await import(pathToFileURL(join(here, '..', 'muki-pet', 'hooks', 'draw', 'index.ts')).href)
 
 const WIDTHS = [300, 520, 784, 792, 1200, 2400]
 const HOMES = [0, 0.25, 0.5, 0.9, 1]

@@ -12,7 +12,7 @@ import { K, heatLevel, moodClass, propClass } from './draw/classes.ts'
 import { MOODS, PROPS, robotSvg, visitPlan, type Mood, type Prop } from './draw/index.ts'
 
 const BAND = {
-  plugin: 'eyebot',
+  plugin: 'muki-pet',
   component: 'AbovePrompt',
   props: {
     hasSurvey: false,
@@ -26,7 +26,7 @@ const BAND = {
 } as const
 
 const FRAME_LIMIT = 131072
-const ALT = 'Eyebot, a small robot on two wheels'
+const ALT = 'Muki, a small robot on two wheels'
 const HEAT_LEVELS = [0, 1, 2, 3]
 
 // Stands for the engine's own (empty) band beneath the plugins.

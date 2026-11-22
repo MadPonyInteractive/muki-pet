@@ -1,11 +1,11 @@
-# Eyebot docs
+# Muki docs
 
 What we know, what we tried, and where we left off, kept so nothing is lost between chats.
 Read this index first, then the latest file in `handoffs/`.
 
 | Folder | What goes there |
 | --- | --- |
-| [design/](design/) | How Eyebot looks and behaves: body, face, motion, mouse reactions. Product decisions. |
+| [design/](design/) | How Muki looks and behaves: body, face, motion, mouse reactions. Product decisions. |
 | [architecture/](architecture/) | How the mod is built: files, how the drawing works, dev workflow. |
 | [research/](research/) | Facts learned about the Claude Code mods API and the Desktop app, with proof. |
 | [log/](log/) | Dated record of what was tried and what happened, wins and failures. One file per day. |

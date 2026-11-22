@@ -1,10 +1,10 @@
 {
-  "name": "eyebot-dev",
+  "name": "muki-pet-dev",
   "private": true,
   "type": "module",
-  "description": "Dev tools for the Eyebot mod. The mod itself (eyebot/) has no dependencies.",
+  "description": "Dev tools for the Muki mod. The mod itself (muki-pet/) has no dependencies.",
   "scripts": {
-    "check": "tsc -p eyebot",
+    "check": "tsc -p muki-pet",
     "golden": "node tools/golden.mjs"
   },
   "devDependencies": {

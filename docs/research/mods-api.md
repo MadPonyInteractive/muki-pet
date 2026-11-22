@@ -1,6 +1,6 @@
 # Mods API findings (Claude Code 2.1.321)
 
-What we learned about the API that matters for Eyebot. The API is early access and changes between versions; the authority is the types file the engine writes next to a loaded mod (`.claude-plugin/types/claude-code/index.d.ts`).
+What we learned about the API that matters for Muki. The API is early access and changes between versions; the authority is the types file the engine writes next to a loaded mod (`.claude-plugin/types/claude-code/index.d.ts`).
 
 ## Drawing
 
@@ -14,7 +14,7 @@ What we learned about the API that matters for Eyebot. The API is early access a
 ## The band above the prompt (`AbovePrompt`)
 
 - Raised on the terminal and Desktop only. Props include `bodyColumns` (width in cells), `maxRows`, `hasSurvey`, `isCollapsed` and `isWorking` (a turn is running; useful for moods).
-- **It's ONE site shared by every mod.** A hook that returns its own tree without `await next(e)` hides every mod beneath it. Proof: Fabio's `context-bar` did that, and Eyebot never showed (2026-11-21). A band hook must do `const other = await next(e)` and include `{other}` in its tree. Both mods now do.
+- **It's ONE site shared by every mod.** A hook that returns its own tree without `await next(e)` hides every mod beneath it. Proof: Fabio's `context-bar` did that, and Muki never showed (2026-11-21). A band hook must do `const other = await next(e)` and include `{other}` in its tree. Both mods now do.
 - In `claude plugin test`, a hook that calls `next(e)` needs a stand-in: `on('ui.render', ($, e) => <Box />)`, or the mount fails with "no implementation for ui.render".
 
 ## Events used for moods (2026-11-22)
@@ -30,10 +30,10 @@ What we learned about the API that matters for Eyebot. The API is early access a
 
 - Loading the plugin-authoring skill turns on hot reload for `~/.claude/dev-mods/<session-id>/`. Mods there load when a turn ends and reload on each edit, **in that session only**.
 - The engine writes the types next to a mod loaded through dev-mods hot reload: `<mod>/.claude-plugin/types/`. A mod loaded through `CLAUDE_CODE_PLUGIN_DIRS` got no types folder and still drew (2026-11-22), so a missing folder proves nothing. Use `claude plugin list` (`Status: loaded`).
-- **The types for a CLAUDE_CODE_PLUGIN_DIRS mod** (2026-11-22): the plugin-authoring skill says there is no command; the engine writes them beside a mod it hot-reloads (dev-mods or `--plugin-dir`). Eyebot's `eyebot/.claude-plugin/types/` was copied from the old dev-mods copy (2.1.321) and is git-ignored. Refresh after an update with `claude --plugin-dir ./eyebot` once (per the skill; not tried yet).
+- **The types for a CLAUDE_CODE_PLUGIN_DIRS mod** (2026-11-22): the plugin-authoring skill says there is no command; the engine writes them beside a mod it hot-reloads (dev-mods or `--plugin-dir`). Muki's `muki-pet/.claude-plugin/types/` was copied from the old dev-mods copy (2.1.321) and is git-ignored. Refresh after an update with `claude --plugin-dir ./muki-pet` once (per the skill; not tried yet).
 - **Class syntax loads** (spike 2026-11-22): a throwaway `brain/spike-class.ts` with an abstract generic base class, a subclass using `extends`, `super`, `static`, a `#private` field, a getter and `override`, imported by `runtime.ts` with a load-time check, passed `claude plugin test` 22/22 and validate; flipping the check made every test fail with `hooks module did not load`, so the code really ran in the engine's host. A root `package.json` beside the mod changes nothing for validate or test. The loader rule still holds: no class may hold `$` or take it in a method (not tested, from the refactor).
-- **`CLAUDE_CODE_PLUGIN_DIRS` works for Eyebot** (2026-11-22): he draws in the Desktop band in every new chat.
-- **`/reload-plugins [--force]`** (found 2026-11-22 in the strings of the app's own Claude Code 2.1.321 binary, `%LOCALAPPDATA%/Claude-Data/claude_*/claude-code/2.1.321/*/claude.exe`): "Activate pending plugin changes in the current session". For a folder plugin its message says it "loads in place ... so edits there take effect at the next session start or /reload-plugins". **Confirmed 2026-11-22:** typed in the Desktop message box, it reloaded Eyebot's edits in the open chat. Refusals it can give: "no plugin reload is set up for this session, restart Claude Code to apply it" and "this session is a thin client (claude ssh, --remote)". `claude --version` on PATH (2.1.309, npm) is a different build from what Desktop runs.
+- **`CLAUDE_CODE_PLUGIN_DIRS` works for Muki** (2026-11-22): he draws in the Desktop band in every new chat.
+- **`/reload-plugins [--force]`** (found 2026-11-22 in the strings of the app's own Claude Code 2.1.321 binary, `%LOCALAPPDATA%/Claude-Data/claude_*/claude-code/2.1.321/*/claude.exe`): "Activate pending plugin changes in the current session". For a folder plugin its message says it "loads in place ... so edits there take effect at the next session start or /reload-plugins". **Confirmed 2026-11-22:** typed in the Desktop message box, it reloaded Muki's edits in the open chat. Refusals it can give: "no plugin reload is set up for this session, restart Claude Code to apply it" and "this session is a thin client (claude ssh, --remote)". `claude --version` on PATH (2.1.309, npm) is a different build from what Desktop runs.
 - A chat keeps the plugin list it started with. A chat started before a folder was added to `CLAUDE_CODE_PLUGIN_DIRS` doesn't get it (2026-11-22, Cubric-Vision chats). New chats do.
 - Claude can't screenshot the Claude app itself (computer use refuses it), so Fabio has to confirm what's on screen.
 
@@ -64,7 +64,7 @@ Source: `C:\Program Files\WindowsApps\Claude_5.11492.2.0_x64__pzs8sxrjxfjjc\app\
 
 - Desktop does draw `Client` (`bm`/`wm` near offset 22,117,000): a holder element per Client, with `pointerdown/move/up/enter/leave` and `keydown` listeners, and a `ResizeObserver` on the holder that sends `resize` (columns, rows) to the module when its cell size changes.
 - Pointer events carry whole cells only (`Math.floor(clientX / cellWidth)`): **no `fine` sub-cell position in Desktop**, and `enter`/`leave` carry the last `move`'s cell. So a 1-row strip can't tell which way the pointer crossed it.
-- The trick Eyebot uses (MPI-9): the band's keyed Box is a hover scope; its hover squeezes an absolute 0-tall Box to 0 wide (`right: 9999`), and the `Client` inside sees the resize. 0 columns after having been wide = the pointer is over the band. **Unproven live:** whether the hover scope counts the pointer over the robot's iframe (Chromium normally marks an iframe and its ancestors `:hover` in the parent).
+- The trick Muki uses (MPI-9): the band's keyed Box is a hover scope; its hover squeezes an absolute 0-tall Box to 0 wide (`right: 9999`), and the `Client` inside sees the resize. 0 columns after having been wide = the pointer is over the band. **Unproven live:** whether the hover scope counts the pointer over the robot's iframe (Chromium normally marks an iframe and its ancestors `:hover` in the parent).
 
 ## Unknowns (to check)
 

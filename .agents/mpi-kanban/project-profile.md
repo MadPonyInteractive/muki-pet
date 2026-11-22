@@ -24,25 +24,25 @@ reports. It never force-pushes and never rebases a shared tree.
 
 ## Project Summary
 
-Eyebot (working name) is an unofficial, open-source (MIT) Claude Code mod: a
+Muki is an unofficial, open-source (MIT) Claude Code mod: a
 small robot pet whose face is a dark screen with two expressive eyes. He lives
 in his own band above the chat input in Claude Desktop, rolls around, reacts to
 what Claude Code is doing, and is there for company and laughs, not to assist.
 
 ## Architecture Summary
 
-- The mod at `eyebot/`: manifest `.claude-plugin/plugin.json`, `hooks/hooks.json`
+- The mod at `muki-pet/`: manifest `.claude-plugin/plugin.json`, `hooks/hooks.json`
   naming the hooks module `hooks/register.tsx` (wiring only: events go to the
   brain, the `AbovePrompt` band goes to `band/render.tsx`).
-- `eyebot/hooks/brain/`: pure state machine (`machine.ts`) and the runtime that
+- `muki-pet/hooks/brain/`: pure state machine (`machine.ts`) and the runtime that
   owns its state, timers and `$.store` (`runtime.ts`).
-- `eyebot/hooks/band/`: draws the band, two-slot swap, drawing cache.
-- `eyebot/hooks/draw/`: pure `robotSvg(width, options)` (`draw/index.ts`)
+- `muki-pet/hooks/band/`: draws the band, two-slot swap, drawing cache.
+- `muki-pet/hooks/draw/`: pure `robotSvg(width, options)` (`draw/index.ts`)
   building the robot as one interactive `Svg`; motion is pre-simulated into CSS
   keyframes, mouse and click reactions are CSS strips.
 - Tests: `hooks/register.test.tsx`, `hooks/brain/machine.test.ts`, run by
-  `claude plugin test`. Type-check: `eyebot/tsconfig.json` extends the
-  engine-written types in `eyebot/.claude-plugin/types/` (git-ignored).
+  `claude plugin test`. Type-check: `muki-pet/tsconfig.json` extends the
+  engine-written types in `muki-pet/.claude-plugin/types/` (git-ignored).
 - `tools/`: `preview.mjs` (render without the app), `golden.mjs` +
   `golden.json` (drawings unchanged), `frame-lab.html` (draws an SVG the way
   Desktop does) and its proof SVGs.
@@ -53,7 +53,7 @@ Detail: see `docs/architecture/how-it-works.md`.
 
 ## Conventions
 
-- Mod code is edited in `eyebot/` in this repo only; it loads in every chat
+- Mod code is edited in `muki-pet/` in this repo only; it loads in every chat
   from here via `CLAUDE_CODE_PLUGIN_DIRS`. See `.agents/rules/project.md`.
 - Findings, failures and decisions go in `docs/` the same day; `docs/log/` is
   append-only. See `docs/README.md` § Rules for these docs.
@@ -64,10 +64,10 @@ Detail: see `docs/architecture/how-it-works.md`.
 
 - `npm install` once, then `npm run check` - type-check the mod (TypeScript 7)
 - `node tools/golden.mjs` - prove drawings unchanged (`--write` records a new reference)
-- `claude plugin validate ./eyebot` - validate the mod (use the app's claude.exe, path in the current handoff)
-- `claude plugin test ./eyebot` - run the mod's tests
+- `claude plugin validate ./muki-pet` - validate the mod (use the app's claude.exe, path in the current handoff)
+- `claude plugin test ./muki-pet` - run the mod's tests
 - `node tools/preview.mjs <out-folder>` - write `robot.svg` + `index.html` to preview without the app
-- `/reload-plugins` (typed in a chat) - pick up edits to `eyebot/`
+- `/reload-plugins` (typed in a chat) - pick up edits to `muki-pet/`
 
 ## Read First
 

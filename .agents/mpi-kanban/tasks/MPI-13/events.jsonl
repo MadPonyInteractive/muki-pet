@@ -1,0 +1,3 @@
+{"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-13", "at": "2026-11-22T17:42:38+00:00", "actor": "MPI-7 Parallel Batch", "column": "todo", "title": "Rename Eyebot to Muki (plugin muki-pet)"}
+{"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-13", "at": "2026-11-22T17:43:00+00:00", "actor": "MPI-7 Parallel Batch", "from": "todo", "to": "doing", "reason": "Fabio: rename to Muki / muki-pet"}
+{"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-13", "at": "2026-11-22T17:44:40+00:00", "actor": "MPI-13 rename", "from": "doing", "to": "doing", "reason": "Renamed and pushed; waiting on Fabio's /reload-plugins"}

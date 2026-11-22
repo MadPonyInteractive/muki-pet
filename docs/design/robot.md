@@ -5,7 +5,7 @@ Decided with Fabio on 2026-11-21 (from his sketch). Overall goals and personalit
 ## Where he lives
 
 His own band directly above the chat input (the `AbovePrompt` site), like a shelf he rolls along. Not a side pane.
-The band is shared with Fabio's usage-bar mod (`context-bar`): Eyebot sits on top, the bars stay just above the input.
+The band is shared with Fabio's usage-bar mod (`context-bar`): Muki sits on top, the bars stay just above the input.
 
 ## Body (side view, cartoon)
 
@@ -40,7 +40,7 @@ The band is shared with Fabio's usage-bar mod (`context-bar`): Eyebot sits on to
 
 ## Moods (milestone 2, added 2026-11-22)
 
-What Claude Code is doing sets his face. Each mood (its look, how long it lasts, whether he stays home) is one entry in `eyebot/hooks/character/moods.ts`; the events are in `eyebot/hooks/register.tsx` and `eyebot/hooks/brain/machine.ts`.
+What Claude Code is doing sets his face. Each mood (its look, how long it lasts, whether he stays home) is one entry in `muki-pet/hooks/character/moods.ts`; the events are in `muki-pet/hooks/register.tsx` and `muki-pet/hooks/brain/machine.ts`.
 
 | When | Mood | Look | How long |
 | --- | --- | --- | --- |
@@ -98,7 +98,7 @@ No red cheeks (Fabio, 2026-11-22: not red cheeks all the time; the whole body, w
 
 ## Planned
 
-- **Mad (Fabio, 2026-11-22):** being booped too many times in a row, or being woken from sleep, makes him mad; a mad Eyebot dodges your hand and rolls away.
+- **Mad (Fabio, 2026-11-22):** being booped too many times in a row, or being woken from sleep, makes him mad; a mad Muki dodges your hand and rolls away.
 - **Needs attention (Fabio, 2026-11-22):** if he gets no attention he gets sad, or throws a temper tantrum. Not designed yet: what counts as attention, how long until sad, what a tantrum looks like. The hook can't see clicks or hovers inside his frame (no script), so attention from the mouse needs a way out of the frame first. See the current handoff.
 
 ## Known limits of v1

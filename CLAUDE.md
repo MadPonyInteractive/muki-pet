@@ -1,12 +1,12 @@
-# Eyebot (working name)
+# Muki (project and plugin: muki-pet)
 
-**Start every chat by reading `docs/README.md` and the newest file in `docs/handoffs/`.** Record findings, attempts (including failures) and decisions in `docs/` as you go, so nothing is lost between chats. The mod's code is in `eyebot/`; `node tools/preview.mjs <folder>` previews the robot without the app.
+**Start every chat by reading `docs/README.md` and the newest file in `docs/handoffs/`.** Record findings, attempts (including failures) and decisions in `docs/` as you go, so nothing is lost between chats. The mod's code is in `muki-pet/`; `node tools/preview.mjs <folder>` previews the robot without the app.
 
 Task board: `.agents/mpi-kanban/board.json`. Project profile: `.agents/mpi-kanban/project-profile.md` (Mpi-Kanban).
 
 ## Critical Rules Snapshot
 
-- Edit the mod in `eyebot/` only; never a `~/.claude/dev-mods/` copy.
+- Edit the mod in `muki-pet/` only; never a `~/.claude/dev-mods/` copy.
 - `robotSvg()` stays pure, and motion lives in CSS keyframes: never animate through `ui.render` redraws or place him with the hook's clock.
 - Every hook calls `next(e)` and returns its result untouched, inside `try`.
 - Original character: no Emo / Wall-E look, no Claude branding or mascot; label it "unofficial".
@@ -29,7 +29,7 @@ A Claude Code mod (plugin with a hooks module that can draw in the interface). D
 - Files: `.claude-plugin/plugin.json`, `hooks/hooks.json` (`modules` array with one path), and the hooks module exporting `register(on, options)`.
 - Draw the face in a `Pane` (docked) or `AbovePrompt` (band). The `Svg` element works in Desktop and VS Code. In the terminal, use `Raster` or `Image` instead.
 - Mod features are new and change between versions: generate and read the types for the installed Claude Code version before coding (see the "get the types for your build" section of the mods docs), and run `claude plugin validate` and `claude plugin test`.
-- Dev loop: `claude --plugin-dir ./eyebot` reloads on save.
+- Dev loop: `claude --plugin-dir ./muki-pet` reloads on save.
 
 ## Mood mapping (first pass)
 
@@ -58,4 +58,4 @@ Optional later: classify the tone of Claude's last reply with `$.model.classify`
 
 - Chat model for the companion: use the Claude Code session's model, or a separate small/local one (the user has an RTX 4060)?
 - Floating always-on-top overlay later (separate helper window), or stay in-pane?
-- Name for the character and the project.
+- ~~Name for the character and the project.~~ Settled 2026-11-22: the robot is Muki (Fabio's first guinea pig); project, repo and plugin are `muki-pet` (github.com/MadPonyInteractive/muki-pet, private).

@@ -23,7 +23,7 @@ read. Ask the user for a pointer only if that search finds nothing.
 
 ### Drawing and redraws (Svg, swaps, ghosting)
 
-- **Read first:** `docs/architecture/how-it-works.md`, `eyebot/hooks/draw/index.ts`, `eyebot/hooks/band/render.tsx`, `eyebot/hooks/register.tsx`
+- **Read first:** `docs/architecture/how-it-works.md`, `muki-pet/hooks/draw/index.ts`, `muki-pet/hooks/band/render.tsx`, `muki-pet/hooks/register.tsx`
 - **Rules:** `.agents/rules/project.md`
 - **Memory:** `~/.claude/projects/C--AI-Mpi-Plugins-Code-Companion/memory/MEMORY.md`
 - **Notes:** iframe kept only when source, alt, width and height are identical.

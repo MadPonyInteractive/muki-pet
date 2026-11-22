@@ -1,9 +1,9 @@
-// Eyebot's hooks: Claude Code's events go to the brain (brain/machine.ts
+// Muki's hooks: Claude Code's events go to the brain (brain/machine.ts
 // decides what he feels and when the band redraws), and the band above the
 // prompt draws him (band/render.tsx, drawing code in draw/).
 //
 // Every hook passes its event on and returns the result untouched; a failure
-// in Eyebot's own code never gets in Claude Code's way.
+// in Muki's own code never gets in Claude Code's way.
 
 import type { Register } from 'claude-code'
 

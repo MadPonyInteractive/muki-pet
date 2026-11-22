@@ -12,7 +12,7 @@ import { framesView, swapIn } from './frames.ts'
 // Desktop cells are roughly this many CSS pixels wide; the band is sized in cells.
 const CELL_PX = 8
 // The alt is part of what Desktop compares to keep a frame, so it never changes.
-const ALT = 'Eyebot, a small robot on two wheels'
+const ALT = 'Muki, a small robot on two wheels'
 // Cells the hover pulls the sensor's right edge in by: more than any band is wide.
 const NEAR_SQUEEZE = 9999
 
@@ -63,7 +63,7 @@ export async function renderBand($: EngineInterface, e: Parameters<BandHook>[1],
   // tells the hooks. It is 0 tall, so it never takes a click from him.
   return (
     <Box flexDirection="column">
-      <Box key="eyebot" flexDirection="column">
+      <Box key="muki" flexDirection="column">
         {slot(0)}
         {slot(1)}
         {Client && (
