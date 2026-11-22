@@ -7,4 +7,4 @@
 - [x] Woken from sleep = angry face (under 30%)
 - [x] Checks: tsc, plugin test, validate, golden
 - [x] Frame lab check
-- [ ] Fabio's eye-test
+- [x] Fabio's eye-test (2026-11-22)

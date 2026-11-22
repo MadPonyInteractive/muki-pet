@@ -1,3 +1,4 @@
 {"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-5", "at": "2026-11-22T03:04:54+00:00", "actor": "claude", "column": "todo", "title": "Needs attention and boop anger"}
 {"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-5", "at": "2026-11-22T20:57:39+00:00", "actor": "claude", "from": "todo", "to": "doing", "reason": "Implementation started."}
 {"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-5", "at": "2026-11-22T21:05:17+00:00", "actor": "claude", "from": "doing", "to": "doing", "reason": "Built and checked; waiting for Fabio's eye-test."}
+{"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-5", "at": "2026-11-22T23:00:07+00:00", "actor": "claude", "from": "doing", "to": "done", "reason": "Fabio saw lonely, mad, tantrum and kick live; one short pet calms a mad Muki (log); temp log removed, checks pass"}

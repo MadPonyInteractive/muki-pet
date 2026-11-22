@@ -28,15 +28,11 @@ Design and decisions: `brief.md`.
 
 ## Current State
 
-Built and committed (2026-11-22), not pushed: MPI-14's commit must land first (agreed with the session "Background task visual cards"; HEAD needs its papers files to build). Seen live by Fabio: boop anger works; lonely, mad and the tantrum showed; the tantrum was made bigger (jumps) and the prop kick when mad was added, both only seen in the frame lab. Timings are now 10/15/20 min (was 20/28/35).
+Done and verified by Fabio (2026-11-22 22:54). Closed by mpi-end-session: the temporary attention log (brain/debug-log.ts and its call in brain/runtime.ts) is removed in the close-out commit.
 
-Next action: read the newest `%TEMP%/claude/muki-pet-attention.log.*` for this chat and check with Fabio:
-1. DONE 2026-11-22 22:02: lonely shows over heat 2 (log and Fabio). Was: over 30% his lonely face may not show: the heat's droopy lid (`.tw`, features/heat.ts) probably covers the sad slant. Fabio: "I don't think sad goes over the tired." Check in the frame lab (mood lonely, heat 2) and make the lonely slant win.
-2. FOUND 2026-11-22 22:05: the hover sensor loses the mouse 1-3 s into play, so PLAY_MS 5 s rarely fired; now 1 s (0749657), check live after a reload. Was: "He stayed angry after petting and cookies" (another chat, before the log existed): not reproduced; suspected boop-mad from clicking him. Ask Fabio to press-and-drag to pet a mad Muki under 30% and read the log.
-3. Fabio's look at the bigger tantrum and the kick in the app (a chat under 30%).
-4. Remove the TEMPORARY log (`brain/debug-log.ts` and its call in `brain/runtime.ts`) before the card closes.
+Seen live: lonely, mad, tantrum (bigger, with jumps) and the prop kick when mad; Fabio: the kick is "very funny", the tantrum "looks fine". One 1-3 s pet cheers him up from lonely or mad (log r7ei: mad, 3.4 s near span, mood ->neutral, idle 0). Earlier double pets were chats still on the old 5 s rule.
 
-Gotchas: `/reload-plugins` restarts his attention clock. In a hidden browser pane `:focus`/`:hover` never match and animations freeze: swap them for classes. The frame lab: `python -m http.server 8765` in tools/, open frame-lab.html?src=<svg>.
+Known and accepted (Fabio): he falls asleep 15 min after the last reply and asleep shows no need, while mad and tantrum come 15/20 min after the last play, so in a quiet chat he is usually asleep first (in the test chat, 9 s before the tantrum); they show in busy chats. A waiting question hides it too (curious, priority 30). To test the ladder quickly, lower LONELY/MAD/TANTRUM_AFTER in character/tuning.ts temporarily (2/3/4 min worked).
 
 ## Plan Drift
 

@@ -8,7 +8,11 @@
 - node tools/golden.mjs --write: re-recorded, widest 97,780 characters (limit 131,072)
 - Frame lab (hidden pane, class swap): ladder q1..q5, mad face, dodge, woken face, tired ladder off, tantrum keyframes parse
 
-## Fabio (pending)
+## Fabio (2026-11-22, passed)
+
+Lonely, mad, tantrum and prop kick seen in the app and approved. One short pet (3.4 s) took a mad Muki to neutral (attention log). Temporary log removed; npm run check, plugin test (42 pass), validate, golden (3366 identical) passed after.
+
+### Earlier notes
 
 - Not yet seen live.
 - 2026-11-22 Fabio: boop anger works in the app. Timings shortened to 10/15/20 min.
