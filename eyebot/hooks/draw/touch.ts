@@ -1,7 +1,7 @@
 // Touch: four invisible strips over the robot. While the button is held
 // (petting), the strip under the hand says which way his head leans into it,
-// and hearts float up. The press, bliss and release wobble rules are in
-// body-css.ts.
+// and hearts float up. A click focuses a strip (tabindex), which starts the
+// boop wobble. The press, bliss and wobble rules are in body-css.ts.
 
 import { COLORS } from './constants.ts'
 
@@ -9,7 +9,7 @@ import { COLORS } from './constants.ts'
 const PETS = [-9, -4, 4, 9]
 
 export const petZones = () =>
-  PETS.map((_, i) => `<rect class="p p${i}" x="${-26 + i * 13}" y="-66" width="13" height="68"/>`).join('')
+  PETS.map((_, i) => `<rect class="p p${i}" x="${-26 + i * 13}" y="-66" width="13" height="68" tabindex="0"/>`).join('')
 
 export const petCss = () => PETS.map((deg, i) => `.bot:active>.p${i}:hover~.bd .pt{transform:rotate(${deg}deg)}`).join('')
 

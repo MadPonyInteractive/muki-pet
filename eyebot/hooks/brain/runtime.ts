@@ -6,6 +6,8 @@
 // the module's own files, so this is plain functions over module state, not an
 // object with methods.
 
+import type { EngineInterface } from 'claude-code'
+
 import { STORE_HOME } from './config.ts'
 import { initialState, step, type Effect, type Event, type State, type TimerName } from './machine.ts'
 
@@ -20,7 +22,7 @@ export function brainState(): State {
 }
 
 // An event from Claude Code or a timer, at the host's time.
-export async function send($: any, event: Event) {
+export async function send($: EngineInterface, event: Event) {
   const now = await $.clock.now()
   const next = step(state, event, now)
   state = next.state
@@ -33,7 +35,7 @@ export function note(event: Extract<Event, { type: 'band' | 'heatSeen' | 'homeSe
   state = step(state, event, 0).state
 }
 
-function run($: any, fx: Effect) {
+function run($: EngineInterface, fx: Effect) {
   if (fx.type === 'startTimer') {
     timers.get(fx.name)?.cancel()
     const timer: Timer = $.clock.after(fx.ms, () => {

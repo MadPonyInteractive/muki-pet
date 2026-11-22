@@ -4,7 +4,7 @@ Written 2026-11-22 after reviewing the first refactor (commit 37f4866). Planning
 
 ## Current State
 
-Project mode: `mvp`. Card MPI-7, in `doing`.
+Project mode: `mvp`. Card MPI-7, in `doing`. **Phase 0 done 2026-11-22 (uncommitted).** Bug step built 2026-11-22 (uncommitted, waiting on Fabio's look after /reload-plugins): MPI-10 bites from the top (Fabio: okay), MPI-11 boop on click (touch strips focusable, boing + wobble on release), MPI-9 one robot at a time (new drawing hides him until 0.75 s). All three cards in doing. Fabio after /reload-plugins (2026-11-22): cookies fine, a click squashes him (boop works). **/reload-plugins only reloads the chat it is typed in; other open chats keep the old code**, so his earlier ghost reports may have come from chats on old code. Next: the MPI-9 ghost look in chats that have reloaded (or new chats), then close MPI-10, MPI-11, MPI-9, then Phase 1. Every change must keep `npm run check` 0 and `node tools/golden.mjs` identical unless the fix is meant to change drawings (then `--write` and list why).
 
 **What the first refactor gave us (keep):**
 
@@ -79,16 +79,17 @@ The options as they were put:
 ## Completed
 
 - [x] Review of commit 37f4866 and this plan (2026-11-22).
+- [x] Phase 0 (2026-11-22, not committed): golden check in the repo (2,934 drawings), type-check on (TypeScript 7.0.2, `npm run check` 0 after 26 index-access fixes, all type-only), host objects typed, class spike passed (classes load), stale `robot.ts` names fixed. Log: `docs/log/2026-11-22.md` § MPI-7 Phase 0.
 
 ## Remaining Work
 
 ## Phase 0: Safety net (no behaviour change)
 
-- [ ] Put the golden-drawing check in the repo: `tools/golden.mjs` runs `robotSvg` and `visitPlan` over the option matrix (widths, moods, from-moods, heat, home, visits at several elapsed times) and writes or compares hashes in `tools/golden.json`. **Verify:** `node tools/golden.mjs` prints "identical" on a clean tree, and fails when one colour in `draw/constants.ts` is changed and changed back.
-- [ ] Generate the Claude Code types for the installed build into `eyebot/.claude-plugin/types/` (mods docs, "get the types for your build"); add `eyebot/tsconfig.json` extending them, strict; add root `package.json` with `typescript` and `npm run check` (`tsc --noEmit -p eyebot`). Depends on Decision 2. **Verify:** `npm run check` runs and its error list is recorded in `docs/log/`.
-- [ ] Replace every `$: any` / `e: any` with the generated types; fix what the compiler finds. **Verify:** `npm run check` exits 0; `claude plugin test ./eyebot` 22/22; `claude plugin validate ./eyebot` passes; golden identical.
-- [ ] Loader spike: a throwaway branch of the code with one `class` in `brain/` (no `$` inside) and the root `package.json` present. **Verify:** validate and test pass and the mod still loads after `/reload-plugins`; result written to `docs/research/mods-api.md`. If classes fail to load, Decision 1 becomes "objects only" and the plan says so in Plan Drift.
-- [ ] Fix the stale names: `.agents/rules/project.md`, `project-profile.md`, `how-it-works.md` (`robot.ts` -> `draw/`), add `npm run check` and `node tools/golden.mjs` to the checks. **Verify:** `grep -rn "robot\.ts" .agents docs/architecture CLAUDE.md` returns only history.
+- [x] Put the golden-drawing check in the repo: `tools/golden.mjs` runs `robotSvg` and `visitPlan` over the option matrix (widths, moods, from-moods, heat, home, visits at several elapsed times) and writes or compares hashes in `tools/golden.json`. **Verify:** `node tools/golden.mjs` prints "identical" on a clean tree, and fails when one colour in `draw/constants.ts` is changed and changed back.
+- [x] Generate the Claude Code types for the installed build into `eyebot/.claude-plugin/types/` (mods docs, "get the types for your build"); add `eyebot/tsconfig.json` extending them, strict; add root `package.json` with `typescript` and `npm run check` (`tsc --noEmit -p eyebot`). Depends on Decision 2. **Verify:** `npm run check` runs and its error list is recorded in `docs/log/`.
+- [x] Replace every `$: any` / `e: any` with the generated types; fix what the compiler finds. **Verify:** `npm run check` exits 0; `claude plugin test ./eyebot` 22/22; `claude plugin validate ./eyebot` passes; golden identical.
+- [x] Loader spike: a throwaway branch of the code with one `class` in `brain/` (no `$` inside) and the root `package.json` present. **Verify:** validate and test pass and the mod still loads after `/reload-plugins`; result written to `docs/research/mods-api.md`. If classes fail to load, Decision 1 becomes "objects only" and the plan says so in Plan Drift.
+- [x] Fix the stale names: `.agents/rules/project.md`, `project-profile.md`, `how-it-works.md` (`robot.ts` -> `draw/`), add `npm run check` and `node tools/golden.mjs` to the checks. **Verify:** `grep -rn "robot\.ts" .agents docs/architecture CLAUDE.md` returns only history.
 
 ## Phase 1: One definition per thing (`character/`)
 
@@ -116,7 +117,8 @@ MPI-9 ghosts, MPI-10 cookie bites, MPI-8 / MPI-4 heat retune (becomes an edit to
 
 ## Plan Drift
 
-- None yet.
+- 2026-11-22: the engine does not write types for a `CLAUDE_CODE_PLUGIN_DIRS` mod; they were copied from the old dev-mods copy (2.1.321). TypeScript 7.0.2 (latest) used, not 5.x. The class spike was proven with `claude plugin test` (engine host), not `/reload-plugins`; the reload is Fabio's.
+- 2026-11-22: the CRLF rule was stale (all of `eyebot/` is LF); rules updated.
 
 ## Verification
 

@@ -2,6 +2,7 @@
 // swap and every drop of the old drawing, per chat, so we can see whether the
 // old one really goes. Written to %TEMP%/claude/eyebot-debug.log.<chat>.
 
+import type { EngineInterface } from 'claude-code'
 import type { State } from '../brain/machine.ts'
 
 type Frames = { slots: ReadonlyArray<string | undefined>; active: number; swapping: boolean }
@@ -11,7 +12,7 @@ const chatId = Math.random().toString(36).slice(2, 6)
 const lines: string[] = []
 const tag = (s?: string) => (s ? `${s.length}:${s.slice(-6) === '</svg>' ? /class="([^"]+)"/.exec(s)?.[1] : '?'}` : '-')
 
-export function debugLog($: any, what: string, frames: Frames, s: State) {
+export function debugLog($: EngineInterface, what: string, frames: Frames, s: State) {
   try {
     const line =
       `${new Date().toISOString().slice(11, 23)} ${chatId} ${what} | active=${frames.active} ` +

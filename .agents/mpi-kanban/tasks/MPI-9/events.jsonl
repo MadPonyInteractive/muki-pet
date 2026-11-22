@@ -1,1 +1,3 @@
 {"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-9", "at": "2026-11-22T06:15:04+00:00", "actor": "claude", "column": "todo", "title": "Ghosts still show after the 3 fixes"}
+{"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-9", "at": "2026-11-22T08:10:00+00:00", "actor": "claude", "from": "todo", "to": "doing", "reason": "Bug step of MPI-7's plan: one robot at a time during a swap."}
+{"schema": "mpi-kanban/event/v1", "type": "checklist.updated", "id": "MPI-9", "at": "2026-11-22T08:10:00+00:00", "actor": "claude", "note": "Robot hidden until the old drawing goes; waiting on Fabio."}

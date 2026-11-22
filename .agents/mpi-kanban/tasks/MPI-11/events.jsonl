@@ -1,1 +1,4 @@
 {"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-11", "at": "2026-11-22T06:59:51+00:00", "actor": "claude", "column": "todo", "title": "Clicking him does nothing: no wobble"}
+{"schema": "mpi-kanban/event/v1", "type": "note.added", "id": "MPI-11", "at": "2026-11-22T07:50:54+00:00", "actor": "claude", "note": "Diagnosis in brief.md: drawing press CSS works in the frame lab; likely the release-only wiggle transition; needs Fabio's hold test."}
+{"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-11", "at": "2026-11-22T08:10:00+00:00", "actor": "claude", "from": "todo", "to": "doing", "reason": "Bug step of MPI-7's plan: boop on click."}
+{"schema": "mpi-kanban/event/v1", "type": "checklist.updated", "id": "MPI-11", "at": "2026-11-22T08:10:00+00:00", "actor": "claude", "note": "Boop on click built and checked in the frame lab; waiting on Fabio."}

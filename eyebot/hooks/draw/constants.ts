@@ -24,11 +24,14 @@ export const COLORS = {
 }
 
 // A new drawing loads under the old one, which stays on top for 0.9 s (see
-// band/frames.ts). He shows in the new one after this short delay and fades in,
-// so he is there well before the old one goes, even when the load is slow.
-export const FADE_IN = '.15s'
+// band/frames.ts). He stays hidden in the new one until just before the old one
+// goes, then fades in fast. Showing him early (it was .15s) put two robots in
+// the band whenever the old drawing had him elsewhere, mid-cookie or out on a
+// trip, as the hook cannot know (MPI-9, 2026-11-22). The cost: a new drawing
+// that loads late leaves a short moment with no robot.
+export const FADE_IN = '.75s'
 // How he shows in a new drawing (the `rbin` keyframes are in body-css.ts).
-export const RBIN = `rbin .25s ease-out ${FADE_IN} backwards`
+export const RBIN = `rbin .15s ease-out ${FADE_IN} backwards`
 
 // Easings for the cookie dash, the roll home, and the 1 s roll back after an
 // early blur.

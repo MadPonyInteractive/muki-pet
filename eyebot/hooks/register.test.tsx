@@ -1,3 +1,4 @@
+import type { EngineInterface, Hook } from 'claude-code'
 import { expect, mock, test } from 'claude-code/testing'
 
 import { MOODS, PROPS, robotSvg, visitPlan } from './draw/index.ts'
@@ -17,7 +18,7 @@ const BAND = {
 } as const
 
 // Stands for the engine's own (empty) band beneath the plugins.
-const emptyBand = ($: any, e: any) => {
+const emptyBand = ($: EngineInterface, e: Parameters<Hook<'ui.render'>>[1]) => {
   const { Box } = $.ui.resolve(e)
   return <Box />
 }
@@ -89,7 +90,7 @@ test('every mood draws, and the same mood hands back the same drawing', () => {
   }
   // A new drawing slides from the last face once the new frame shows him.
   const sad = robotSvg(720, { mood: 'sad', from: 'happy', home: 0.3 })
-  expect(sad).toContain('.lid{animation:f4 .45s ease-out .15s backwards}@keyframes f4{from{transform:translateY(-7px)}}')
+  expect(sad).toContain('.lid{animation:f4 .45s ease-out .75s backwards}@keyframes f4{from{transform:translateY(-7px)}}')
 })
 
 test('the widest band, hot and in any mood, stays under the frame size limit', () => {
@@ -128,8 +129,8 @@ test('moods follow the turn: alert, happy, back to calm, then sleepy and asleep'
     await clock.advance(1000)
     const all = await ui.findAll({ type: 'Svg' })
     expect(all).toHaveLength(1)
-    expect(all[0].props.alt).toBe('Eyebot, a small robot on two wheels')
-    return /class="m-(\w+)/.exec(String(all[0].props.source))?.[1]
+    expect(all[0]!.props.alt).toBe('Eyebot, a small robot on two wheels')
+    return /class="m-(\w+)/.exec(String(all[0]!.props.source))?.[1]
   }
   expect(await mood()).toBe('neutral')
 
@@ -189,7 +190,7 @@ test('a filling context window warms him, one level at a time', async ($, on) =>
   on('session.measure', (_$, e) => ({ changed: e.changed }))
   const ui = await $.ui.mount({ ...BAND, surface: 'desktop' })
   const heat = async (percent: number) => {
-    await $.session.measure({ context: { percent } as any, rateLimits: [], changed: ['context'] })
+    await $.session.measure({ context: { percent, window: 200000 }, rateLimits: [], changed: ['context'] })
     await clock.settle()
     await clock.advance(1000)
     return /class="m-\w+ h(\d)"/.exec(String((await ui.find({ type: 'Svg' }))?.props.source))?.[1]
@@ -224,7 +225,7 @@ test('a prop lands inside the band, he ends beside it, and that spot is his new 
 test('Claude reading a file drops a prop he goes to look at, at most every 12 s', async ($, on) => {
   on('ui.render', emptyBand)
   const clock = mock.clock(on, { now: 9_000_000 })
-  on('tool.call', () => ({ result: { content: 'ok' } }) as any)
+  on('tool.call', () => ({ result: { content: 'ok' } }))
   on('turn.complete', (_$, e) => ({ text: e.answer }))
   const ui = await $.ui.mount({ ...BAND, surface: 'desktop' })
   await clock.advance(1000)
@@ -233,17 +234,17 @@ test('Claude reading a file drops a prop he goes to look at, at most every 12 s'
     await clock.advance(1000) // the swap is over: one drawing left
     const all = await ui.findAll({ type: 'Svg' })
     expect(all).toHaveLength(1)
-    return /class="([^"]+)"/.exec(String(all[0].props.source))?.[1] ?? ''
+    return /class="([^"]+)"/.exec(String(all[0]!.props.source))?.[1] ?? ''
   }
-  await $.tool.call({ tool: 'Read', tool_use_id: 'r1', file_path: 'a.txt' } as any)
+  await $.tool.call({ tool: 'Read', tool_use_id: 'r1', file_path: 'a.txt' })
   expect(await cls()).toContain('p-file')
   await clock.advance(1000)
-  await $.tool.call({ tool: 'Bash', tool_use_id: 'b1', command: 'ls' } as any)
+  await $.tool.call({ tool: 'Bash', tool_use_id: 'b1', command: 'ls' })
   await clock.settle()
   await clock.advance(1000)
   expect(await cls()).toContain('p-file') // too soon for another one
   await clock.advance(12_000)
-  await $.tool.call({ tool: 'Bash', tool_use_id: 'b2', command: 'ls' } as any)
+  await $.tool.call({ tool: 'Bash', tool_use_id: 'b2', command: 'ls' })
   expect(await cls()).toContain('p-terminal')
   // A mood change waits for the visit to end, then shows.
   await $.turn.complete({ turnId: 'tp', answer: 'done', durationMs: 1, isAborted: false, reason: 'answer' })
@@ -258,10 +259,10 @@ test('Claude reading a file drops a prop he goes to look at, at most every 12 s'
 test('once a visit is over, the band shows the plain drawing at his new home', async ($, on) => {
   on('ui.render', emptyBand)
   const clock = mock.clock(on, { now: 20_000_000 })
-  on('tool.call', () => ({ result: { content: 'ok' } }) as any)
+  on('tool.call', () => ({ result: { content: 'ok' } }))
   const ui = await $.ui.mount({ ...BAND, surface: 'desktop' })
   await clock.advance(1000)
-  await $.tool.call({ tool: 'Grep', tool_use_id: 'g1', pattern: 'x' } as any)
+  await $.tool.call({ tool: 'Grep', tool_use_id: 'g1', pattern: 'x' })
   await clock.settle()
   await clock.advance(1000)
   expect(String((await ui.find({ type: 'Svg' }))?.props.source)).toContain(' vi p-lens')
@@ -270,7 +271,7 @@ test('once a visit is over, the band shows the plain drawing at his new home', a
   await clock.advance(1000)
   const all = await ui.findAll({ type: 'Svg' })
   expect(all).toHaveLength(1)
-  expect(String(all[0].props.source)).not.toContain(' vi ')
+  expect(String(all[0]!.props.source)).not.toContain(' vi ')
   await ui.unmount()
 })
 
@@ -282,9 +283,9 @@ test('a new width replaces the drawing at once, with no old one on top', async (
   const clock = mock.clock(on, { now: 30_000_000 })
   const ui = await $.ui.mount({ ...BAND, surface: 'desktop', props: { ...BAND.props, bodyColumns: 98 } })
   await clock.advance(1000)
-  await ui.redraw({ ...BAND.props, bodyColumns: 99 } as any)
+  await ui.redraw({ ...BAND.props, bodyColumns: 99 })
   const all = await ui.findAll({ type: 'Svg' })
   expect(all).toHaveLength(1)
-  expect(all[0].props.width).toBe(792)
+  expect(all[0]!.props.width).toBe(792)
   await ui.unmount()
 })

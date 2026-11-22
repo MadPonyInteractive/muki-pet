@@ -37,7 +37,7 @@ export const baseCss = () =>
   `.bot:hover .hop{animation:hop .5s ease-out}` +
   // Touch: a press squashes him and closes his eyes in bliss, a drag pets him.
   `.bot{cursor:grab}.bot:active{cursor:grabbing}` +
-  `.bd{pointer-events:none}.p{fill:#000;fill-opacity:0;pointer-events:all}` +
+  `.bd{pointer-events:none}.p{fill:#000;fill-opacity:0;pointer-events:all;outline:none}` +
   `.sq{transition:transform .4s cubic-bezier(.3,1.9,.5,1)}` +
   `.bot:active .sq{transform:scale(1.07,.9);transition:transform .12s ease-out}` +
   `.bot:active .lid{transform:translateY(-11px)}` +
@@ -52,6 +52,17 @@ export const baseCss = () =>
   // drawing loads, under the old one still on top: a ghost).
   `.wg{transition:transform .8s cubic-bezier(.25,2.6,.45,.7)}` +
   `.bot:active .wg{transform:rotate(-4deg);transition:transform .15s ease-out}` +
+  // A click (boop) is too short for the press to show, so letting go of a
+  // focused strip plays a full boing and wobble from the held pose. It needs
+  // focus, which a new drawing never has, so it can't replay under one. The
+  // strip then hides for a moment, which drops its focus, so the next click
+  // boops again (the cookie strips end the same way).
+  `.bot:not(:active)>.p:focus~.bd .sq{animation:boing .5s ease-out}` +
+  `.bot:not(:active)>.p:focus~.bd .wg{animation:wob .75s ease-out}` +
+  `.bot:not(:active)>.p:focus{animation:pend .8s step-end forwards}` +
+  `@keyframes boing{0%{transform:scale(1.07,.9)}35%{transform:scale(.95,1.06)}65%{transform:scale(1.02,.98)}100%{transform:none}}` +
+  `@keyframes wob{0%{transform:rotate(-4deg)}22%{transform:rotate(5deg)}45%{transform:rotate(-3deg)}68%{transform:rotate(1.5deg)}100%{transform:none}}` +
+  `@keyframes pend{to{visibility:hidden}}` +
   `@keyframes hop{0%,100%{transform:none}35%{transform:translateY(-7px)}60%{transform:translateY(1px)}}` +
   // Blinking: two overlapping rhythms. (`.b1`/`.b2` are taken: the cookie
   // bites once used them too and ran the blink instead of the bite.)

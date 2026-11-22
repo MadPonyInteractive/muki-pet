@@ -49,9 +49,9 @@ export function simulate(width: number, home: number, seed: number, roam = true)
   const { x, lookX, lookY } = play(plan, home, rand)
   const n = x.length
   const dt = 1 / FPS
-  const at_ = (arr: number[], i: number) => arr[(i + n) % n]
+  const at_ = (arr: number[], i: number) => arr[(i + n) % n]!
   const vel = x.map((_, i) => (at_(x, i + 1) - at_(x, i - 1)) / (2 * dt))
-  const acc = x.map((_, i) => (at_(x, i + 1) - 2 * x[i] + at_(x, i - 1)) / (dt * dt))
+  const acc = x.map((_, i) => (at_(x, i + 1) - 2 * x[i]! + at_(x, i - 1)) / (dt * dt))
   return { x, tilt: headSpring(vel, acc), ...eyes(vel, lookX, lookY) }
 }
 
@@ -104,7 +104,7 @@ function headSpring(vel: number[], acc: number[]): number[] {
   const sub = 8
   for (let pass = 0; pass < 2; pass++) {
     for (let i = 0; i < n; i++) {
-      const target = clamp(-(0.07 * vel[i] + 0.022 * acc[i]), -16, 16)
+      const target = clamp(-(0.07 * vel[i]! + 0.022 * acc[i]!), -16, 16)
       for (let s = 0; s < sub; s++) {
         const h = dt / sub
         w += (omega * omega * (target - th) - 2 * zeta * omega * w) * h
@@ -126,9 +126,9 @@ function eyes(vel: number[], lookX: number[], lookY: number[]) {
   const k = 1 - Math.exp(-1 / FPS / 0.09)
   for (let pass = 0; pass < 2; pass++) {
     for (let i = 0; i < n; i++) {
-      const tx = Number.isNaN(lookX[i]) ? clamp(vel[i] / 50, -1, 1) * 5 : lookX[i]
+      const tx = Number.isNaN(lookX[i]) ? clamp(vel[i]! / 50, -1, 1) * 5 : lookX[i]!
       ex += (tx - ex) * k
-      ey += (lookY[i] - ey) * k
+      ey += (lookY[i]! - ey) * k
       eyeX[i] = ex
       eyeY[i] = ey
     }

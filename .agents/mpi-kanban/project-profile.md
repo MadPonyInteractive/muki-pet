@@ -32,14 +32,21 @@ what Claude Code is doing, and is there for company and laughs, not to assist.
 ## Architecture Summary
 
 - The mod at `eyebot/`: manifest `.claude-plugin/plugin.json`, `hooks/hooks.json`
-  naming the hooks module `hooks/register.tsx` (one `ui.render` hook on
-  `AbovePrompt`, mood hooks, two-slot swap, `$.store` for home).
-- `eyebot/hooks/robot.ts`: pure `robotSvg(width, options)` building the robot as
-  one interactive `Svg`; motion is pre-simulated into CSS keyframes, mouse and
-  click reactions are CSS strips.
-- `eyebot/hooks/register.test.tsx`: tests run by `claude plugin test`.
-- `tools/`: `preview.mjs` (render without the app), `frame-lab.html` (draws an
-  SVG the way Desktop does) and its proof SVGs.
+  naming the hooks module `hooks/register.tsx` (wiring only: events go to the
+  brain, the `AbovePrompt` band goes to `band/render.tsx`).
+- `eyebot/hooks/brain/`: pure state machine (`machine.ts`) and the runtime that
+  owns its state, timers and `$.store` (`runtime.ts`).
+- `eyebot/hooks/band/`: draws the band, two-slot swap, drawing cache.
+- `eyebot/hooks/draw/`: pure `robotSvg(width, options)` (`draw/index.ts`)
+  building the robot as one interactive `Svg`; motion is pre-simulated into CSS
+  keyframes, mouse and click reactions are CSS strips.
+- Tests: `hooks/register.test.tsx`, `hooks/brain/machine.test.ts`, run by
+  `claude plugin test`. Type-check: `eyebot/tsconfig.json` extends the
+  engine-written types in `eyebot/.claude-plugin/types/` (git-ignored).
+- `tools/`: `preview.mjs` (render without the app), `golden.mjs` +
+  `golden.json` (drawings unchanged), `frame-lab.html` (draws an SVG the way
+  Desktop does) and its proof SVGs.
+- Root `package.json`: dev tools only (TypeScript); the mod has no dependencies.
 - `prototype/face.html`: the first face sketch.
 
 Detail: see `docs/architecture/how-it-works.md`.
@@ -55,6 +62,8 @@ Detail: see `docs/architecture/how-it-works.md`.
 
 ## Important Commands
 
+- `npm install` once, then `npm run check` - type-check the mod (TypeScript 7)
+- `node tools/golden.mjs` - prove drawings unchanged (`--write` records a new reference)
 - `claude plugin validate ./eyebot` - validate the mod (use the app's claude.exe, path in the current handoff)
 - `claude plugin test ./eyebot` - run the mod's tests
 - `node tools/preview.mjs <out-folder>` - write `robot.svg` + `index.html` to preview without the app

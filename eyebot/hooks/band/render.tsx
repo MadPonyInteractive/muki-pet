@@ -1,6 +1,8 @@
 // Draws the band above the prompt: the robot's Svg (in the double buffer's two
 // slots), over whatever other mods drew there.
 
+import type { EngineInterface, MatchedHook } from 'claude-code'
+
 import { heatOf, STORE_HEAT, STORE_HOME } from '../brain/config.ts'
 import { brainState, note } from '../brain/runtime.ts'
 import { BAND_HEIGHT } from '../draw/index.ts'
@@ -17,7 +19,7 @@ const drawingFor = createDrawings()
 
 // Heat on every redraw, as the context bar does: the live figure, or the last
 // one saved (a fresh reload has none until the next response).
-async function readHeat($: any) {
+async function readHeat($: EngineInterface) {
   try {
     let percent = (await $.session.usage()).context.percent
     if (percent !== undefined) {
@@ -35,7 +37,7 @@ async function readHeat($: any) {
 }
 
 // His saved home, once per load of the mod.
-async function readHome($: any) {
+async function readHome($: EngineInterface) {
   if (brainState().homeKnown) return
   note({ type: 'homeSeen' })
   try {
@@ -44,8 +46,10 @@ async function readHome($: any) {
   } catch {}
 }
 
+type BandHook = MatchedHook<'ui.render', { component: 'AbovePrompt' }>
+
 // The `ui.render` hook for the AbovePrompt band.
-export async function renderBand($: any, e: any, next: (e: any) => any) {
+export async function renderBand($: EngineInterface, e: Parameters<BandHook>[1], next: Parameters<BandHook>[2]) {
   // The terminal has no Svg (a Raster version is a later milestone).
   if (e.surface === 'terminal' || e.props.hasSurvey) return next(e)
 

@@ -7,6 +7,8 @@
 // Plain functions over module state: the mod loader only lets `$` be passed
 // to functions declared at the top of the module's own files.
 
+import type { EngineInterface } from 'claude-code'
+
 import { brainState } from '../brain/runtime.ts'
 import { debugLog } from './debug-log.ts'
 
@@ -29,7 +31,7 @@ export function framesView() {
   return { slots: f.slots as ReadonlyArray<string | undefined>, active: f.active, swapping: f.timer !== undefined }
 }
 
-function dropOldAfter($: any) {
+function dropOldAfter($: EngineInterface) {
   f.timer?.cancel()
   f.timer = $.clock.after(SWAP_MS, () => {
     f.timer = undefined
@@ -40,7 +42,7 @@ function dropOldAfter($: any) {
 }
 
 // Puts a drawing in the band. False when it is already the one shown.
-export function swapIn($: any, source: string, width: number): boolean {
+export function swapIn($: EngineInterface, source: string, width: number): boolean {
   if (f.slots[f.active] === source) return false
   if (width !== f.width) {
     // A new width: no old drawing stays on top. Opening a chat always goes

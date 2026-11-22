@@ -35,6 +35,7 @@ The band is shared with Fabio's usage-bar mod (`context-bar`): Eyebot sits on to
 - **Press on him (boop):** he squashes down, his eyes close into blissful "^ ^" crescents, pink cheeks appear, and hearts float up beside his head. The cursor is a grab hand.
 - **Hold and drag across him (petting):** his head leans toward your hand (four strips across him, ±4° and ±9°), so stroking left and right rocks his head along.
 - **Let go:** he springs back up with a little overshoot, wobbles back from a small lean (a springy transition; it used to be an animation, which also played on every new drawing under the old one and made his head ghost), and the blush fades slowly (starts after about 1 s, gone after about 3.5 s).
+- **A click (boop, 2026-11-22, MPI-11):** a click is too short for the press to show, so letting go of a clicked spot plays a full boing (squash, stretch, settle) and a wobble from the held pose, about 0.75 s. Each touch strip has a tabindex, a click focuses it, and focus is what starts it; the strip then hides for a moment, which drops its focus, so the next click boops again. A new drawing never has focus, so the boop cannot replay under it.
 - Pure CSS (`:active` plus `:hover`), because the frame has no scripts and doesn't send clicks to the mod.
 
 ## Moods (milestone 2, added 2026-11-22)
@@ -105,3 +106,8 @@ No red cheeks (Fabio, 2026-11-22: not red cheeks all the time; the whole body, w
 - The route is one pre-made loop of about 62 s, so it repeats. If that's noticeable, re-plan the route now and then.
 - He can't roll toward the mouse; he only stops and looks.
 - He can't tell a click from a long hold, or count clicks (no script). A wiggle also plays once when the page first loads.
+
+
+## Showing up in a new drawing (2026-11-22, MPI-9)
+
+He stays hidden in a new drawing for 0.75 s and then fades in over 0.15 s, so he appears just as the old drawing on top goes (0.9 s). Shown earlier, two robots were in the band whenever the old drawing had him elsewhere (mid-cookie, out on a trip). A drawing that loads late can leave a short moment with no robot instead. The mood face slide waits for the same moment. A redraw during a cookie game still ends the game: the new frame knows nothing of the click.

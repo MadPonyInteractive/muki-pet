@@ -1,0 +1,13 @@
+{
+  "name": "eyebot-dev",
+  "private": true,
+  "type": "module",
+  "description": "Dev tools for the Eyebot mod. The mod itself (eyebot/) has no dependencies.",
+  "scripts": {
+    "check": "tsc -p eyebot",
+    "golden": "node tools/golden.mjs"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2"
+  }
+}

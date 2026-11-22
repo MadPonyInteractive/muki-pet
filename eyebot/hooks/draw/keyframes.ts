@@ -11,12 +11,12 @@ function simplify(values: number[], tol: number): number[] {
   const keep = [0]
   let start = 0
   for (let j = 2; j <= n; j++) {
-    const end = j === n ? values[0] : values[j]
+    const end = j === n ? values[0]! : values[j]!
     let ok = true
     for (let m = start + 1; m < j; m++) {
       const u = (m - start) / (j - start)
-      const v = values[start] + (end - values[start]) * u
-      if (Math.abs(v - values[m]) > tol) {
+      const v = values[start]! + (end - values[start]!) * u
+      if (Math.abs(v - values[m]!) > tol) {
         ok = false
         break
       }
@@ -32,8 +32,8 @@ function simplify(values: number[], tol: number): number[] {
 function keyframes(name: string, values: number[], tol: number, css: (v: number) => string): string {
   const n = values.length
   const idx = simplify(values, tol)
-  const stops = idx.map(i => `${pct(i, n)}{transform:${css(values[i])}}`)
-  stops.push(`100%{transform:${css(values[0])}}`)
+  const stops = idx.map(i => `${pct(i, n)}{transform:${css(values[i]!)}}`)
+  stops.push(`100%{transform:${css(values[0]!)}}`)
   return `@keyframes ${name}{${stops.join('')}}`
 }
 
@@ -44,8 +44,8 @@ function eyeKeyframes(xs: number[], ys: number[]): string {
   const keep = new Set([...simplify(xs, 0.25), ...simplify(ys, 0.25)])
   const stops = [...keep]
     .sort((a, b) => a - b)
-    .map(i => `${pct(i, n)}{transform:translate(${r1(xs[i])}px,${r1(ys[i])}px)}`)
-  stops.push(`100%{transform:translate(${r1(xs[0])}px,${r1(ys[0])}px)}`)
+    .map(i => `${pct(i, n)}{transform:translate(${r1(xs[i]!)}px,${r1(ys[i]!)}px)}`)
+  stops.push(`100%{transform:translate(${r1(xs[0]!)}px,${r1(ys[0]!)}px)}`)
   return `@keyframes ey{${stops.join('')}}`
 }
 

@@ -11,3 +11,6 @@
 {"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-9", "at": "2026-11-22T06:15:04+00:00", "actor": "claude", "column": "todo", "title": "Ghosts still show after the 3 fixes"}
 {"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-10", "at": "2026-11-22T06:23:26+00:00", "actor": "claude", "column": "todo", "title": "Cookie bites come from the wrong side"}
 {"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-11", "at": "2026-11-22T06:59:51+00:00", "actor": "claude", "column": "todo", "title": "Clicking him does nothing: no wobble"}
+{"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-10", "at": "2026-11-22T07:46:18+00:00", "actor": "claude", "from": "todo", "to": "doing", "reason": "Bug step of MPI-7's plan: bites from the top edge."}
+{"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-11", "at": "2026-11-22T08:10:00+00:00", "actor": "claude", "from": "todo", "to": "doing", "reason": "Bug step of MPI-7's plan: boop on click."}
+{"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-9", "at": "2026-11-22T08:10:00+00:00", "actor": "claude", "from": "todo", "to": "doing", "reason": "Bug step of MPI-7's plan: one robot at a time during a swap."}

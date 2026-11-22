@@ -9,14 +9,14 @@ export const COOKIE_DEF =
   `<g id="ck"><circle r="7" fill="${COLORS.cookie}" stroke="${COLORS.cookieEdge}" stroke-width="1.3"/>` +
   `<g fill="${COLORS.chip}"><circle cx="-2.8" cy="-2.2" r="1.2"/><circle cx="2.6" cy="-0.6" r="1.1"/><circle cx="-0.6" cy="3" r="1.2"/><circle cx="3.2" cy="3.6" r=".8"/><circle cx="-3.8" cy="1.6" r=".7"/></g></g>`
 
-// The bites all come from the bottom edge, the side his mouth is on, left to
-// right, each overlapping the last, so the cookie stays round with a scalloped
-// bite (spread around the edge, they left a three-pointed star: Fabio,
-// 2026-11-22).
-const BITES = [
-  [-4.5, 7.2],
-  [0, 8.4],
-  [4.5, 7.2],
+// The bites all come from the top edge, the side his mouth is on (the cookie
+// is held below it; bites from the bottom looked wrong: Fabio, 2026-11-22),
+// left to right, each overlapping the last, so the cookie stays round with a
+// scalloped bite (spread around the edge, they left a three-pointed star).
+const BITES: Array<[number, number]> = [
+  [-4.5, -7.2],
+  [0, -8.4],
+  [4.5, -7.2],
 ]
 
 // One layer's cookie (`k` is the layer): bitten three times (a mask with three
@@ -29,7 +29,7 @@ export function cookie(k: number): string {
     `<rect x="-10" y="-10" width="20" height="20" fill="#fff"/>` +
     BITES.map(([x, y], i) => `<circle class="bt bt${i}" cx="${x}" cy="${y}" r="3.6"/>`).join('') +
     `</mask>` +
-    BITES.map(([x], i) => `<circle class="crm r${i}" cx="${r1(x * 0.6)}" cy="3" r="1.1"/>`).join('') +
+    BITES.map(([x], i) => `<circle class="crm r${i}" cx="${r1(x * 0.6)}" cy="-4" r="1.1"/>`).join('') +
     `</g>`
   )
 }
