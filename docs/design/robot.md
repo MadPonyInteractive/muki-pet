@@ -105,7 +105,7 @@ Context level is his energy. Attention is a pet or a cookie.
   - **5 boops in a row** (each within 1.5 s of the last) make him **mad for 15 s**: angry face that stays angry under your hand, no hop, no hearts, no blush, and he dodges your hand, sliding his body 30 px away from the side the mouse is on.
   - **Woken from sleep:** your mouse on him while he's asleep gets the angry face (no hop, the z's stop) instead of the happy one, for as long as it's there.
 - **Over 30% context (no energy):** he can't get mad: no boop anger, no waking anger, no tantrum. With no attention for 10 min he's lonely. He rolls slowly (trips take 1.8x as long). Boops work as before.
-- A pet or a cookie calms him at once inside the drawing (touch wins over any mood). For the next drawing, the hook counts your mouse over the band for 5 s or more as attention and restarts the clock: it can't tell a pet from a cookie or from just resting the mouse there.
+- A pet or a cookie calms him at once inside the drawing (touch wins over any mood). For the next drawing, the hook counts your mouse over the band for 1 s or more as attention (was 5 s: the hover sensor loses the mouse 1 to 3 s into play, so petting almost never counted) and restarts the clock: it can't tell a pet from a cookie or from just resting the mouse there.
 - Asleep, he shows none of it; the clock keeps running, so if you were away long he may wake up mid-tantrum.
 - Passing moods (alert, happy, sad) and a question waiting for you still show over these.
 - Timings: `character/tuning.ts`; faces: `character/moods.ts` (`lonely`, `mad`, `tantrum`).
