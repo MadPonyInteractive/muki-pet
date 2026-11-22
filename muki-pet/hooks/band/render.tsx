@@ -5,7 +5,6 @@ import type { EngineInterface, MatchedHook } from 'claude-code'
 
 import { brainState, readHeat, readHome, send } from '../brain/runtime.ts'
 import { BAND_HEIGHT } from '../character/geometry.ts'
-import { debugLog } from './debug-log.ts'
 import { createDrawings } from './drawing.ts'
 import { framesView, swapIn } from './frames.ts'
 
@@ -41,9 +40,7 @@ export async function renderBand($: EngineInterface, e: Parameters<BandHook>[1],
     now = await $.clock.now()
   } catch {}
   const source = drawingFor(brainState(), width, now)
-  if (swapIn($, source, width)) {
-    debugLog($, `swap width=${width} cols=${e.props.bodyColumns} working=${e.props.isWorking}`, framesView(), brainState())
-  }
+  swapIn($, source, width)
 
   const frames = framesView()
   const slot = (i: number) => {

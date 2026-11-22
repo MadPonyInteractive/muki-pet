@@ -9,9 +9,6 @@
 
 import type { EngineInterface } from 'claude-code'
 
-import { brainState } from '../brain/runtime.ts'
-import { debugLog } from './debug-log.ts'
-
 type Timer = { cancel: () => void }
 
 // How long the old drawing stays on top while a new one loads under it. The
@@ -36,7 +33,6 @@ function dropOldAfter($: EngineInterface) {
   f.timer = $.clock.after(SWAP_MS, () => {
     f.timer = undefined
     f.slots[1 - f.active] = undefined
-    debugLog($, 'drop old', framesView(), brainState())
     $.ui.invalidate('ui.render')
   })
 }

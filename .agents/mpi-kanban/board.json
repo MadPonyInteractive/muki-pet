@@ -4,12 +4,12 @@
   "columns": {
     "todo": [
       "MPI-12",
-      "MPI-3",
       "MPI-5",
       "MPI-6"
     ],
     "doing": [],
     "done": [
+      "MPI-3",
       "MPI-9",
       "MPI-8",
       "MPI-13",

@@ -16,7 +16,6 @@
 | `hooks/band/render.tsx` | The band: asks the runtime for heat and home, picks the drawing, double buffer, JSX. |
 | `hooks/band/sensor.ts` | A `Client` surface module: tells the hooks when your mouse is over the band (see Moods § No redraw while you're with him). |
 | `hooks/band/frames.ts`, `drawing.ts` | Double buffer (two slots, 0.9 s swap); drawing cache per width/mood/heat/home. |
-| `hooks/band/debug-log.ts` | TEMPORARY redraw log (remove with MPI-3). |
 | `hooks/draw/index.ts` | Re-exports `robotSvg(width, { mood, from, home, heat, visit })` (pure, built in `compose.ts`) and the names tools and tests import. |
 | `hooks/draw/compose.ts` | Puts the body parts together and loops over `FEATURES`: root classes, CSS, defs and each feature's markup in its slot. |
 | `hooks/draw/feature.ts`, `features/` | **Pluggable drawing features**, one file each, all the `Feature` shape `{ name, rootClass?, css?, drawingCss?, defs?, slots? }`: `touch`, `sleep`, `heat` (CSS generated from `character/heat.ts`), `visit`, `cookies/` (`cues`, `cookie`, `eating`, `game`, `sick`). The list order in `features/index.ts` is the markup, root-class and CSS order. Slots: `head`, `overHead`, `ground`, `zones`, `behind`, `front`, `props` (described in `feature.ts`). |
