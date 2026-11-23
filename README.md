@@ -103,7 +103,7 @@ You need Node 22.18 or newer (it runs the `.ts` files directly) and Claude Code 
 
 1. `npm install` (dev tools only: the mod itself has no dependencies).
 2. Get the mod's TypeScript types: run `claude --plugin-dir ./muki-pet` once from the repo root, then quit it (`/exit`). Claude Code writes the types for your version into `muki-pet/.claude-plugin/types/` when it loads the mod. They aren't committed, and they change with each Claude Code release, so do this again after an update.
-3. `npm test` runs the four checks: type-check, golden drawings, `claude plugin test` and `claude plugin validate`. If the `claude` on your PATH is older than the app's, point `CLAUDE` at the newer binary.
+3. `npm test` runs the four checks: type-check, golden drawings, `claude plugin test` and `claude plugin validate`, plus a check that the version matches the changelog. If the `claude` on your PATH is older than the app's, point `CLAUDE` at the newer binary.
 
 To see your changes in the desktop app, load the mod from your clone: set `CLAUDE_CODE_PLUGIN_DIRS` to the full path of `muki-pet/` (in `env` in `~/.claude/settings.json`), open a new chat, and type `/reload-plugins` after each edit.
 
@@ -112,6 +112,8 @@ Other tools:
 - `node tools/preview.mjs <folder>` previews the robot in a browser, without the app.
 - `npm run shots` redraws the pictures in this README (needs Chrome).
 - `npm run icon` redraws the plugin icon from his face (needs Chrome).
+
+**Releasing a change:** raise `version` in [`muki-pet/.claude-plugin/plugin.json`](muki-pet/.claude-plugin/plugin.json) and add an entry at the top of [`CHANGELOG.md`](CHANGELOG.md), in the same commit. People who installed Muki keep their copy until that number changes. Then tag the commit `v<version>` and make a GitHub release from the changelog entry.
 
 How it all fits together: [`docs/architecture/how-it-works.md`](docs/architecture/how-it-works.md). How to add a mood, a prop or a new behaviour: [`docs/architecture/how-to-add.md`](docs/architecture/how-to-add.md).
 

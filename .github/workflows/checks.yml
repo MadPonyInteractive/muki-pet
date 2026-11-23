@@ -29,6 +29,8 @@ jobs:
           node-version: 24
       - name: Golden drawings
         run: node tools/golden.mjs
+      - name: Version check
+        run: node tools/version-check.mjs
       # The newest Claude Code, on purpose: users run the newest, and mod
       # features change between versions.
       - name: Install Claude Code

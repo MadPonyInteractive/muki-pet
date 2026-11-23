@@ -1,6 +1,6 @@
-// `npm test`: the four checks in one go, stopping at the first failure.
+// `npm test`: the four checks (and the version check) in one go, stopping at the first failure.
 // 1. type-check (needs the engine-written types; see README § Develop)
-// 2. golden drawings
+// 2. golden drawings, then the version check (tools/version-check.mjs)
 // 3. claude plugin test
 // 4. claude plugin validate
 // The Claude Code CLI is `claude` on PATH; set CLAUDE to another binary's path
@@ -21,6 +21,7 @@ if (!existsSync(join(root, 'muki-pet', '.claude-plugin', 'types', 'claude-code',
 const steps = [
   ['type-check', process.execPath, [join(root, 'node_modules', 'typescript', 'bin', 'tsc'), '-p', 'muki-pet']],
   ['golden', process.execPath, [join(root, 'tools', 'golden.mjs')]],
+  ['version', process.execPath, [join(root, 'tools', 'version-check.mjs')]],
   ['plugin test', claude, ['plugin', 'test', './muki-pet']],
   ['plugin validate', claude, ['plugin', 'validate', './muki-pet']],
 ]
@@ -35,4 +36,4 @@ for (const [name, cmd, args] of steps) {
     process.exit(r.status || 1)
   }
 }
-console.log('\nAll four checks passed.')
+console.log('\nAll checks passed.')
