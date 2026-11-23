@@ -6,6 +6,7 @@
 import { K } from '../classes.ts'
 import type { Feature } from '../feature.ts'
 import { r1 } from '../math.ts'
+import { calm } from '../parts/body-css.ts'
 
 // Where each burst goes (around him, above the ground), its colour and when it
 // starts (s). The first waits for the old drawing to fade out (FADE_IN).
@@ -46,7 +47,10 @@ const css = () =>
   `@keyframes party{0%,100%{transform:none}` +
   `20%{transform:translate(-9px,-8px) rotate(-12deg)}35%{transform:translate(-6px,0) scale(1.1,.88)}` +
   `60%{transform:translate(9px,-8px) rotate(12deg)}75%{transform:translate(6px,0) scale(1.1,.88)}}` +
-  `@keyframes cheer{0%,100%{transform:none}25%{transform:rotate(-10deg)}75%{transform:rotate(10deg)}}`
+  `@keyframes cheer{0%,100%{transform:none}25%{transform:rotate(-10deg)}75%{transform:rotate(10deg)}}` +
+  // Less motion: no fireworks and no head wiggle; his happy eyes stay (the
+  // jumps go with the hop, parts/body-css.ts).
+  calm(`.${K.burst},.${K.petTilt}{animation:none!important}`)
 
 export const celebrate: Feature = {
   name: 'celebrate',

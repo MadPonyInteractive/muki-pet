@@ -5,7 +5,9 @@
   "description": "Dev tools for the Muki mod. The mod itself (muki-pet/) has no dependencies.",
   "scripts": {
     "check": "tsc -p muki-pet",
-    "golden": "node tools/golden.mjs"
+    "golden": "node tools/golden.mjs",
+    "test": "node tools/test-all.mjs",
+    "icon": "node tools/icon.mjs"
   },
   "devDependencies": {
     "typescript": "7.0.2"

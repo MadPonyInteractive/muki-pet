@@ -1,0 +1,39 @@
+# The checks that run without the Claude app: golden drawings, `claude plugin
+# test` and `claude plugin validate` (neither needs a sign-in). The type-check
+# stays local: its types are written only when Claude Code loads the mod in an
+# interactive session (README § Develop).
+name: checks
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+# A push is a group of one, so every commit gets its own verdict; a PR cancels
+# its own superseded runs.
+concurrency:
+  group: checks-${{ github.event_name == 'pull_request' && github.ref || github.run_id }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Golden drawings
+        run: node tools/golden.mjs
+      # The newest Claude Code, on purpose: users run the newest, and mod
+      # features change between versions.
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+      - name: Plugin tests
+        run: claude plugin test ./muki-pet
+      - name: Plugin validate
+        run: claude plugin validate ./muki-pet

@@ -5,9 +5,10 @@
 // loops; this file has the marks and the keyframes. Hover or touch stops it
 // while your hand is on him (petting calms him).
 
-import { K } from '../classes.ts'
+import { K, moodClass } from '../classes.ts'
 import type { Feature } from '../feature.ts'
 import { r1 } from '../math.ts'
+import { calm } from '../parts/body-css.ts'
 
 // One cycle: the burst, then calm until the next one.
 const CYCLE = 120
@@ -61,7 +62,9 @@ const tantrumCss = () =>
   swing('stomp', stomp) +
   swing('shake', (side, fade) => `rotate(${r1(-side * 14 * fade)}deg)`) +
   // Your hand on him calms him while it's there.
-  `.${K.bot}:hover .${K.petTilt}{animation:none}.${K.bot}:hover .${K.steam}{display:none}`
+  `.${K.bot}:hover .${K.petTilt}{animation:none}.${K.bot}:hover .${K.steam}{display:none}` +
+  // Less motion: no head shake (the stomp goes with the hop, parts/body-css.ts).
+  calm(`.${moodClass('tantrum')} .${K.petTilt}{animation:none!important}`)
 
 export const tantrum: Feature = {
   name: 'tantrum',

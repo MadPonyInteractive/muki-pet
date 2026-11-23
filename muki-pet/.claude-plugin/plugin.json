@@ -1,6 +1,15 @@
 {
   "name": "muki-pet",
+  "displayName": "Muki",
   "version": "0.1.0",
   "license": "MIT",
-  "description": "Unofficial robot pet that rolls around above the Claude Code prompt"
+  "description": "Unofficial robot pet that rolls around above the Claude Code prompt",
+  "author": {
+    "name": "Mad Pony Interactive",
+    "email": "contact@madponyinteractive.com",
+    "url": "https://madponyinteractive.com"
+  },
+  "homepage": "https://github.com/MadPonyInteractive/muki-pet",
+  "repository": "https://github.com/MadPonyInteractive/muki-pet",
+  "keywords": ["pet", "companion", "robot", "mod", "desktop", "fun"]
 }
