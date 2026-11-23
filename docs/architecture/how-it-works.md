@@ -81,7 +81,7 @@ Why this way, and not a frame-by-frame redraw: see `research/mods-api.md`.
 - Tired (`.h2`/`.h3`): `q2` never takes clicks (`!important`) and the focus hands back after 0.8 s.
 - The cookie game's "touch strips come back" animation (`tchA`/`tchB`) goes on `q1` only; on all `.p` it would make the wide `q5` clickable after a cookie.
 - `features/tantrum.ts`: the steam and "!!" marks (shown by the tantrum mood) and the `stomp`/`shake`/`puff`/`bang` keyframes, 120 s cycles with the burst in the first 4 s, generated in code.
-- Lab proof (hidden pane, `:focus`/`:hover` swapped for classes, transitions off): five hit-test-and-focus clicks on him climb `q1`..`q5`; `q5`'s hide is 15 s; angry lids under hover; dodge +30 px from the left strips, -30 px from the right; asleep hover = angry, no hop, no z's; at heat 2 the clicks stay on `q1` with 0.8 s. `tools/frame-lab-boop-test.svg` is the drawing used.
+- Lab proof (hidden pane, `:focus`/`:hover` swapped for classes, transitions off): five hit-test-and-focus clicks on him climb `q1`..`q5`; `q5`'s hide is 15 s; angry lids under hover; dodge +30 px from the left strips, -30 px from the right; asleep hover = angry, no hop, no z's; at heat 2 the clicks stay on `q1` with 0.8 s. the drawing used was what `node tools/lab-svg.mjs boop` now writes.
 
 ## Band width
 

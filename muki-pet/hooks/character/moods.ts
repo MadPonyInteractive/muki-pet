@@ -17,6 +17,19 @@ type Lasting = { kind: 'lasting'; still: boolean; face: Rule[] }
 type Passing = { kind: 'passing'; ms: number; still: boolean; face: Rule[] }
 export type MoodDef = Lasting | Passing
 
+// Faces two moods share. Sad: the top lids tilt up at the inner corners, eyes
+// down. Angry: the top lids slant down at the inner corners.
+const SAD_FACE: Rule[] = [
+  ['.topL', 'transform:translateY(4px) rotate(-24deg)'],
+  ['.topR', 'transform:translateY(4px) rotate(24deg)'],
+  ['.gz', 'transform:translateY(3px)'],
+]
+const MAD_FACE: Rule[] = [
+  ['.topL', 'transform:translateY(4px) rotate(20deg)'],
+  ['.topR', 'transform:translateY(4px) rotate(-20deg)'],
+  ['.eye', 'transform:scaleY(.92)'],
+]
+
 export const MOOD_TABLE = {
   neutral: { kind: 'lasting', still: false, face: [] },
   alert: {
@@ -64,11 +77,7 @@ export const MOOD_TABLE = {
     kind: 'passing',
     ms: 5000,
     still: true,
-    face: [
-      ['.topL', 'transform:translateY(4px) rotate(-24deg)'],
-      ['.topR', 'transform:translateY(4px) rotate(24deg)'],
-      ['.gz', 'transform:translateY(3px)'],
-    ],
+    face: SAD_FACE,
   },
   curious: {
     kind: 'lasting',
@@ -82,33 +91,14 @@ export const MOOD_TABLE = {
   },
   // He wants attention (brain/behaviours/attention.ts): lonely, then mad, then
   // tantrums. Lonely is the sad face, lasting until you play with him.
-  lonely: {
-    kind: 'lasting',
-    still: false,
-    face: [
-      ['.topL', 'transform:translateY(4px) rotate(-24deg)'],
-      ['.topR', 'transform:translateY(4px) rotate(24deg)'],
-      ['.gz', 'transform:translateY(3px)'],
-    ],
-  },
-  // Angry: the top lids slant down at the inner corners.
-  mad: {
-    kind: 'lasting',
-    still: false,
-    face: [
-      ['.topL', 'transform:translateY(4px) rotate(20deg)'],
-      ['.topR', 'transform:translateY(4px) rotate(-20deg)'],
-      ['.eye', 'transform:scaleY(.92)'],
-    ],
-  },
+  lonely: { kind: 'lasting', still: false, face: SAD_FACE },
+  mad: { kind: 'lasting', still: false, face: MAD_FACE },
   // Mad, and every 2 min a stomp-and-steam tantrum (draw/features/tantrum.ts).
   tantrum: {
     kind: 'lasting',
     still: true,
     face: [
-      ['.topL', 'transform:translateY(4px) rotate(20deg)'],
-      ['.topR', 'transform:translateY(4px) rotate(-20deg)'],
-      ['.eye', 'transform:scaleY(.92)'],
+      ...MAD_FACE,
       ['.stm', 'display:inline'],
       ['.hop', 'animation:stomp 120s linear 2s infinite'],
       ['.pt', 'animation:shake 120s linear 2s infinite'],

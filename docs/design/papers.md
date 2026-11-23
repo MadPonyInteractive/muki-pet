@@ -12,7 +12,7 @@ Fabio's idea, 2026-11-22: a pile of papers at the right-hand end of Muki's road,
 ## Checked
 
 - Stills paused at each moment of the visit, at 3x, in the browser pane (2026-11-22). Rolling, look, eye roll (up-right, top, up-left), half lids, head shake, leaving, home all read. The first eye-roll arc (±4 px) was too small to see; it is now ±6 px and 8.5 px up. Fabio, live (2026-11-22): the roll should be faster and more of an arc. It was 4 stops over 0.85 s, each easing to a halt; now it is 13 samples on a circle (-25 to 200 degrees, 6.5 x 7 px) at an even speed (`animation-timing-function:linear` on each stop) in 0.5 s, and the lids follow 0.2 s later.
-- `tools/frame-lab-papers-test.svg`: a pile visit with 4 papers, played as Desktop plays it (`tools/frame-lab.html?src=frame-lab-papers-test.svg&w=760&h=76`).
+- `node tools/lab-svg.mjs papers`: writes a pile visit with 4 papers from the current code and prints the lab link to play it as Desktop plays it.
 - With no pile, every drawing is byte-identical to before (golden 3366/3366): the pile's CSS is only written when there are papers.
 
 ## Open

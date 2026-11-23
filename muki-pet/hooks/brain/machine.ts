@@ -7,32 +7,34 @@
 //   4. what he shows is the highest-priority mood vote.
 // Whether a change is drawn now or waits is the last behaviour's call
 // (behaviours/hold.ts), so that rule lives in one place. A new behaviour is a
-// new file and one line in BEHAVIOURS.
+// new file and one entry in BEHAVIOURS: its slice in State comes from the list.
 
 import { initialActivity, advance, activityMood } from './activity.ts'
 import { Attention } from './behaviours/attention.ts'
 import type { Behaviour } from './behaviours/behaviour.ts'
 import { Celebrate } from './behaviours/celebrate.ts'
-import { held, Hold } from './behaviours/hold.ts'
+import { Hold } from './behaviours/hold.ts'
 import { Papers } from './behaviours/papers.ts'
 import { Reaction } from './behaviours/reaction.ts'
 import { Remote } from './behaviours/remote.ts'
-import { activeVisit as activeOf, VisitBehaviour } from './behaviours/visit.ts'
+import { activeVisit as activeOf, held } from './behaviours/running.ts'
+import { VisitBehaviour } from './behaviours/visit.ts'
 import type { DrawingOptions, Effect, Event, MoodVote, State, Visit } from './types.ts'
 
 export type { Effect, Event, State, TimerName, Visit } from './types.ts'
 
 // In the order they run. The hold goes last: it decides about redraws after
 // the others have said what changed.
-const reaction = new Reaction()
-const celebrate = new Celebrate()
-const attention = new Attention()
-const visit = new VisitBehaviour()
-const papers = new Papers()
-const remote = new Remote()
-const hold = new Hold()
-// Each is keyed in State.slices by its name.
-const BEHAVIOURS: Array<Behaviour<any>> = [reaction, celebrate, attention, visit, papers, remote, hold]
+const BEHAVIOURS = [new Reaction(), new Celebrate(), new Attention(), new VisitBehaviour(), new Papers(), new Remote(), new Hold()] as const
+
+// State.slices: each behaviour's slice, under its name (types.ts uses this).
+type Each = (typeof BEHAVIOURS)[number]
+export type Slices = { [B in Each as B['name']]: ReturnType<B['initial']> }
+
+// The loops below see every behaviour the same way; each one's own slice
+// is fetched by name in one place.
+const ALL: ReadonlyArray<Behaviour<unknown>> = BEHAVIOURS
+const sliceOf = (b: Behaviour<unknown>, s: State): unknown => (s.slices as Record<string, unknown>)[b.name]
 
 export const initialState = (): State => ({
   activity: initialActivity(),
@@ -42,12 +44,12 @@ export const initialState = (): State => ({
   heatKnown: false,
   homeKnown: false,
   width: 0,
-  slices: { reaction: reaction.initial(), celebrate: celebrate.initial(), attention: attention.initial(), visit: visit.initial(), papers: papers.initial(), remote: remote.initial(), hold: hold.initial() },
+  slices: Object.fromEntries(ALL.map(b => [b.name, b.initial()])) as Slices,
 })
 
 // The mood that wins: the highest priority among the activity's and the behaviours' votes.
 export function feeling(s: State): State['mood'] {
-  const votes = [activityMood(s.activity), ...BEHAVIOURS.map(b => b.mood(s.slices[b.name as keyof State['slices']]))]
+  const votes = [activityMood(s.activity), ...ALL.map(b => b.mood(sliceOf(b, s)))]
   let best = votes[0]!
   for (const v of votes) if (v && v.priority > best.priority) best = v
   return best.mood
@@ -61,7 +63,7 @@ export const nearHold = (s: State) => held(s.slices.hold)
 // What the behaviours add to the next drawing.
 export function drawingOptions(s: State, now: number): DrawingOptions {
   let options: DrawingOptions = {}
-  for (const b of BEHAVIOURS) options = { ...options, ...b.drawing(s.slices[b.name as keyof State['slices']], now) }
+  for (const b of ALL) options = { ...options, ...b.drawing(sliceOf(b, s), now) }
   return options
 }
 
@@ -99,10 +101,10 @@ export function step(state: State, event: Event, now: number): { state: State; e
     s.activity = next.activity
     fx.push(...next.effects)
 
-    for (const b of BEHAVIOURS) {
+    for (const b of ALL) {
       // A paper more or less in the pile is drawn too, and the headset going on, off or settling.
       const wants = top && (heatChanged || feeling(s) !== s.mood || s.slices.papers.count !== state.slices.papers.count || s.slices.remote !== state.slices.remote)
-      const r = b.on(ev, s.slices[b.name as keyof State['slices']], { now, state: s, wants })
+      const r = b.on(ev, sliceOf(b, s), { now, state: s, wants })
       Object.assign(s.slices, { [b.name]: r.slice })
       if (r.home !== undefined) s.home = r.home
       for (const req of r.effects) {

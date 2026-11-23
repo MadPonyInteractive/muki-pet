@@ -12,6 +12,13 @@ export const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.mi
 // A share of the band (0 = left end, 1 = right end) as an x in pixels.
 export const bandX = (W: number, u: number) => EDGE + clamp(u, 0, 1) * Math.max(0, W - 2 * EDGE)
 
+// And back: an x in pixels as a share of the band (the middle when it's too narrow).
+export const toU = (W: number, x: number) => (W > 2 * EDGE ? (x - EDGE) / (W - 2 * EDGE) : 0.5)
+
+// A number in [0, 1) that changes a lot from one n to the next (golden ratio),
+// so visit n+1 doesn't look like visit n.
+export const jitter = (n: number) => (n * 0.618034) % 1
+
 export type VisitPlan = {
   fromX: number
   toX: number
@@ -37,7 +44,7 @@ export function visitPlan(width: number, fromU: number, n: number): VisitPlan {
   const W = Math.round(width)
   const fromX = Math.round(bandX(W, fromU))
   const s = fromX < W / 2 ? 1 : -1
-  const X = clamp(fromX + s * (110 + 120 * ((n * 0.618034) % 1)), 30, W - 30)
+  const X = clamp(fromX + s * (110 + 120 * jitter(n)), 30, W - 30)
   const toX = Math.round(clamp(X - s * 32, EDGE, Math.max(EDGE, W - EDGE)))
   const go = Math.round(clamp(Math.abs(toX - fromX) / 110, 0.7, 2.5) * 100) / 100
   const arrive = 0.9 + go
@@ -45,7 +52,7 @@ export function visitPlan(width: number, fromU: number, n: number): VisitPlan {
   return {
     fromX,
     toX,
-    toU: W > 2 * EDGE ? (toX - EDGE) / (W - 2 * EDGE) : 0.5,
+    toU: toU(W, toX),
     off: Math.round(X - toX),
     s,
     go,

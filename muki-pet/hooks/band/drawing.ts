@@ -5,7 +5,7 @@
 
 import { activeVisit, drawingOptions, nearHold, type State } from '../brain/machine.ts'
 import { robotSvg, type Mood } from '../draw/index.ts'
-import { activePile } from '../brain/behaviours/papers.ts'
+import { activePile } from '../brain/behaviours/running.ts'
 
 export function createDrawings() {
   let cached = { key: '', width: 0, mood: 'neutral' as Mood, visit: undefined as number | undefined, source: '' }

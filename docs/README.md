@@ -27,7 +27,7 @@ Read this index first, then the latest file in `handoffs/`.
 - [handoffs/2026-11-22-coin-game-built.md](handoffs/2026-11-22-coin-game-built.md): previous (swap, coin game, heat and touch fix)
 - [handoffs/2026-11-22-coin-game-plan.md](handoffs/2026-11-22-coin-game-plan.md): previous (the build plan, done)
 - [handoffs/2026-11-22-moods-built.md](handoffs/2026-11-22-moods-built.md): previous (moods built)
-- `tools/frame-lab.html`: draws an SVG exactly as Desktop does (same sanitizer, CSP, sandbox) for testing in the browser pane; `tools/frame-lab-ladder-test.svg` is the cookie-counting proof
+- `tools/frame-lab.html`: draws an SVG exactly as Desktop does (same sanitizer, CSP, sandbox) for testing in the browser pane; `tools/frame-lab-ladder-test.svg` is the cookie-counting proof and `frame-lab-coin-test.svg` the click-to-focus proof (both hand-written). A drawing from the current code: `node tools/lab-svg.mjs <boop|kick|papers|tantrum|'{json options}'> [width]` (writes a git-ignored `tools/frame-lab-<name>.svg` and prints the lab URL)
 - [handoffs/2026-11-22-robot-visible.md](handoffs/2026-11-22-robot-visible.md): previous (done)
 - [handoffs/2026-11-22-robot-not-visible.md](handoffs/2026-11-22-robot-not-visible.md): older (done)
 

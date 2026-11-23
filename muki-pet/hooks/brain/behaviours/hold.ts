@@ -18,6 +18,7 @@
 import { AFTER_VISIT_MS, NEAR_GRACE_MS } from '../../character/tuning.ts'
 import type { Ctx, Event, Request, Result } from '../types.ts'
 import { Behaviour } from './behaviour.ts'
+import { activePile, activeVisit, held } from './running.ts'
 
 export type HoldSlice = {
   // Your mouse is over the band, or left it less than NEAR_GRACE_MS ago.
@@ -28,8 +29,6 @@ export type HoldSlice = {
   // The visit-end timer is running.
   visitEndSet: boolean
 }
-
-export const held = (slice: HoldSlice) => slice.near || slice.nearGrace
 
 export class Hold extends Behaviour<HoldSlice> {
   readonly name = 'hold'
@@ -56,12 +55,8 @@ export class Hold extends Behaviour<HoldSlice> {
         s.deferred = true
         return
       }
-      // (visit.ts and papers.ts have the same test as activeVisit/activePile;
-      // they can't be imported here without a cycle.)
-      const prop = ctx.state.slices.visit.visit
-      const pile = ctx.state.slices.papers.visit
-      const v = prop && ctx.now < prop.end ? prop : pile
-      if (v && ctx.now < v.end) {
+      const v = activeVisit(ctx.state.slices.visit, ctx.now) ?? activePile(ctx.state.slices.papers, ctx.now)
+      if (v) {
         s.deferred = true
         afterVisit(v.end - ctx.now + AFTER_VISIT_MS)
         return

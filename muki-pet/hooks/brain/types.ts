@@ -5,13 +5,7 @@
 import type { Mood } from '../character/moods.ts'
 import type { Prop } from '../character/props.ts'
 import type { ActivityState } from './activity.ts'
-import type { AttentionSlice } from './behaviours/attention.ts'
-import type { CelebrateSlice } from './behaviours/celebrate.ts'
-import type { HoldSlice } from './behaviours/hold.ts'
-import type { ReactionSlice } from './behaviours/reaction.ts'
-import type { PapersSlice } from './behaviours/papers.ts'
-import type { RemoteSlice } from './behaviours/remote.ts'
-import type { VisitSlice } from './behaviours/visit.ts'
+import type { Slices } from './machine.ts'
 
 // Timers are namespaced by whoever owns them.
 export type TimerName = 'activity.sleepy' | 'activity.asleep' | 'reaction.flash' | 'hold.visitEnd' | 'hold.nearEnd' | 'attention.next' | 'papers.next' | 'celebrate.end' | 'remote.idle' | 'remote.settle'
@@ -75,8 +69,8 @@ export type State = {
   homeKnown: boolean
   // The band's width in px, 0 until it is first drawn. A visit needs it.
   width: number
-  // One slice per behaviour, under its name.
-  slices: { reaction: ReactionSlice; celebrate: CelebrateSlice; attention: AttentionSlice; visit: VisitSlice; papers: PapersSlice; remote: RemoteSlice; hold: HoldSlice }
+  // One slice per behaviour, under its name (from the list in machine.ts).
+  slices: Slices
 }
 
 // What a behaviour is told besides the event.

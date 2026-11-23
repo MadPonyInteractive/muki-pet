@@ -4,7 +4,7 @@
 // Pure, and shared: the brain plans a visit with pilePlan, and the drawing
 // (draw/features/papers.ts) rolls him along the same plan.
 
-import { bandX, clamp, EDGE } from './geometry.ts'
+import { bandX, clamp, EDGE, jitter, toU } from './geometry.ts'
 import { LEAD, MINUTE, SECOND } from './tuning.ts'
 
 // At most this many papers are drawn; more tasks don't grow the pile.
@@ -18,7 +18,7 @@ export const PILE_EVERY_MAX = 6 * MINUTE
 export const PILE_RETRY = 30 * SECOND
 
 // The wait before visit n+1 (n >= 1).
-export const pileGap = (n: number) => Math.round(PILE_EVERY_MIN + (PILE_EVERY_MAX - PILE_EVERY_MIN) * ((n * 0.618034) % 1))
+export const pileGap = (n: number) => Math.round(PILE_EVERY_MIN + (PILE_EVERY_MAX - PILE_EVERY_MIN) * jitter(n))
 
 // The pile's middle: near the right end of the band.
 export const pileX = (W: number) => Math.round(W - 24)
@@ -46,7 +46,7 @@ export function pilePlan(width: number, fromU: number, n: number): PilePlan {
   const fromX = Math.round(bandX(W, fromU))
   const hi = Math.max(EDGE, W - EDGE)
   const atX = Math.round(clamp(pileX(W) - 40, EDGE, hi))
-  const toX = Math.round(clamp(atX - (120 + 120 * ((n * 0.618034) % 1)), EDGE, hi))
+  const toX = Math.round(clamp(atX - (120 + 120 * jitter(n)), EDGE, hi))
   const go = Math.round(clamp(Math.abs(atX - fromX) / 110, 0.6, 2.5) * 100) / 100
   const back = Math.round(clamp(Math.abs(atX - toX) / 140, 0.6, 2) * 100) / 100
   const arrive = LEAD + 0.4 + go
@@ -56,7 +56,7 @@ export function pilePlan(width: number, fromU: number, n: number): PilePlan {
     fromX,
     atX,
     toX,
-    toU: W > 2 * EDGE ? (toX - EDGE) / (W - 2 * EDGE) : 0.5,
+    toU: toU(W, toX),
     go,
     arrive,
     leave,

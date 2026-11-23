@@ -4,3 +4,7 @@
 
 # Dev tools (root package.json)
 node_modules/
+
+# Lab drawings written by tools/lab-svg.mjs (the hand-written *-test.svg stay)
+tools/frame-lab-*.svg
+!tools/frame-lab-*-test.svg

@@ -30,12 +30,13 @@ Something must still *choose* the mood: a passing mood is shown by a behaviour (
 
 `muki-pet/hooks/character/heat.ts`: add an entry to `HEAT_LEVELS` (keep them in rising `from` order): `from` (context %), `bezel`, `chassis`, `rim`, `tyre` colours, `droop` (px the top lids drop), `sweat` (0, 1 or 2 drops). `MAX_HEAT`, `heatOf` and the CSS (`draw/features/heat.ts`) follow the table.
 
-## A behaviour (one new file + two small edits)
+## A behaviour (one new file + one line, plus its timers and events)
 
 1. `muki-pet/hooks/brain/behaviours/<name>.ts`: a class extending `Behaviour<Slice>` (from `behaviour.ts`). Give it `readonly name`, `initial()` and `on(event, slice, ctx) -> { slice, effects }`; add `mood(slice)` (a `{ mood, priority }` vote: asking is 30, reactions 20, activity 10) or `drawing(slice, now)` (drawing options) if it needs them. Return effects as data (`startTimer`, `cancelTimer`, `redraw`, `{ type: 'emit', event }`); never touch `$`. `reaction.ts` is the smallest example.
-2. `muki-pet/hooks/brain/types.ts`: add its slice to `State['slices']`, its timers to `TimerName` (name them `<behaviour>.<timer>`), and any new event to `Event`.
-3. `muki-pet/hooks/brain/machine.ts`: add it to `BEHAVIOURS` (before `hold`, which must stay last) and its `initial()` to `initialState`'s `slices`.
-4. A test in `brain/machine.test.ts` from a fresh state.
+2. `muki-pet/hooks/brain/machine.ts`: add `new <Name>()` to `BEHAVIOURS` (before `hold`, which must stay last). Its slice in `State['slices']` (under its `name`) and in `initialState` come from that list; `readonly name = '<name>'` must stay a literal.
+3. `muki-pet/hooks/brain/types.ts`: its timers in `TimerName` (name them `<behaviour>.<timer>`), and any new event in `Event`.
+4. If other behaviours ask about it ("is X running"), put that test in `brain/behaviours/running.ts` (type imports only), not in its own file, so there is no import cycle.
+5. A test in `brain/machine.test.ts` from a fresh state.
 
 A new Claude Code event also needs a line in `register.tsx` that `send`s it (hooks call `next(e)` and return its result untouched, inside `try`).
 

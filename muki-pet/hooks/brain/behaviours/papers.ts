@@ -9,8 +9,7 @@ import { MAX_PAPERS, PILE_FIRST, PILE_RETRY, pileGap, pilePlan } from '../../cha
 import { AFTER_VISIT_MS, SECOND } from '../../character/tuning.ts'
 import type { Ctx, DrawingOptions, Event, Request, Result } from '../types.ts'
 import { Behaviour } from './behaviour.ts'
-import { held } from './hold.ts'
-import { activeVisit } from './visit.ts'
+import { activePile, activeVisit, held } from './running.ts'
 
 export type PileVisit = { from: number; n: number; start: number; end: number }
 
@@ -22,8 +21,6 @@ export type PapersSlice = {
   // The next-visit timer is running.
   timerSet: boolean
 }
-
-export const activePile = (slice: PapersSlice, now: number): PileVisit | undefined => (slice.visit && now < slice.visit.end ? slice.visit : undefined)
 
 export class Papers extends Behaviour<PapersSlice> {
   readonly name = 'papers'

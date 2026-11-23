@@ -6,11 +6,9 @@ import { visitPlan } from '../../character/geometry.ts'
 import { AFTER_VISIT_MS, PROP_GAP, SECOND } from '../../character/tuning.ts'
 import type { Ctx, DrawingOptions, Event, Request, Result, Visit } from '../types.ts'
 import { Behaviour } from './behaviour.ts'
-import { held } from './hold.ts'
+import { activePile, activeVisit, held } from './running.ts'
 
 export type VisitSlice = { visit?: Visit; visits: number; lastVisit: number }
-
-export const activeVisit = (slice: VisitSlice, now: number): Visit | undefined => (slice.visit && now < slice.visit.end ? slice.visit : undefined)
 
 export class VisitBehaviour extends Behaviour<VisitSlice> {
   readonly name = 'visit'
@@ -22,9 +20,7 @@ export class VisitBehaviour extends Behaviour<VisitSlice> {
   on(event: Event, slice: VisitSlice, ctx: Ctx): Result<VisitSlice> {
     const { state, now } = ctx
     if (event.type !== 'toolStart') return { slice, effects: [] }
-    // (papers.ts imports this file, so the pile visit is tested inline.)
-    const pile = state.slices.papers.visit
-    if (state.mood === 'asleep' || held(state.slices.hold) || !state.width || now - slice.lastVisit < PROP_GAP || activeVisit(slice, now) || (pile && now < pile.end)) {
+    if (state.mood === 'asleep' || held(state.slices.hold) || !state.width || now - slice.lastVisit < PROP_GAP || activeVisit(slice, now) || activePile(state.slices.papers, now)) {
       return { slice, effects: [] }
     }
     const n = slice.visits + 1
