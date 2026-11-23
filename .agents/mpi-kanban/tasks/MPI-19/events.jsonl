@@ -1,1 +1,4 @@
 {"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-19", "at": "2026-11-23T08:26:01+00:00", "actor": "claude", "column": "todo", "title": "Tantrum: a red heart that breaks, falls and gets run over"}
+{"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-19", "at": "2026-11-23T10:08:47+00:00", "actor": "claude", "from": "todo", "to": "doing", "reason": "Implementation started."}
+{"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-19", "at": "2026-11-23T11:09:33+00:00", "actor": "claude", "from": "doing", "to": "doing", "reason": "Verified in the lab and live by Fabio."}
+{"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-19", "at": "2026-11-23T11:11:28+00:00", "actor": "claude", "from": "doing", "to": "done", "reason": "Heart, fast stamping, calm-at-once and no tantrum on trips verified in the frame lab and live by Fabio; checks pass."}

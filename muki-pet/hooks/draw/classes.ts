@@ -47,10 +47,15 @@ export const K = {
   // Touch.
   pet: 'p', // a touch strip over him
   heart: 'hrt', // a floating heart
-  // A tantrum: steam puffs and a red "!!" over his head.
+  // A tantrum: steam puffs and a red heart over his head that breaks, falls
+  // and gets run over.
   steam: 'stm',
   puff: 'pf',
-  bang: 'bng',
+  heartBreak: 'hbk', // the whole heart: pops in, beats, fades
+  halfLeft: 'hhl', // a half: cracks off and falls
+  halfRight: 'hhr',
+  flatLeft: 'hfl', // a fallen half: a wheel squashes it flat
+  flatRight: 'hfr',
   // Sleep and visit marks over his head.
   zz: 'zz',
   z1: 'z1',

@@ -14,9 +14,12 @@ import { FACE_DEFS } from './face.ts'
 import { head } from './head.ts'
 import { wheelShape } from './wheels.ts'
 
+// How far each wheel sits from his middle (before SCALE).
+export const WHEEL_DX = 15
+
 const parts = (headExtra: string) =>
-  wheelShape(-15) +
-  wheelShape(15) +
+  wheelShape(-WHEEL_DX) +
+  wheelShape(WHEEL_DX) +
   `<rect class="${K.chassis}" x="-21" y="-27" width="42" height="11" rx="5.5" fill="${COLORS.bezel}"/>` +
   head(headExtra)
 
