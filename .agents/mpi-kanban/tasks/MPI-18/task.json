@@ -1,0 +1,21 @@
+{
+  "schema": "mpi-kanban/task-card/v1",
+  "id": "MPI-18",
+  "title": "Pets and cookies don't end his mad or tantrum",
+  "description": "Fabio, 2026-11-23: he almost never sees Muki lonely; soon after a pet or cookie Muki is mad, and tantrums never end however much you pet him or give him cookies. Find the cause live (band near events vs attention.ts clock), then fix.",
+  "column": "doing",
+  "maturity": "validating",
+  "status": "active",
+  "created_at": "2026-11-23T07:41:04+00:00",
+  "updated_at": "2026-11-23T08:26:01+00:00",
+  "links": {
+    "brief": "brief.md",
+    "plan": "plan.md",
+    "checklist": "checklist.md",
+    "validation": "validation.md",
+    "files": "files.json",
+    "events": "events.jsonl",
+    "handoffs": "handoffs/",
+    "research": "research/"
+  }
+}

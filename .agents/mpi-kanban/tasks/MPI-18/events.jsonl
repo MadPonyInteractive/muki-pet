@@ -1,0 +1,3 @@
+{"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-18", "at": "2026-11-23T07:41:04+00:00", "actor": "claude", "column": "todo", "title": "Pets and cookies don't end his mad or tantrum"}
+{"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-18", "at": "2026-11-23T07:43:45+00:00", "actor": "claude", "from": "todo", "to": "doing", "reason": "investigating live with a temporary log"}
+{"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-18", "at": "2026-11-23T08:26:01+00:00", "actor": "claude", "from": "doing", "to": "doing", "reason": "fixed and verified live by Fabio; commit and close pending"}

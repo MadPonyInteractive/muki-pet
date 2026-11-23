@@ -13,6 +13,7 @@ import { MOODS, PROPS, robotSvg, visitPlan, type Mood, type Prop } from './draw/
 import { STORE_HEAT, STORE_HOME, createBrain, readHeat, readHome } from './brain/runtime.ts'
 import { heatOf } from './character/heat.ts'
 import { renderBand } from './band/render.tsx'
+import Sensor from './band/sensor.ts'
 
 const BAND = {
   plugin: 'muki-pet',
@@ -323,6 +324,37 @@ test('while your mouse is over the band (the sensor squeezed to 0 wide) a turn d
   expect(after.some(s => s !== shown)).toBe(true)
   expect(after.some(s => moodOf(s) !== moodOf(shown))).toBe(true)
   await ui.unmount()
+})
+
+// MPI-18: the sensor once kept its memory with setState. Desktop unmounts a
+// Client that calls setState on three renders in a row with no pointer, key or
+// props between, and each resize is such a render: the sensor died after its
+// first visit (wake, over, left), so your pets and cookies never reached his
+// attention clock. `claude plugin test` doesn't apply that rule to resizes, so
+// this checks the sensor directly: it posts every visit and never calls setState.
+test('the sensor reports every visit of your mouse and never calls setState', () => {
+  const posts: unknown[] = []
+  let setStates = 0
+  const call = (columns: number) =>
+    Sensor(null, {
+      elements: { Box: () => ({}) },
+      state: undefined,
+      setState: () => void setStates++,
+      columns,
+      rows: 0,
+      every: () => () => {},
+      onPointer: () => () => {},
+      onKey: () => () => {},
+      post: (data: unknown) => void posts.push(data),
+    } as unknown as Parameters<typeof Sensor>[1])
+  call(90)
+  posts.length = 0
+  for (let visit = 1; visit <= 5; visit++) {
+    call(0)
+    call(90)
+  }
+  expect(posts).toEqual(Array.from({ length: 5 }, () => [{ over: true }, { over: false }]).flat())
+  expect(setStates).toBe(0)
 })
 
 // Opening a chat fires two renders at once. One that didn't wait for his saved

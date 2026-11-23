@@ -19,6 +19,7 @@ Read this index first, then the latest file in `handoffs/`.
 - [research/mods-api.md](research/mods-api.md): what the mods API can and can't do for us
 - [log/2026-11-21.md](log/2026-11-21.md): day one
 - [log/2026-11-22.md](log/2026-11-22.md): first time seen in the app
+- [log/2026-11-23.md](log/2026-11-23.md): the mouse sensor that died after one visit (MPI-18)
 - [architecture/how-to-add.md](architecture/how-to-add.md): how to add a mood, prop, feature or behaviour
 - [handoffs/2026-11-23-review-fixes.md](handoffs/2026-11-23-review-fixes.md): **current handoff** (MPI-17 review fixes: phases 1-2 done, docs next)
 - [handoffs/2026-11-22-ghost-hunt-fixed.md](handoffs/2026-11-22-ghost-hunt-fixed.md): previous (ghost cause found: a chat opened again replays its last drawing; done)
