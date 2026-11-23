@@ -74,3 +74,6 @@ export const BACK = '1s cubic-bezier(.45,0,.3,1)'
 // The Remote Control headset comes off this long after your last message from
 // the phone or web (MPI-15), unless you type at the desk first. In ms.
 export const REMOTE_IDLE_MS = 15 * 60_000
+// How long the headset's drop (or lift) plays before drawings show it at rest
+// (its longest animation, the happy squint, ends at 1.9 s).
+export const HEADSET_SETTLE_MS = 2.5 * SECOND

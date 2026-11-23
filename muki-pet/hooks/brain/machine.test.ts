@@ -5,13 +5,13 @@ import { expect, test } from 'claude-code/testing'
 import { visitPlan } from '../character/geometry.ts'
 import { passingMs } from '../character/moods.ts'
 import {
-  LONELY_AFTER, MAD_AFTER, MINUTE, NEAR_GRACE_MS, PLAY_MS, PROP_GAP, SECOND, TANTRUM_AFTER, TIRED_HEAT, TIRED_LONELY,
+  HEADSET_SETTLE_MS, LONELY_AFTER, MAD_AFTER, MINUTE, NEAR_GRACE_MS, PLAY_MS, PROP_GAP, REMOTE_IDLE_MS, SECOND, TANTRUM_AFTER, TIRED_HEAT, TIRED_LONELY,
 } from '../character/tuning.ts'
 import { ACTIVITY_TABLE, advance, type ActivityState } from './activity.ts'
 import { Hold } from './behaviours/hold.ts'
 import { Reaction } from './behaviours/reaction.ts'
 import { VisitBehaviour } from './behaviours/visit.ts'
-import { feeling, initialState, nearHold, step, type Effect, type Event, type State } from './machine.ts'
+import { drawingOptions, feeling, initialState, nearHold, step, type Effect, type Event, type State } from './machine.ts'
 
 const go = (s: State, event: Event, now = 0) => step(s, event, now)
 const has = (fx: Effect[], type: Effect['type'], name?: string) =>
@@ -46,6 +46,41 @@ test('curious wins while a tool waits for your OK, and a failed tool saddens him
   expect(feeling(r.state)).toBe('curious')
   r = go(r.state, { type: 'toolDone', failed: true })
   expect(r.state.mood).toBe('sad')
+})
+
+test('the headset: a phone message puts it on, a desk message or the idle timer takes it off', () => {
+  const headset = (s: State) => drawingOptions(s, 0).headset
+  let r = go(drawn(), { type: 'prompt', origin: 'bridge' })
+  expect(headset(r.state)).toBe('drop')
+  expect(has(r.effects, 'redraw')).toBe(true)
+  expect(r.effects).toContainEqual({ type: 'startTimer', name: 'remote.idle', ms: REMOTE_IDLE_MS })
+  expect(r.effects).toContainEqual({ type: 'startTimer', name: 'remote.settle', ms: HEADSET_SETTLE_MS })
+  // Once it has dropped, a drawing with it at rest, so the last drawing never replays the drop.
+  r = go(r.state, { type: 'timer', name: 'remote.settle' })
+  expect(headset(r.state)).toBe('on')
+  expect(has(r.effects, 'redraw')).toBe(true)
+  // Another phone message changes nothing he shows.
+  expect(has(go(r.state, { type: 'prompt', origin: 'bridge' }).effects, 'redraw')).toBe(false)
+
+  const desk = go(r.state, { type: 'prompt', origin: 'composer' })
+  expect(headset(desk.state)).toBe('lift')
+  expect(has(desk.effects, 'cancelTimer', 'remote.idle')).toBe(true)
+  expect(headset(go(desk.state, { type: 'timer', name: 'remote.settle' }).state)).toBeUndefined()
+
+  const idle = go(r.state, { type: 'timer', name: 'remote.idle' })
+  expect(headset(idle.state)).toBe('lift')
+  expect(has(idle.effects, 'redraw')).toBe(true)
+})
+
+test('a phone message while your mouse is on him waits, and is drawn once after the grace', () => {
+  let r = go(drawn(), { type: 'near', on: true })
+  r = go(r.state, { type: 'prompt', origin: 'bridge' })
+  expect(has(r.effects, 'redraw')).toBe(false)
+  r = go(r.state, { type: 'near', on: false })
+  expect(has(r.effects, 'redraw')).toBe(false)
+  r = go(r.state, { type: 'timer', name: 'hold.nearEnd' })
+  expect(r.effects.filter(f => f.type === 'redraw')).toHaveLength(1)
+  expect(drawingOptions(r.state, 0).headset).toBe('drop')
 })
 
 test('no redraw when nothing he shows changes', () => {
@@ -191,6 +226,32 @@ test('activity: the transition table, state by state', () => {
   for (const state of Object.keys(ACTIVITY_TABLE) as ActivityState[]) {
     expect(advance(at(state), { type: 'near', on: true }).activity).toEqual(at(state))
   }
+})
+
+test('activity: curious ends only when the tool he asked about ends', () => {
+  let a = advance({ state: 'working', resume: 'working' }, { type: 'toolAsk', id: 'A' }).activity
+  expect(a.state).toBe('asking')
+  // Another tool (a sub-agent's, a parallel one) ending is not the answer.
+  a = advance(a, { type: 'toolDone', failed: false, id: 'B' }).activity
+  expect(a.state).toBe('asking')
+  // A sleep timer meanwhile keeps the question.
+  a = advance(a, { type: 'timer', name: 'activity.sleepy' }).activity
+  a = advance(a, { type: 'toolDone', failed: false, id: 'B' }).activity
+  expect(a.state).toBe('asking')
+  a = advance(a, { type: 'toolDone', failed: false, id: 'A' }).activity
+  expect(a.state).toBe('sleepy')
+
+  // Two asked at once: he waits for both.
+  a = advance({ state: 'working', resume: 'working' }, { type: 'toolAsk', id: 'A' }).activity
+  a = advance(a, { type: 'toolAsk', id: 'C' }).activity
+  a = advance(a, { type: 'toolDone', failed: false, id: 'A' }).activity
+  expect(a.state).toBe('asking')
+  a = advance(a, { type: 'toolDone', failed: false, id: 'C' }).activity
+  expect(a.state).toBe('working')
+
+  // The turn's end still ends it.
+  a = advance({ state: 'working', resume: 'working' }, { type: 'toolAsk', id: 'A' }).activity
+  expect(advance(a, { type: 'turnComplete', reason: 'answer' }).activity.state).toBe('idle')
 })
 
 test('reaction: passing moods on their events, each with its own timer', () => {

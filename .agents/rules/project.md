@@ -10,7 +10,8 @@ Governs all work on the Muki mod in this repo.
 - Never drive animation through `ui.render` redraws. Motion is pre-simulated CSS keyframes inside one interactive `Svg`.
 - Never carry motion across drawings with the hook's clock; every drawing starts him resting at home.
 - Keep the Svg alt constant. Desktop keeps the iframe only if source, alt, width and height are all identical.
-- Every hook calls `next(e)` and returns its result untouched, with its own code in `try`.
+- Every hook calls `next(e)` and returns its result untouched, with its own code in `try`. The band's render hook returns what other mods drew (`below`) if his drawing fails.
+- Anything in `$.store` that belongs to one chat is keyed by session id (`brain/chat-store.ts`); the store is shared by every chat.
 - The SVG string must stay under 131,072 characters; check the widest band after changing it.
 - Files in `muki-pet/` are LF in the index and the working tree (`git ls-files --eol`, 2026-11-22; git's "LF will be replaced by CRLF" warning is `core.autocrlf` talk, not the file). Still, a Python edit that writes `'\n'` into a JS string can become a real line break.
 - Before claiming done: `npm run check` (type-check) exits 0, `node tools/golden.mjs` says identical (or the change is meant to alter drawings: then `--write` and say which), `claude plugin test ./muki-pet` and `claude plugin validate ./muki-pet` pass.

@@ -10,7 +10,9 @@ import { expect, mock, test, type Mounted as TestMounted } from 'claude-code/tes
 
 import { K, heatLevel, moodClass, propClass } from './draw/classes.ts'
 import { MOODS, PROPS, robotSvg, visitPlan, type Mood, type Prop } from './draw/index.ts'
-import { STORE_HOME, createBrain, readHome } from './brain/runtime.ts'
+import { STORE_HEAT, STORE_HOME, createBrain, readHeat, readHome } from './brain/runtime.ts'
+import { heatOf } from './character/heat.ts'
+import { renderBand } from './band/render.tsx'
 
 const BAND = {
   plugin: 'muki-pet',
@@ -132,6 +134,8 @@ test('the widest band, hot and in any mood, stays under the frame size limit', (
   for (const prop of PROPS) {
     expect(robotSvg(3000, { mood: 'focused', heat: 3, visit: { prop, from: 0.9, n: 2, elapsed: 2 } }).length).toBeLessThan(FRAME_LIMIT)
   }
+  // The heaviest drawing: a tantrum, hot, with the full pile and the headset.
+  expect(robotSvg(3000, { mood: 'tantrum', from: 'mad', heat: 3, pile: { count: 6 }, headset: 'drop' }).length).toBeLessThan(FRAME_LIMIT)
   const hot = robotSvg(720, { heat: 3 })
   expect(moodOf(hot)).toBe('neutral')
   expect(heatOfDrawing(hot)).toBe(3)
@@ -323,6 +327,52 @@ test('while your mouse is over the band (the sensor squeezed to 0 wide) a turn d
 
 // Opening a chat fires two renders at once. One that didn't wait for his saved
 // spot drew him in the middle, then the saved spot came in and both showed.
+test('a failure in his own drawing still hands back what other mods drew', async () => {
+  const below = { type: 'context bar' }
+  const $ = {
+    ui: {
+      resolve: () => {
+        throw new Error('boom')
+      },
+    },
+  } as unknown as EngineInterface
+  const e = { ...BAND, surface: 'desktop' } as unknown as Parameters<typeof renderBand>[1]
+  expect(await renderBand($, e, (async () => below) as unknown as Parameters<typeof renderBand>[2])).toBe(below)
+})
+
+test('heat is saved per chat: a new chat with no figure yet starts cool', async () => {
+  // The test engine has no store or usage figures: a small fake shared by two chats.
+  const saved: Record<string, unknown> = { [STORE_HEAT]: 45 } // an old plain number is ignored
+  const chat = (id: string, percent?: number) =>
+    ({
+      clock: { now: async () => 0, after: () => ({ cancel() {} }) },
+      ui: { invalidate() {} },
+      session: { id: async () => id, usage: async () => ({ context: { percent } }) },
+      store: {
+        get: async (k: string) => saved[k],
+        set: async (k: string, v: unknown) => {
+          saved[k] = v
+        },
+      },
+    }) as unknown as EngineInterface
+  const flush = async () => {
+    for (let i = 0; i < 10; i++) await Promise.resolve()
+  }
+
+  const a = createBrain()
+  await readHeat(chat('A', 45), a)
+  await flush()
+  expect(a.state.heat).toBe(heatOf(45))
+
+  const b = createBrain()
+  await readHeat(chat('B'), b)
+  expect(b.state.heat).toBe(0)
+
+  const reloadedA = createBrain()
+  await readHeat(chat('A'), reloadedA)
+  expect(reloadedA.state.heat).toBe(heatOf(45))
+})
+
 test('two renders at once both wait for his saved spot', async () => {
   // The test engine has no store: a small fake with a slow one.
   const saved: Record<string, unknown> = { [STORE_HOME]: 0.3 }

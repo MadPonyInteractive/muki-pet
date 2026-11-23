@@ -1,0 +1,16 @@
+{
+  "schema": "mpi-kanban/files/v1",
+  "files": [
+    "muki-pet/hooks/",
+    "tools/golden.mjs",
+    "tools/shots.mjs",
+    "docs/",
+    "CLAUDE.md",
+    "README.md",
+    "LICENSE",
+    "package.json",
+    ".github/workflows/",
+    ".agents/rules/project.md",
+    ".agents/mpi-kanban/project-profile.md"
+  ]
+}

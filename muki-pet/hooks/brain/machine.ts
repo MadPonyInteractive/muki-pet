@@ -16,6 +16,7 @@ import { Celebrate } from './behaviours/celebrate.ts'
 import { held, Hold } from './behaviours/hold.ts'
 import { Papers } from './behaviours/papers.ts'
 import { Reaction } from './behaviours/reaction.ts'
+import { Remote } from './behaviours/remote.ts'
 import { activeVisit as activeOf, VisitBehaviour } from './behaviours/visit.ts'
 import type { DrawingOptions, Effect, Event, MoodVote, State, Visit } from './types.ts'
 
@@ -28,9 +29,10 @@ const celebrate = new Celebrate()
 const attention = new Attention()
 const visit = new VisitBehaviour()
 const papers = new Papers()
+const remote = new Remote()
 const hold = new Hold()
 // Each is keyed in State.slices by its name.
-const BEHAVIOURS: Array<Behaviour<any>> = [reaction, celebrate, attention, visit, papers, hold]
+const BEHAVIOURS: Array<Behaviour<any>> = [reaction, celebrate, attention, visit, papers, remote, hold]
 
 export const initialState = (): State => ({
   activity: initialActivity(),
@@ -40,7 +42,7 @@ export const initialState = (): State => ({
   heatKnown: false,
   homeKnown: false,
   width: 0,
-  slices: { reaction: reaction.initial(), celebrate: celebrate.initial(), attention: attention.initial(), visit: visit.initial(), papers: papers.initial(), hold: hold.initial() },
+  slices: { reaction: reaction.initial(), celebrate: celebrate.initial(), attention: attention.initial(), visit: visit.initial(), papers: papers.initial(), remote: remote.initial(), hold: hold.initial() },
 })
 
 // The mood that wins: the highest priority among the activity's and the behaviours' votes.
@@ -98,8 +100,8 @@ export function step(state: State, event: Event, now: number): { state: State; e
     fx.push(...next.effects)
 
     for (const b of BEHAVIOURS) {
-      // A paper more or less in the pile is drawn too.
-      const wants = top && (heatChanged || feeling(s) !== s.mood || s.slices.papers.count !== state.slices.papers.count)
+      // A paper more or less in the pile is drawn too, and the headset going on, off or settling.
+      const wants = top && (heatChanged || feeling(s) !== s.mood || s.slices.papers.count !== state.slices.papers.count || s.slices.remote !== state.slices.remote)
       const r = b.on(ev, s.slices[b.name as keyof State['slices']], { now, state: s, wants })
       Object.assign(s.slices, { [b.name]: r.slice })
       if (r.home !== undefined) s.home = r.home

@@ -69,9 +69,19 @@ export function advance(a: State['activity'], event: Event): { activity: State['
   if (key === 'turnStart') effects.push({ type: 'cancelTimer', name: 'activity.sleepy' }, { type: 'cancelTimer', name: 'activity.asleep' })
   if (key === 'turnComplete') effects.push({ type: 'startTimer', name: 'activity.sleepy', ms: SLEEPY_AFTER }, { type: 'startTimer', name: 'activity.asleep', ms: ASLEEP_AFTER })
   if (!cell) return { activity: a, effects }
-  if (cell === 'resume') return { activity: { state: a.resume, resume: a.resume }, effects }
-  if (typeof cell === 'object') return { activity: { state: 'asking', resume: cell.keep }, effects }
-  if (cell === 'asking') return { activity: a.state === 'asking' ? a : { state: 'asking', resume: a.state as Resting }, effects }
+  if (cell === 'resume') {
+    // Another tool ending (a sub-agent's, a parallel one) is not the answer.
+    const waiting = event.type === 'toolDone' ? (a.asked ?? []).filter(id => id !== event.id) : []
+    if (waiting.length) return { activity: { ...a, asked: waiting }, effects }
+    return { activity: { state: a.resume, resume: a.resume }, effects }
+  }
+  if (typeof cell === 'object') return { activity: { ...a, state: 'asking', resume: cell.keep }, effects }
+  if (cell === 'asking') {
+    const id = event.type === 'toolAsk' ? event.id : undefined
+    const asking = a.state === 'asking' ? a : { state: 'asking' as const, resume: a.state as Resting }
+    // Without an id, any tool's end answers him (as before ids were passed).
+    return { activity: id ? { ...asking, asked: [...(asking.asked ?? []), id] } : asking, effects }
+  }
   return { activity: { state: cell, resume: cell }, effects }
 }
 

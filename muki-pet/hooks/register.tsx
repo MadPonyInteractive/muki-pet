@@ -12,7 +12,6 @@ import { isConfirmation } from './character/confirm.ts'
 import { heatOf } from './character/heat.ts'
 import { propFor } from './character/props.ts'
 import { addPaper, sendPapers, startsBackgroundTask } from './brain/pile-store.ts'
-import { promptSeen } from './brain/remote.ts'
 import { send } from './brain/runtime.ts'
 
 export const register: Register = on => {
@@ -30,10 +29,10 @@ export const register: Register = on => {
   })
 
   // Remote Control: a message from your phone puts his headset on; one typed
-  // at the desk takes it off (brain/remote.ts).
+  // at the desk takes it off (brain/behaviours/remote.ts).
   on('prompt.submit', async ($, e, next) => {
     try {
-      promptSeen($, e.origin.kind)
+      await send($, { type: 'prompt', origin: e.origin.kind })
     } catch {}
     return next(e)
   })
@@ -61,12 +60,14 @@ export const register: Register = on => {
   on('tool.check', async ($, e, next) => {
     const verdict = await next(e)
     try {
-      if (verdict.decision === 'ask' && e.tool_use_id && e.approver === 'person') await send($, { type: 'toolAsk' })
+      if (verdict.decision === 'ask' && e.tool_use_id && e.approver === 'person') await send($, { type: 'toolAsk', id: e.tool_use_id })
     } catch {}
     return verdict
   })
 
-  // A tool Claude starts may drop a prop; when it ends, a failure saddens him.
+  // A tool Claude starts may drop a prop; when it ends, a failure saddens him
+  // (not a sub-agent's: those are not his business). Its id ends a question
+  // about that tool only.
   on('tool.call', async ($, e, next) => {
     try {
       const prop = !e.agentId && propFor(e.tool)
@@ -76,8 +77,8 @@ export const register: Register = on => {
     } catch {}
     const result = await next(e)
     try {
-      const failed = 'deny' in result || Boolean((result as { isError?: boolean }).isError)
-      await send($, { type: 'toolDone', failed })
+      const failed = !e.agentId && ('deny' in result || Boolean((result as { isError?: boolean }).isError))
+      await send($, { type: 'toolDone', failed, id: e.tool_use_id })
     } catch {}
     return result
   })

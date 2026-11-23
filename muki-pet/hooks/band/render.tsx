@@ -4,7 +4,6 @@
 import type { EngineInterface, MatchedHook } from 'claude-code'
 
 import { readPapers } from '../brain/pile-store.ts'
-import { remoteOn } from '../brain/remote.ts'
 import { brainState, readHeat, readHome, send } from '../brain/runtime.ts'
 import { BAND_HEIGHT } from '../character/geometry.ts'
 import { createDrawings } from './drawing.ts'
@@ -23,57 +22,61 @@ type BandHook = MatchedHook<'ui.render', { component: 'AbovePrompt' }>
 
 // The `ui.render` hook for the AbovePrompt band.
 export async function renderBand($: EngineInterface, e: Parameters<BandHook>[1], next: Parameters<BandHook>[2]) {
-  // The terminal has no Svg (a Raster version is a later milestone).
+  // The terminal has no Svg, and he stays a Desktop mod (its stills can't move).
   if (e.surface === 'terminal' || e.props.hasSurvey) return next(e)
 
   // The band is shared: what other mods draw here (the context bar) goes under him.
   const below = await next(e)
-  const ui = $.ui.resolve(e)
-  const { Box, Svg } = ui
-  // Not every surface's table has one; without it there's no sensor (no hold).
-  const Client = 'Client' in ui ? ui.Client : undefined
-  const width = Math.max(240, e.props.bodyColumns * CELL_PX)
-
-  await readHeat($)
-  await readHome($)
-  await readPapers($)
-  const headset = remoteOn()
-  await send($, { type: 'band', width })
-  let now = 0
+  // A failure in his own code never takes the other mods' band with it.
   try {
-    now = await $.clock.now()
-  } catch {}
-  const source = drawingFor(brainState(), width, now, headset)
-  swapIn($, source, width)
+    const ui = $.ui.resolve(e)
+    const { Box, Svg } = ui
+    // Not every surface's table has one; without it there's no sensor (no hold).
+    const Client = 'Client' in ui ? ui.Client : undefined
+    const width = Math.max(240, e.props.bodyColumns * CELL_PX)
 
-  const frames = framesView()
-  const slot = (i: number) => {
-    const source = frames.slots[i]
-    const svg = source && <Svg source={source} alt={ALT} width={width} height={BAND_HEIGHT} isInteractive />
-    return i === frames.active ? (
-      <Box flexDirection="column">{svg}</Box>
-    ) : (
-      <Box flexDirection="column" position="absolute" top={0} left={0} right={0}>
-        {svg}
+    await readHeat($)
+    await readHome($)
+    await readPapers($)
+    await send($, { type: 'band', width })
+    let now = 0
+    try {
+      now = await $.clock.now()
+    } catch {}
+    const source = drawingFor(brainState(), width, now)
+    swapIn($, source, width)
+
+    const frames = framesView()
+    const slot = (i: number) => {
+      const source = frames.slots[i]
+      const svg = source && <Svg source={source} alt={ALT} width={width} height={BAND_HEIGHT} isInteractive />
+      return i === frames.active ? (
+        <Box flexDirection="column">{svg}</Box>
+      ) : (
+        <Box flexDirection="column" position="absolute" top={0} left={0} right={0}>
+          {svg}
+        </Box>
+      )
+    }
+
+    // The keyed Box is a hover scope: while the mouse is anywhere over him (his
+    // frame included), the sensor's Box is squeezed to 0 wide, and band/sensor.ts
+    // tells the hooks. It is 0 tall, so it never takes a click from him.
+    return (
+      <Box flexDirection="column">
+        <Box key="muki" flexDirection="column">
+          {slot(0)}
+          {slot(1)}
+          {Client && (
+            <Box position="absolute" top={0} left={0} right={0} hover={{ right: NEAR_SQUEEZE }}>
+              <Client key="near" module="./sensor.ts" width="100%" height={0} />
+            </Box>
+          )}
+        </Box>
+        {below}
       </Box>
     )
+  } catch {
+    return below
   }
-
-  // The keyed Box is a hover scope: while the mouse is anywhere over him (his
-  // frame included), the sensor's Box is squeezed to 0 wide, and band/sensor.ts
-  // tells the hooks. It is 0 tall, so it never takes a click from him.
-  return (
-    <Box flexDirection="column">
-      <Box key="muki" flexDirection="column">
-        {slot(0)}
-        {slot(1)}
-        {Client && (
-          <Box position="absolute" top={0} left={0} right={0} hover={{ right: NEAR_SQUEEZE }}>
-            <Client key="near" module="./sensor.ts" width="100%" height={0} />
-          </Box>
-        )}
-      </Box>
-      {below}
-    </Box>
-  )
 }

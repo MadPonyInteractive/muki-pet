@@ -10,20 +10,24 @@ import type { CelebrateSlice } from './behaviours/celebrate.ts'
 import type { HoldSlice } from './behaviours/hold.ts'
 import type { ReactionSlice } from './behaviours/reaction.ts'
 import type { PapersSlice } from './behaviours/papers.ts'
+import type { RemoteSlice } from './behaviours/remote.ts'
 import type { VisitSlice } from './behaviours/visit.ts'
 
 // Timers are namespaced by whoever owns them.
-export type TimerName = 'activity.sleepy' | 'activity.asleep' | 'reaction.flash' | 'hold.visitEnd' | 'hold.nearEnd' | 'attention.next' | 'papers.next' | 'celebrate.end'
+export type TimerName = 'activity.sleepy' | 'activity.asleep' | 'reaction.flash' | 'hold.visitEnd' | 'hold.nearEnd' | 'attention.next' | 'papers.next' | 'celebrate.end' | 'remote.idle' | 'remote.settle'
 
 export type Event =
   // From Claude Code.
   // `confirmed`: your message said it worked (character/confirm.ts).
   | { type: 'turnStart'; confirmed?: boolean }
   | { type: 'turnComplete'; reason: string }
-  | { type: 'toolAsk' }
+  // `id`: the tool call's id, so only the asked tool's end ends the question.
+  | { type: 'toolAsk'; id?: string }
   | { type: 'toolStart'; prop: Prop }
-  | { type: 'toolDone'; failed: boolean }
+  | { type: 'toolDone'; failed: boolean; id?: string }
   | { type: 'heat'; level: number }
+  // A message entered the chat; `origin` is where from (`prompt.submit`'s origin.kind).
+  | { type: 'prompt'; origin: string }
   // Background tasks still running at the end of a turn (the paper pile).
   | { type: 'papers'; count: number }
   // Your mouse came over the band (true) or left it (false).
@@ -57,7 +61,8 @@ export type Visit = { prop: Prop; from: number; n: number; start: number; end: n
 
 export type State = {
   // His lasting state (idle, working, asking, sleepy, asleep) and its table.
-  activity: { state: ActivityState; resume: Exclude<ActivityState, 'asking'> }
+  // `asked`: while asking, the ids of the tools still waiting for your OK.
+  activity: { state: ActivityState; resume: Exclude<ActivityState, 'asking'>; asked?: string[] }
   // What the band shows. Every drawing starts him resting at his home spot
   // (`home`, a share of the band), so a new drawing never has to guess how far
   // he got in the old one: drawings can't share a clock, each starts its own
@@ -71,7 +76,7 @@ export type State = {
   // The band's width in px, 0 until it is first drawn. A visit needs it.
   width: number
   // One slice per behaviour, under its name.
-  slices: { reaction: ReactionSlice; celebrate: CelebrateSlice; attention: AttentionSlice; visit: VisitSlice; papers: PapersSlice; hold: HoldSlice }
+  slices: { reaction: ReactionSlice; celebrate: CelebrateSlice; attention: AttentionSlice; visit: VisitSlice; papers: PapersSlice; remote: RemoteSlice; hold: HoldSlice }
 }
 
 // What a behaviour is told besides the event.
@@ -98,4 +103,5 @@ export type MoodVote = { mood: Mood; priority: number }
 export type DrawingOptions = {
   visit?: { prop: Prop; from: number; n: number; elapsed: number }
   pile?: { count: number; visit?: { from: number; n: number; elapsed: number } }
+  headset?: 'on' | 'drop' | 'lift'
 }

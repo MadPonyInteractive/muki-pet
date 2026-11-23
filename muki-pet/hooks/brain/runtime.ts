@@ -10,10 +10,12 @@
 import type { EngineInterface } from 'claude-code'
 
 import { heatOf } from '../character/heat.ts'
+import { readForChat, saveForChat } from './chat-store.ts'
 import { initialState, step } from './machine.ts'
 import type { Effect, Event, State, TimerName } from './types.ts'
 
-// Keys in the mod's store: his home spot, and the last context percentage seen.
+// Keys in the mod's store: his home spot, and the last context percentage seen
+// (per chat: { <session id>: percent }, chat-store.ts).
 export const STORE_HOME = 'home'
 export const STORE_HEAT = 'context'
 
@@ -45,11 +47,13 @@ export async function readHeat($: EngineInterface, brain: Brain = current) {
   try {
     let percent = (await $.session.usage()).context.percent
     if (percent !== undefined) {
+      const live = percent
       void Promise.resolve()
-        .then(() => $.store.set(STORE_HEAT, percent))
+        .then(() => saveForChat($, STORE_HEAT, live))
         .catch(() => {})
     } else if (!brain.state.heatKnown) {
-      const saved = await $.store.get(STORE_HEAT)
+      // This chat's own figure: another chat's context is not his (MPI-17).
+      const saved = await readForChat($, STORE_HEAT)
       if (typeof saved === 'number') percent = saved
     }
     await send($, { type: 'heatSeen', level: percent === undefined ? undefined : heatOf(percent) }, brain)
@@ -68,8 +72,9 @@ export function readHome($: EngineInterface, brain: Brain = current) {
 }
 
 async function loadHome($: EngineInterface, brain: Brain) {
-  await send($, { type: 'homeSeen' }, brain)
+  // Inside the try: a failed read here would otherwise fail every render of the chat.
   try {
+    await send($, { type: 'homeSeen' }, brain)
     const home = await $.store.get(STORE_HOME)
     if (typeof home === 'number' && home >= 0 && home <= 1) await send($, { type: 'homeSeen', home }, brain)
   } catch {}

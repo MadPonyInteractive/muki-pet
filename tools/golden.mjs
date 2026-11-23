@@ -40,6 +40,13 @@ for (const W of WIDTHS) {
           for (const mood of ['neutral', 'focused'])
             draw(`${W} visit ${prop} ${from} ${n} ${elapsed} ${mood}`, W, { mood, heat: n % 4, visit: { prop, from, n, elapsed } })
       }
+  // The paper pile: at rest, and a visit to it.
+  for (const count of [1, 3, 6]) draw(`${W} pile${count}`, W, { mood: 'neutral', pile: { count } })
+  for (const from of FROMS) for (const elapsed of ELAPSED) draw(`${W} pile3 visit ${from} ${elapsed}`, W, { mood: 'neutral', pile: { count: 3, visit: { from, n: 1, elapsed } } })
+  // The Remote Control headset.
+  for (const headset of ['on', 'drop', 'lift']) draw(`${W} headset ${headset}`, W, { mood: 'neutral', headset })
+  // Everything at once.
+  draw(`${W} pile6 headset heat3 tantrum`, W, { mood: 'tantrum', heat: 3, pile: { count: 6 }, headset: 'on' })
 }
 
 const count = Object.keys(got).length
