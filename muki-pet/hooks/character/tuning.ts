@@ -12,11 +12,11 @@ export const ASLEEP_AFTER = 15 * MINUTE
 // play he gets lonely, then mad, then throws tantrums. Over 30% context he has
 // no energy to get mad: he only gets lonely, TIRED_LONELY after the last play.
 // Shortened 2026-11-22 (was 20/28/35 min): Fabio found 35 min too long.
-// 1 s, not 5 (2026-11-22, from the logs): the band's hover sensor loses the
-// mouse soon after you start playing with him (spans of 1 to 3 s while
-// petting or feeding him), while a mouse just crossing the band shows for
-// 0 to 0.3 s. With 5 s, petting and cookies almost never counted.
-export const PLAY_MS = 1 * SECOND
+// 0.4 s (2026-11-23, MPI-18, from the logs): a quick cookie keeps the mouse on
+// the band for 0.5 to 0.6 s, and Fabio wants a cookie to count; a mouse just
+// crossing the band shows for 0 to 0.3 s. (1 s missed quick cookies; 5 s missed
+// most play.)
+export const PLAY_MS = 0.4 * SECOND
 export const LONELY_AFTER = 10 * MINUTE
 export const MAD_AFTER = 15 * MINUTE
 export const TANTRUM_AFTER = 20 * MINUTE
