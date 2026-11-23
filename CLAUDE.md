@@ -28,29 +28,29 @@ A Claude Code mod: a little robot companion whose whole character is a screen fa
 A Claude Code mod (plugin with a hooks module that can draw in the interface). Docs: https://code.claude.com/docs/en/plugins/mods/reference
 
 - Files: `.claude-plugin/plugin.json`, `hooks/hooks.json` (`modules` array with one path), and the hooks module exporting `register(on, options)`.
-- Draw the face in a `Pane` (docked) or `AbovePrompt` (band). The `Svg` element works in Desktop and VS Code. In the terminal, use `Raster` or `Image` instead.
+- He draws as one interactive `Svg` in the `AbovePrompt` band, in Claude Desktop only (the terminal takes only still images, so his CSS motion can't work there).
 - Mod features are new and change between versions: generate and read the types for the installed Claude Code version before coding (see the "get the types for your build" section of the mods docs), and run `claude plugin validate` and `claude plugin test`.
-- Dev loop: `claude --plugin-dir ./muki-pet` reloads on save.
+- Dev loop: `muki-pet/` loads in every chat through `CLAUDE_CODE_PLUGIN_DIRS`; after an edit, type `/reload-plugins` in the chat. Checks and details: `docs/architecture/how-it-works.md` § Dev workflow.
 
-## Mood mapping (first pass)
+## Mood mapping
+
+The moods and their faces are defined in `muki-pet/hooks/character/moods.ts`; what triggers them is in `docs/architecture/how-it-works.md` § Moods.
 
 | Event | Mood |
 | --- | --- |
-| `turn.start` | alert (eyes wide) |
+| `turn.start` | alert (eyes wide); celebrate (fireworks) if your message is a short "it worked" |
 | tool running (`tool.call`) | focused (slight top lid) |
 | `turn.complete` success | happy |
 | tool failure / error | sad |
 | permission prompt / waiting for user | curious, eyes looking at the prompt |
 | long idle | sleepy, then asleep |
-| ping timer (`$.clock.every`) | surprised or playful, then a toast or speech bubble |
-
-Optional later: classify the tone of Claude's last reply with `$.model.classify` and pick a mood from it.
+| no play with him for a while | lonely, then mad, then a tantrum (a pet or a cookie ends it) |
 
 ## Milestones
 
 1. Robot renders in the band above the prompt in Desktop: rolls around, head lag, idle blink, looks at the mouse.
 2. Moods driven by turn and tool events.
-3. Ping timer with a toast and a small speech bubble.
+3. ~~Ping timer with a toast and a small speech bubble.~~ Dropped 2026-11-23 (Fabio): he doesn't talk.
 4. ~~Chat via an Input in the pane, with the personality prompt.~~ Dropped 2026-11-22 (Fabio): he doesn't talk, and he uses no credits (no model or network calls); keep it that way.
 5. Skins and personalities as data files, a settings panel, README, and tests. (Skins: a good idea, not started.)
 6. ~~Terminal fallback (Raster) and VS Code check.~~ Dropped 2026-11-22 (Fabio): the terminal only takes still images, so his CSS motion can't work there; he stays a Desktop mod.

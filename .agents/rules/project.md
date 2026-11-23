@@ -21,7 +21,7 @@ Governs all work on the Muki mod in this repo.
 
 ## Sub-Agent Briefing
 
-Muki is an unofficial Claude Code mod: a robot pet drawn as one interactive SVG in the band above the chat input in Claude Desktop. Code is in `muki-pet/hooks/`: `register.tsx` wires events to the brain, `brain/` (pure state machine + runtime), `band/` (draws the band, double buffer), `draw/` (pure SVG builder, `robotSvg` in `draw/index.ts`), `character/` (what he is, as data: moods, props, heat, palette, tuning, geometry; read by brain and draw, imports neither), tests `register.test.tsx` and `brain/machine.test.ts`. Design and architecture are in `docs/design/robot.md` and `docs/architecture/how-it-works.md`.
+Muki is an unofficial Claude Code mod: a robot pet drawn as one interactive SVG in the band above the chat input in Claude Desktop. Code is in `muki-pet/hooks/`: `register.tsx` wires events to the brain, `brain/` (pure state machine + runtime), `band/` (draws the band, double buffer), `draw/` (pure SVG builder, `robotSvg` in `draw/index.ts`), `character/` (what he is, as data: moods, props, heat, palette, tuning, geometry; read by brain and draw, imports neither), tests `register.test.tsx`, `brain/machine.test.ts` and `*.test.ts` beside the code they test. Design and architecture are in `docs/design/robot.md` and `docs/architecture/how-it-works.md`.
 
 - Checks: `npm run check` (TypeScript, from the repo root; `npm install` once), `node tools/golden.mjs` (drawings unchanged), `claude plugin validate ./muki-pet` and `claude plugin test ./muki-pet`, run with the Desktop app's claude.exe (path in the newest `docs/handoffs/` file).
 - Preview without the app: `node tools/preview.mjs <out-folder>`.

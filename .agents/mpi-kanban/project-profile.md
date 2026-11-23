@@ -4,8 +4,8 @@ mode: mvp
 mode_rationale: early single-developer mod on a changing API, meant to go public on GitHub; correctness over polish (user approved at init, 2026-11-22)
 mode_source: user
 setup_date: 2026-11-22
-last_refresh: 2026-11-22
-pack_version: 1.8.0
+last_refresh: 2026-11-23
+pack_version: 1.10.0
 push_policy: ask
 knowledge_index: .agents/mpi-kanban/project-knowledge-index.md
 ---
@@ -40,8 +40,9 @@ what Claude Code is doing, and is there for company and laughs, not to assist.
 - `muki-pet/hooks/draw/`: pure `robotSvg(width, options)` (`draw/index.ts`)
   building the robot as one interactive `Svg`; motion is pre-simulated into CSS
   keyframes, mouse and click reactions are CSS strips.
-- Tests: `hooks/register.test.tsx`, `hooks/brain/machine.test.ts`, run by
-  `claude plugin test`. Type-check: `muki-pet/tsconfig.json` extends the
+- Tests: `hooks/register.test.tsx`, `hooks/brain/machine.test.ts`,
+  `hooks/brain/behaviours/*.test.ts`, `hooks/character/confirm.test.ts`,
+  `hooks/draw/classes.test.ts`, run by `claude plugin test`. Type-check: `muki-pet/tsconfig.json` extends the
   engine-written types in `muki-pet/.claude-plugin/types/` (git-ignored).
 - `tools/`: `preview.mjs` (render without the app), `golden.mjs` +
   `golden.json` (drawings unchanged), `frame-lab.html` (draws an SVG the way
@@ -103,9 +104,7 @@ other `maturity` renders as a red invalid card.
 
 ## Open Gaps
 
-- Not a git repository yet: close-out cannot commit or push until `git init`.
-- No TypeScript compiler on this machine, so no type-check.
-- Band width in Desktop is a guess (`bodyColumns × 8 px`), not checked in the app.
+- A fresh clone can't type-check: the engine-written types in `muki-pet/.claude-plugin/types/` are git-ignored (MPI-17 Phase 4).
 - `docs/handoffs/` duplicates "where we left off" with the task board; decide
   whether cards or handoff files are the source of truth for open work.
 

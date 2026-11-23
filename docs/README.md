@@ -19,7 +19,9 @@ Read this index first, then the latest file in `handoffs/`.
 - [research/mods-api.md](research/mods-api.md): what the mods API can and can't do for us
 - [log/2026-11-21.md](log/2026-11-21.md): day one
 - [log/2026-11-22.md](log/2026-11-22.md): first time seen in the app
-- [handoffs/2026-11-22-ghost-hunt-fixed.md](handoffs/2026-11-22-ghost-hunt-fixed.md): **current handoff** (ghost cause found: a chat opened again replays its last drawing; three fixes, not seen live)
+- [architecture/how-to-add.md](architecture/how-to-add.md): how to add a mood, prop, feature or behaviour
+- [handoffs/2026-11-23-review-fixes.md](handoffs/2026-11-23-review-fixes.md): **current handoff** (MPI-17 review fixes: phases 1-2 done, docs next)
+- [handoffs/2026-11-22-ghost-hunt-fixed.md](handoffs/2026-11-22-ghost-hunt-fixed.md): previous (ghost cause found: a chat opened again replays its last drawing; done)
 - [handoffs/2026-11-22-ghost-hunt-cookies-built.md](handoffs/2026-11-22-ghost-hunt-cookies-built.md): previous (cookie game built; redraw logs added)
 - [handoffs/2026-11-22-home-spot-cookies.md](handoffs/2026-11-22-home-spot-cookies.md): previous (home spot, props, heat)
 - [handoffs/2026-11-22-coin-game-built.md](handoffs/2026-11-22-coin-game-built.md): previous (swap, coin game, heat and touch fix)

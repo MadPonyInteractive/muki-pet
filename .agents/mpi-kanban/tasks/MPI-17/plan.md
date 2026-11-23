@@ -8,7 +8,7 @@ Project mode: mvp. Source: the codebase review of 2026-11-22 (Fabio asked for al
 - The three bugs in Phase 1 were found by reading the code. None was seen live. Reproduce each in a test before fixing it; if one can't be reproduced, record that in `## Plan Drift` and skip the fix.
 - Drawing size is not a worry: the heaviest drawing is 100,733 characters at 3840 px (limit 131,072).
 - Rules that apply throughout: `.agents/rules/project.md` (pure `robotSvg`, no redraw from play, every hook returns `next(e)` untouched inside `try`, `$` only to top-level functions, the four checks before "done").
-- **Where it stands (2026-11-23):** Phases 1 and 2 done and verified, uncommitted. Next action: Phase 3, docs that mislead (new handoff first). Tests run with the app's binary: `$LOCALAPPDATA/Claude-Data/claude_pzs8sxrjxfjjc/claude-code/2.1.330/9424831ad51c/claude.exe plugin test ./muki-pet`. Gotcha: the guard hook blocks heredocs in Bash; write scripts to the scratchpad.
+- **Where it stands (2026-11-23):** Phases 1 and 2 committed (4a1a1d5). Phase 3: handoff, stale lines and the history move done (uncommitted); milestone 3 struck (Fabio); project refresh applied (pack 1.10.0). Phase 3 done, uncommitted. Next action: Phase 4 (licence and manifest first). Tests run with the app's binary: `$LOCALAPPDATA/Claude-Data/claude_pzs8sxrjxfjjc/claude-code/2.1.330/9424831ad51c/claude.exe plugin test ./muki-pet`. Gotcha: the guard hook blocks heredocs in Bash; write scripts to the scratchpad.
 - Run phases in order, one at a time. No parallel batch: the phases are small and several touch the same files (`register.tsx`, `runtime.ts`, the docs).
 
 ## Completed
@@ -31,10 +31,10 @@ Project mode: mvp. Source: the codebase review of 2026-11-22 (Fabio asked for al
 
 ## Phase 3: Docs that mislead
 
-- [ ] **A current handoff.** `docs/handoffs/2026-11-22-ghost-hunt-fixed.md` is listed as current but predates MPI-12 to MPI-15 (it says Eyebot, `robot.ts`, `DEBUG_LOG` still in, tests 14/14). Write a new handoff for the real state and update the list in `docs/README.md`. Old handoffs stay as they are (history).
-- [ ] **Stale lines.** `.agents/mpi-kanban/project-profile.md` § Open Gaps ("not a git repository yet", "no TypeScript compiler") and its test list; `muki-pet/hooks/band/render.tsx:26` ("a Raster version is a later milestone": dropped); `docs/architecture/how-it-works.md` (`robotSvg(width, { mood, from, at, heat })` has no `at`; the test-files row misses `confirm.test.ts`, `celebrate.test.ts`, `papers.test.ts`; the list numbered 1, 2, 3, 3b, 4, 5, 7, 6; `remote.ts`, `pile-store.ts`, `papers.ts`, `celebrate.ts`, `attention.ts` missing from the files table); `CLAUDE.md` § Target (Pane, Raster, VS Code) and § Mood mapping ("first pass": add lonely, mad, tantrum, celebrate, or point at `character/moods.ts`). Also run `/mpi-project-refresh` for the pack drift (1.8.0 → 1.10.0).
-- [ ] **`how-it-works.md` describes only what is true now.** Move the history ("was 1 s", "first try…", who saw what when) into `docs/log/2026-11-22.md` (append, don't rewrite the log), keeping one line per rule that says why it exists.
-- [ ] **Milestone 3 in `CLAUDE.md`.** Your call (Fabio): is the ping timer with a toast and speech bubble still wanted, given he doesn't talk? My pick: strike it, as milestones 4 and 6 were.
+- [x] **A current handoff.** (2026-11-23: `docs/handoffs/2026-11-23-review-fixes.md`, listed in `docs/README.md` with `how-to-add.md`, which was missing from the list.) `docs/handoffs/2026-11-22-ghost-hunt-fixed.md` is listed as current but predates MPI-12 to MPI-15 (it says Eyebot, `robot.ts`, `DEBUG_LOG` still in, tests 14/14). Write a new handoff for the real state and update the list in `docs/README.md`. Old handoffs stay as they are (history).
+- [x] **Stale lines.** (2026-11-23: all fixed, and `/mpi-project-refresh` applied: pack 1.10.0, band-width gap closed, index topics updated; also the rules' sub-agent briefing test list, CLAUDE.md's dev loop and its `$.model.classify` line, which the no-credits decision ruled out.) `.agents/mpi-kanban/project-profile.md` § Open Gaps ("not a git repository yet", "no TypeScript compiler") and its test list; `muki-pet/hooks/band/render.tsx:26` ("a Raster version is a later milestone": dropped); `docs/architecture/how-it-works.md` (`robotSvg(width, { mood, from, at, heat })` has no `at`; the test-files row misses `confirm.test.ts`, `celebrate.test.ts`, `papers.test.ts`; the list numbered 1, 2, 3, 3b, 4, 5, 7, 6; `remote.ts`, `pile-store.ts`, `papers.ts`, `celebrate.ts`, `attention.ts` missing from the files table); `CLAUDE.md` § Target (Pane, Raster, VS Code) and § Mood mapping ("first pass": add lonely, mad, tantrum, celebrate, or point at `character/moods.ts`). Also run `/mpi-project-refresh` for the pack drift (1.8.0 → 1.10.0).
+- [x] **`how-it-works.md` describes only what is true now.** (2026-11-23: most history was already in the log; the two items that weren't are appended under § MPI-17 Phase 3. Also fixed there: stale size figures and the route-cache sentence.) Move the history ("was 1 s", "first try…", who saw what when) into `docs/log/2026-11-22.md` (append, don't rewrite the log), keeping one line per rule that says why it exists.
+- [x] **Milestone 3 in `CLAUDE.md`.** (2026-11-23: Fabio said strike it; struck like 4 and 6.) Your call (Fabio): is the ping timer with a toast and speech bubble still wanted, given he doesn't talk? My pick: strike it, as milestones 4 and 6 were.
 - **Verify (phase):** `grep -rn "Eyebot\|robot\.ts\|DEBUG_LOG\|Raster version" CLAUDE.md docs/architecture docs/README.md .agents/rules .agents/mpi-kanban/project-profile.md muki-pet/hooks` finds nothing; every file named in `how-it-works.md`'s table exists; `validate_board.py` passes.
 
 ## Phase 4: Ready for a public repo
@@ -79,7 +79,7 @@ Project mode: mvp. Source: the codebase review of 2026-11-22 (Fabio asked for al
 
 ## Plan Drift
 
-- None yet.
+- 2026-11-23: `render.tsx:26` ("a Raster version is a later milestone") was already gone, rewritten with Phase 1's safety net. The CLAUDE.md mood table's ping-timer row was dropped with the rest of the stale table; milestone 3 was then struck on Fabio's word.
 
 ## Verification
 

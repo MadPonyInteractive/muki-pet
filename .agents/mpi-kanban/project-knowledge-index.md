@@ -1,7 +1,7 @@
 ---
 schema: mpi-kanban/project-knowledge-index/v1
 profile: .agents/mpi-kanban/project-profile.md
-last_refresh: 2026-11-22
+last_refresh: 2026-11-23
 ---
 
 # Project Knowledge Index
@@ -16,7 +16,7 @@ read. Ask the user for a pointer only if that search finds nothing.
 
 ### Robot look, motion and games
 
-- **Read first:** `docs/design/robot.md`, `prototype/face.html`
+- **Read first:** `docs/design/robot.md`, `docs/design/papers.md`, `prototype/face.html`
 - **Rules:** `.agents/rules/project.md`
 - **Memory:** none
 - **Notes:** coin game, cookie game, props and heat are all described in `robot.md`.
@@ -27,6 +27,13 @@ read. Ask the user for a pointer only if that search finds nothing.
 - **Rules:** `.agents/rules/project.md`
 - **Memory:** `~/.claude/projects/C--AI-Mpi-Plugins-Code-Companion/memory/MEMORY.md`
 - **Notes:** iframe kept only when source, alt, width and height are identical.
+
+### Brain, behaviours and character data
+
+- **Read first:** `docs/architecture/how-to-add.md`, `muki-pet/hooks/brain/machine.ts`, `muki-pet/hooks/character/`
+- **Rules:** `.agents/rules/project.md`
+- **Memory:** none
+- **Notes:** how to add a mood, prop, drawing feature or behaviour; `character/` imports nothing from `brain/`, `draw/` or `band/`.
 
 ### Mods API and Desktop behaviour
 
@@ -53,4 +60,4 @@ read. Ask the user for a pointer only if that search finds nothing.
 
 ## Topic Gaps
 
-- No topic yet for chat, ping timer, skins/personalities, or the terminal fallback (milestones 3 to 6 in `CLAUDE.md`); add them when that work starts.
+- No topic yet for skins (MPI-16); add one when that work starts.
