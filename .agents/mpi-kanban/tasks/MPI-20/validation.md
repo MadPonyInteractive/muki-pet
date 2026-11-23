@@ -7,4 +7,5 @@
 
 ## Waiting
 
-- Fabio's go to push, tag v0.1.0 and make the GitHub release.
+- Fabio said: push and release (done below).
+- 2026-11-23: pushed adad6a0, tag v0.1.0 pushed, release https://github.com/MadPonyInteractive/muki-pet/releases/tag/v0.1.0 created from the changelog entry; version check passes with the tag; CI green.
