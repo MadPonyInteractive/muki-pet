@@ -5,10 +5,9 @@
     "todo": [
       "MPI-16"
     ],
-    "doing": [
-      "MPI-17"
-    ],
+    "doing": [],
     "done": [
+      "MPI-17",
       "MPI-19",
       "MPI-18",
       "MPI-12",

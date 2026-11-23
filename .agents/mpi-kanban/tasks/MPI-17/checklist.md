@@ -3,6 +3,6 @@
 - [x] Likely bugs
 - [x] Safety net
 - [x] Docs that mislead
-- [ ] Ready for a public repo
-- [ ] Small tidying (no behaviour change)
-- [ ] The README, with pictures (last)
+- [x] Ready for a public repo
+- [x] Small tidying (no behaviour change)
+- [x] The README, with pictures (last)

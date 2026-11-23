@@ -2,3 +2,4 @@
 {"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-17", "at": "2026-11-22T23:56:18+00:00", "actor": "claude", "from": "todo", "to": "doing", "reason": "Implementation started."}
 {"schema": "mpi-kanban/event/v1", "type": "task.updated", "id": "MPI-17", "at": "2026-11-22T23:56:37+00:00", "actor": "claude"}
 {"schema": "mpi-kanban/event/v1", "type": "checklist.updated", "id": "MPI-17", "at": "2026-11-22T23:56:37+00:00", "actor": "claude"}
+{"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-17", "at": "2026-11-23T12:40:32+00:00", "actor": "claude", "from": "doing", "to": "done", "reason": "All six phases done and verified; README, pictures and install checked; Fabio approved icon, reduced motion, pictures and README."}

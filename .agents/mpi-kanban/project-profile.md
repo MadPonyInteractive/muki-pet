@@ -69,6 +69,9 @@ Detail: see `docs/architecture/how-it-works.md`.
 - `claude plugin test ./muki-pet` - run the mod's tests
 - `node tools/preview.mjs <out-folder>` - write `robot.svg` + `index.html` to preview without the app
 - `/reload-plugins` (typed in a chat) - pick up edits to `muki-pet/`
+- `npm test` - all four checks in order (`tools/test-all.mjs`; set `CLAUDE` to the app's claude.exe)
+- `npm run shots` - redraw the README pictures in `docs/images/` (headless Chrome); `npm run icon` - the plugin icon
+- `claude plugin validate .` - validate the repo's marketplace (`.claude-plugin/marketplace.json`)
 
 ## Read First
 

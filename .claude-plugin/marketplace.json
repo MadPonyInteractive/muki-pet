@@ -1,0 +1,16 @@
+{
+  "name": "muki-pet",
+  "description": "Muki, an unofficial robot pet for Claude Code Desktop",
+  "owner": {
+    "name": "Mad Pony Interactive",
+    "email": "contact@madponyinteractive.com",
+    "url": "https://madponyinteractive.com"
+  },
+  "plugins": [
+    {
+      "name": "muki-pet",
+      "source": "./muki-pet",
+      "description": "Unofficial robot pet that rolls around above the Claude Code prompt"
+    }
+  ]
+}
