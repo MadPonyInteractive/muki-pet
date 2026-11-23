@@ -16,5 +16,5 @@
 
 ## Not checked
 
-- The GitHub form of the install (the repo is private).
+- (Done after close: the GitHub install, once the repo went public: 0.1.0 installed and enabled in an empty config.)
 - The new attention timings (mad 20 min, tantrum 25) live in the app.
