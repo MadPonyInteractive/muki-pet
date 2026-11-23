@@ -13,7 +13,14 @@ import { K, propClass } from '../classes.ts'
 import type { ActiveVisit, DrawCtx, Feature } from '../feature.ts'
 import { deg, r1 } from '../math.ts'
 import { partTransform } from '../moods.ts'
+import { calm } from '../parts/body-css.ts'
 import { r2, timeline } from '../timeline.ts'
+
+// Less motion (Fabio, 2026-11-23): no roll over. The drawing is placed at his
+// new home, so with the roll gone he is simply beside the prop from the start;
+// his head stays straight. Face, "?"/"!" and the prop's pop stay.
+const stillRoll = (kick: boolean) =>
+  calm(`.${K.carry},.${K.visitWheel},.${K.visiting} .${K.lean}${kick ? `,.${K.propAnim}` : ''}{animation:none!important}`)
 
 // The visit's moments, in seconds from the end of the lead-in. `arrive` and
 // `leave` come from the plan; the rest are offsets from them.
@@ -120,7 +127,8 @@ export function visitCss(v: VisitPlan, elapsed: number, mood: Mood): string {
       [c.start, 'transform:scale(0)'], [c.popIn, 'transform:scale(1.18)'], [c.popped, 'transform:none'], [c.nudge, 'transform:none'],
       [c.nudgeLeft, 'transform:rotate(-14deg)'], [c.nudgeRight, 'transform:rotate(10deg)'], [c.nudgeBack, 'transform:none'],
       [c.leave, 'transform:none;opacity:1'], [c.puff, 'transform:scale(1.25);opacity:1'], [c.gone, 'transform:scale(0);opacity:0'], [E, 'transform:scale(0);opacity:0'],
-    ])
+    ]) +
+    stillRoll(false)
   )
 }
 
@@ -166,7 +174,9 @@ function kickCss(v: VisitPlan, elapsed: number): string {
       [0, 'transform:scale(0)'], [0.3, 'transform:scale(1.18)'], [0.45, 'transform:none'], [dash - 0.2, 'transform:none'], [dash - 0.1, 'transform:rotate(-6deg)'], [dash, 'transform:rotate(5deg)'], [dash + 0.1, 'transform:none'],
       [hit, 'transform:none;opacity:1'], [A + 0.35, `transform:translate(${s * 130}px,-38px) rotate(${s * 300}deg);opacity:1`],
       [A + 0.75, `transform:translate(${s * 280}px,-14px) rotate(${s * 620}deg);opacity:0`], [E, `transform:translate(${s * 280}px,-14px);opacity:0`],
-    ])
+    ]) +
+    // The prop doesn't fly off either; it sits until the drawing after the visit.
+    stillRoll(true)
   )
 }
 

@@ -12,6 +12,7 @@ import { K } from '../classes.ts'
 import type { DrawCtx, Feature } from '../feature.ts'
 import { deg, r1 } from '../math.ts'
 import { partTransform } from '../moods.ts'
+import { calm } from '../parts/body-css.ts'
 import { r2, timeline, type Stop } from '../timeline.ts'
 
 // The pile, its top sheet lifting a corner now and then.
@@ -107,7 +108,10 @@ export function pileCss(p: PilePlan, elapsed: number, mood: Mood): string {
     // The lids drop halfway: unimpressed.
     `.${K.pileVisit} .${K.topL}{${run('ptl')}}.${K.pileVisit} .${K.topR}{${run('ptr')}}` +
     lid('ptl', [`.${K.top}`, `.${K.topL}`]) +
-    lid('ptr', [`.${K.top}`, `.${K.topR}`])
+    lid('ptr', [`.${K.top}`, `.${K.topR}`]) +
+    // Less motion: no roll there and back, no head shake; he does the eye roll
+    // and the lids where he is (his new home).
+    calm(`.${K.carry},.${K.visitWheel},.${K.pileVisit} .${K.lean}{animation:none!important}`)
   )
 }
 
