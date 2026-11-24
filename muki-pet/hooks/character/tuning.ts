@@ -73,11 +73,13 @@ export const FPS = 30
 // redraw while he's out on a trip jumps him home.
 export const GLOW = '15s'
 
-// Easings for the cookie dash, the roll home, and the 1 s roll back after an
-// early blur.
+// Easings for the cookie dash, the roll home, and the roll back after an early
+// blur. That blur is mostly Desktop's: it blurs his frame on every band update
+// while Claude works, mid-cookie. 1 s made him run away from the cookie; he now
+// lingers .4 s, then rolls home over 2.4 s (Fabio, 2026-11-24, MPI-21).
 export const DASH = 'cubic-bezier(.6,0,.25,1)'
 export const ROLL = 'cubic-bezier(.45,0,.55,1)'
-export const BACK = '1s cubic-bezier(.45,0,.3,1)'
+export const BACK = '2.4s cubic-bezier(.45,0,.3,1) .4s'
 
 // The Remote Control headset comes off this long after your last message from
 // the phone or web (MPI-15), unless you type at the desk first. In ms.
