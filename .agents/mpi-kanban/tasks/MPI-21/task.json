@@ -1,0 +1,21 @@
+{
+  "schema": "mpi-kanban/task-card/v1",
+  "id": "MPI-21",
+  "title": "Play survives Claude's work: smooth home after a lost focus, no prop while petted",
+  "description": "Desktop blurs Muki's frame on every band update (research/mods-api.md), ending cookie/boop focus mid-play: he snaps home. Make the loss roll him home smoothly, and find why a prop visit starts while he is petted (the hold should block it).",
+  "column": "doing",
+  "maturity": "in-progress",
+  "status": "active",
+  "created_at": "2026-11-24T11:35:20+00:00",
+  "updated_at": "2026-11-24T11:35:28+00:00",
+  "links": {
+    "brief": "brief.md",
+    "plan": "plan.md",
+    "checklist": "checklist.md",
+    "validation": "validation.md",
+    "files": "files.json",
+    "events": "events.jsonl",
+    "handoffs": "handoffs/",
+    "research": "research/"
+  }
+}

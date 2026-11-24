@@ -190,10 +190,20 @@ const queries = () =>
   `<g class="${K.query}" transform="translate(20,-58)" fill="${COLORS.eye}" font-family="sans-serif" font-weight="700" font-size="11">` +
   `<text class="${K.query1}">?</text><text class="${K.query2}" x="1">!</text></g>`
 
+// A trip (to a prop or to the paper pile) stops under your hand, as his
+// wandering does: petting him while he's out isn't ignored (Fabio, 2026-11-24,
+// MPI-21). Every track of the trip pauses together, so it picks up where it
+// was; the brain's redraw at the trip's end waits for you (hold.ts), and its
+// grace after you go covers what is left. Not during a cookie run, whose own
+// animations run on the same parts.
+const PARTS = [K.carry, K.visitWheel, K.propAnim, K.query1, K.query2, K.lean, K.gaze, K.eyeL, K.eyeR, K.topL, K.topR, K.lid]
+const pauseUnderHand = () =>
+  `:is(.${K.visiting},.${K.pileVisit}):hover:not(:has(.${K.strip}:focus)) :is(${PARTS.map(p => `.${p}`).join(',')}){animation-play-state:paused}`
+
 export const visit: Feature = {
   name: 'visit',
   rootClass,
-  css: () => `.${K.prop},.${K.query}{display:none;pointer-events:none}.${K.query} text{opacity:0}`,
+  css: () => `.${K.prop},.${K.query}{display:none;pointer-events:none}.${K.query} text{opacity:0}` + pauseUnderHand(),
   drawingCss: (d) => (d.visit ? visitCss(d.visit.plan, Math.max(0, d.visit.elapsed), d.mood) : ''),
   slots: {
     props: (d) => (d.visit ? prop(d.visit) : ''),

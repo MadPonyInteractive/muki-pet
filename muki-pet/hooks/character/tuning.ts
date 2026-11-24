@@ -38,6 +38,12 @@ export const AFTER_VISIT_MS = 300
 // the mouse leaves, it waits this long more, so a cookie he's still eating gets
 // finished (Fabio, 2026-11-22).
 export const NEAR_GRACE_MS = 3 * SECOND
+// After play (the mouse on him for PLAY_MS or more: a pet, a cookie, boops), the
+// wait is long enough for the longest cookie run to end by itself: the farthest
+// dash (1.5 s), being sick (7.4 s), the longest roll home (7 s) and the focus
+// letting go (8.6 s) is 24.5 s. A redraw sooner restarted him at home mid-game
+// while Claude worked (Fabio, 2026-11-24, MPI-21).
+export const PLAY_GRACE_MS = 25 * SECOND
 
 // A new drawing loads under the old one, which stays on top for 0.9 s (see
 // band/frames.ts). He stays hidden in the new one until just before the old one

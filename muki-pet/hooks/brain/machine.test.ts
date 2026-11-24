@@ -5,7 +5,7 @@ import { expect, test } from 'claude-code/testing'
 import { visitPlan } from '../character/geometry.ts'
 import { passingMs } from '../character/moods.ts'
 import {
-  HEADSET_SETTLE_MS, LONELY_AFTER, MAD_AFTER, MINUTE, NEAR_GRACE_MS, PLAY_MS, PROP_GAP, REMOTE_IDLE_MS, SECOND, TANTRUM_AFTER, TIRED_HEAT, TIRED_LONELY,
+  HEADSET_SETTLE_MS, LONELY_AFTER, MAD_AFTER, MINUTE, NEAR_GRACE_MS, PLAY_GRACE_MS, PLAY_MS, PROP_GAP, REMOTE_IDLE_MS, SECOND, TANTRUM_AFTER, TIRED_HEAT, TIRED_LONELY,
 } from '../character/tuning.ts'
 import { ACTIVITY_TABLE, advance, type ActivityState } from './activity.ts'
 import { Hold } from './behaviours/hold.ts'
@@ -188,6 +188,26 @@ test('play with him while he wanders never redraws him', () => {
   r = go(r.state, { type: 'timer', name: 'hold.nearEnd' }, PLAY_MS + NEAR_GRACE_MS)
   expect(has(r.effects, 'redraw')).toBe(false)
   expect(r.state.mood).toBe('neutral')
+})
+
+// MPI-21: a cookie run goes on long after the mouse has gone; a mood change
+// from Claude's work 3 s later restarted him at home mid-game.
+test('after play, a waiting redraw holds off until a cookie run is over, and a quick crossing never shortens that', () => {
+  let r = go(drawn(), { type: 'near', on: true }, 1000)
+  r = go(r.state, { type: 'near', on: false }, 1000 + PLAY_MS)
+  expect(r.effects).toContainEqual({ type: 'startTimer', name: 'hold.nearEnd', ms: PLAY_GRACE_MS })
+  r = go(r.state, { type: 'turnStart' }, 5000)
+  expect(has(r.effects, 'redraw')).toBe(false)
+  // The mouse just crosses the band 10 s later: the long wait keeps its end.
+  r = go(r.state, { type: 'near', on: true }, 11000)
+  r = go(r.state, { type: 'near', on: false }, 11100)
+  expect(r.effects).toContainEqual({ type: 'startTimer', name: 'hold.nearEnd', ms: 1000 + PLAY_MS + PLAY_GRACE_MS - 11100 })
+  r = go(r.state, { type: 'timer', name: 'hold.nearEnd' }, 1000 + PLAY_MS + PLAY_GRACE_MS)
+  expect(has(r.effects, 'redraw')).toBe(true)
+  // A later short crossing gets the short grace again.
+  r = go(r.state, { type: 'near', on: true }, 60000)
+  r = go(r.state, { type: 'near', on: false }, 60100)
+  expect(r.effects).toContainEqual({ type: 'startTimer', name: 'hold.nearEnd', ms: NEAR_GRACE_MS })
 })
 
 test('a visit that ends while you are near waits for you, and leaving with nothing waiting redraws nothing', () => {

@@ -1,0 +1,2 @@
+{"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-21", "at": "2026-11-24T11:35:20+00:00", "actor": "claude", "column": "todo", "title": "Play survives Claude's work: smooth home after a lost focus, no prop while petted"}
+{"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-21", "at": "2026-11-24T11:35:28+00:00", "actor": "claude", "from": "todo", "to": "doing"}

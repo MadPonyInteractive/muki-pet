@@ -12,6 +12,7 @@ import { K, heatLevel, moodClass, propClass } from './draw/classes.ts'
 import { MOODS, PROPS, robotSvg, visitPlan, type Mood, type Prop } from './draw/index.ts'
 import { STORE_HEAT, STORE_HOME, createBrain, readHeat, readHome } from './brain/runtime.ts'
 import { heatOf } from './character/heat.ts'
+import { PLAY_GRACE_MS } from './character/tuning.ts'
 import { renderBand } from './band/render.tsx'
 import Sensor from './band/sensor.ts'
 
@@ -318,7 +319,11 @@ test('while your mouse is over the band (the sensor squeezed to 0 wide) a turn d
   await clock.settle()
   await clock.advance(1000)
   expect((await ui.findAll({ type: 'Svg' })).map(s => s.props.source)).toEqual([shown])
-  await clock.advance(2500) // past the grace: the waiting mood is drawn
+  // The mouse was over him for 2 s, so that was play: the wait covers a cookie
+  // run (MPI-21), not just the 3 s after a mouse crossing the band.
+  await clock.advance(2500)
+  expect((await ui.findAll({ type: 'Svg' })).map(s => s.props.source)).toEqual([shown])
+  await clock.advance(PLAY_GRACE_MS - 3000) // past the grace: the waiting mood is drawn
   const after = (await ui.findAll({ type: 'Svg' })).map(s => s.props.source)
   expect(after).not.toContain(undefined)
   expect(after.some(s => s !== shown)).toBe(true)
