@@ -16,7 +16,7 @@ Replaces `2026-11-24-play-vs-work.md` as the current handoff.
 
 1. Done 2026-11-26: Fabio saw the toys ("looks cool") and the middle-click ("works"). The sleep timers are back at 5 and 15 min. He has not said he saw the bed or the foods.
 2. To watch for: Desktop's own menu on a right-click; the play's speed and look; the cotton.
-3. Done 2026-11-26: committed and released as 0.1.1 on Fabio's go (MPI-21 and MPI-22 closed). Open ideas: more toys (balloon, wind-up mouse, jack-in-the-box, rubber duck), README pictures of the toys, bed and foods (`tools/shots.mjs`).
+3. Done 2026-11-26: committed and released as 0.1.1 on Fabio's go (MPI-21 and MPI-22 closed). README pictures added the same day (`docs/images/food.png`, `toys.png`, from `tools/shots.mjs`). Open ideas: more toys (balloon, wind-up mouse, jack-in-the-box, rubber duck).
 
 ## Paste-ready resume prompt
 

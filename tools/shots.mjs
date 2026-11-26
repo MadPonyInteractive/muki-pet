@@ -32,6 +32,15 @@ const shot = (options, more = {}) => ({ options: { home: HOME, ...options }, at:
 
 // Mouse steps, as offsets from his middle (x) and the band's top (y).
 const hover = { move: [0, 40] }
+// The toys and the foods are picked at random (a number that flips for ever
+// and is held at the click: draw/features/toys.ts, cookies/cookie.ts). A
+// picture wants one of them, so `pre` stops the flipping on a chosen number
+// before the mouse steps. First toy turn: 1 is the bag, 0 the ball.
+const toy = (pick) => `document.querySelector('svg').style.cssText = 'animation:none;--tp:${pick}'`
+// Foods: 0 cookie, 1 hamburger, 2 cake.
+const food = (pick) => `document.querySelector('.fds').style.cssText = 'animation:none;--fp:${pick}'`
+const feed = [{ move: [130, 40] }, { click: true }, { move: [0, 200] }, { wait: 620 }]
+const middle = { click: true, button: 'middle' }
 const SHOTS = {
   resting: shot({ mood: 'neutral' }),
   wandering: shot({ mood: 'neutral' }, { at: 8450 }),
@@ -68,6 +77,19 @@ const SHOTS = {
         show: ['.pd'],
       }),
     ],
+  ]),
+  // He's on his way to the food here: it is still whole.
+  ...strip('food', [
+    ['cookie', shot({ mood: 'neutral' }, { pre: food(0), act: feed, show: ['.k1'] })],
+    ['hamburger', shot({ mood: 'neutral' }, { pre: food(1), act: feed, show: ['.k1'] })],
+    ['cake', shot({ mood: 'neutral' }, { pre: food(2), act: feed, show: ['.k1'] })],
+  ]),
+  // A middle click gives a toy; the waits pick a moment of its play.
+  ...strip('toys', [
+    ['punching bag', shot({ mood: 'neutral' }, { pre: toy(1), act: [{ move: [120, 40] }, middle, { move: [0, 200] }, { wait: 1380 }], show: ['.tbg'] })],
+    ['it hits back', shot({ mood: 'neutral' }, { pre: toy(1), act: [{ move: [120, 40] }, middle, { move: [0, 200] }, { wait: 2900 }], show: ['.tbg'] })],
+    ['ball', shot({ mood: 'neutral' }, { pre: toy(0), act: [{ move: [120, 40] }, middle, { move: [0, 200] }, { wait: 2180 }], show: ['.tbl'] })],
+    ['tucked in', shot({ mood: 'asleep' }, { act: [{ move: [120, 40] }, middle, { move: [0, 200] }, { wait: 2600 }], show: ['.bed'] })],
   ]),
   celebrate: shot({ mood: 'celebrate' }, { at: 2700, show: ['.fw'] }),
   headset: shot({ mood: 'neutral', headset: 'on' }, { show: ['.hs'] }),
@@ -146,6 +168,7 @@ async function drawShot(s, file) {
   if (s.act) {
     // He fades in at FADE_IN (.75 s): play only once he's there.
     await sleep(900)
+    if (s.pre) await evaluate(s.pre)
     let down = false
     let at = [mid, 40]
     for (const step of s.act) {
@@ -158,8 +181,9 @@ async function drawShot(s, file) {
         await cdp.page('Input.dispatchMouseEvent', { type: 'mousePressed', x: at[0], y: at[1], button: 'left', buttons: 1, clickCount: 1 })
       }
       if (step.click) {
-        await cdp.page('Input.dispatchMouseEvent', { type: 'mousePressed', x: at[0], y: at[1], button: 'left', buttons: 1, clickCount: 1 })
-        await cdp.page('Input.dispatchMouseEvent', { type: 'mouseReleased', x: at[0], y: at[1], button: 'left', buttons: 0, clickCount: 1 })
+        const button = step.button ?? 'left'
+        await cdp.page('Input.dispatchMouseEvent', { type: 'mousePressed', x: at[0], y: at[1], button, buttons: button === 'middle' ? 4 : 1, clickCount: 1 })
+        await cdp.page('Input.dispatchMouseEvent', { type: 'mouseReleased', x: at[0], y: at[1], button, buttons: 0, clickCount: 1 })
       }
       if (step.wait) await sleep(step.wait)
     }

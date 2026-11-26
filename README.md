@@ -62,6 +62,10 @@ Leave him alone too long and he gets lonely (after 10 minutes), then mad (20), t
 
 <img src="docs/images/play.png" width="476" alt="Petting, a boop, a cookie, and too many cookies">
 
+<img src="docs/images/food.png" width="354" alt="The three foods: a cookie, a hamburger and a slice of cake">
+
+<img src="docs/images/toys.png" width="507" alt="Muki with his punching bag, the bag hitting him back, his ball, and tucked into cotton asleep">
+
 ### He celebrates with you
 
 Tell Claude it worked ("it works", "perfect", "looks good" and so on, as a short message) and Muki jumps for joy with fireworks.
