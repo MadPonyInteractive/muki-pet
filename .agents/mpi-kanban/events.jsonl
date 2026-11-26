@@ -71,3 +71,6 @@
 {"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-20", "at": "2026-11-23T12:55:34+00:00", "actor": "claude", "from": "doing", "to": "done", "reason": "Changelog, version check, tag v0.1.0 and release done; CI green."}
 {"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-21", "at": "2026-11-24T11:35:20+00:00", "actor": "claude", "column": "todo", "title": "Play survives Claude's work: smooth home after a lost focus, no prop while petted"}
 {"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-21", "at": "2026-11-24T11:35:28+00:00", "actor": "claude", "from": "todo", "to": "doing"}
+{"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-22", "at": "2026-11-26T10:30:50+00:00", "actor": "claude", "column": "doing", "title": "Right-click play: a toy queue (punching bag, ball) and a cotton bed when he sleeps"}
+{"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-21", "at": "2026-11-26T11:05:18+00:00", "actor": "claude", "from": "doing", "to": "done", "reason": "Fabio live 2026-11-26: a bit better now; shipped in 0.1.1."}
+{"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-22", "at": "2026-11-26T11:05:18+00:00", "actor": "claude", "from": "doing", "to": "done", "reason": "Built, checks pass, toys and middle-click seen live by Fabio; shipped in 0.1.1."}

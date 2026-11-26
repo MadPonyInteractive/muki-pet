@@ -75,6 +75,19 @@ Why this way, and not a frame-by-frame redraw: see `research/mods-api.md`.
 - **The 6th:** its focused strip grows to cover the whole band (`x`/`width` in CSS) so further clicks hit it and change nothing, and the robot ignores the pointer while he's sick.
 - Lab proof: `tools/frame-lab-ladder-test.svg` (ladder, alternating names, mask bites, the growing 6th strip). Checked with `:focus` swapped for a class; the real click-to-focus was already proven by the coin game.
 
+## Right-click play and random picks with no script (MPI-22, 2026-11-26)
+
+`draw/features/toys.ts` (toys and the bed) and `draw/features/cookies/cookie.ts` (the three foods). Proofs: `tools/frame-lab-rclick-test.svg`, `tools/frame-lab-pick-test.svg`; the facts are in `research/mods-api.md` § CSS tricks.
+
+- **Telling a right-click:** CSS can't (a right press sets `:active` and `:focus` like a left one). SMIL can: `<set attributeName="class" to="<root classes> tg t1" begin="tv.contextmenu" ...>` on the svg root adds classes to the root while it runs. `tv` is the id of the travelling group (`parts/body.ts`), which holds every strip. The switch replaces the root's whole class, so it repeats the root classes (`DrawCtx.roots`).
+- **Turns:** one switch per toy (`t1`, `t2`). While turn k is on, a see-through sheet `o<k>` (the `over` slot: on the svg root, after everything) covers the band and takes the mouse. A right-click on it ends turn k and starts the next; a left click ends it. `dur` ends it after the longest play.
+- **Hands off (`tg` on the root):** every strip hides, which drops the focus the right-click's own press gave one (otherwise a cookie run or a boop would start), and his wander loop pauses.
+- **Random:** an animation on the svg root (`ypk`, `step-end`) flips `--tp` through 0..N-1, one step every 0.19 s. `tg` pauses it, so it holds its value from the click. `--tk` is "pick turn" (`--tp` and `--th`, the turn's number), and `@container style(--tk:0 1) or style(--tk:1 2){...}` holds each toy's rules: toy = (pick + turn) mod N. An animated custom property can't feed `animation-name` directly, which is why the rules sit in container queries.
+- **The play** is plain keyframes: each part (head lean, body, eyes, lids, the toy) runs one track over the whole play (`timeline()`), with short loops listed after it for the repeats (the fast hits, the bounces). Face tracks start and end at his mood's own look (`partTransform`).
+- **The bed** is one switch with no `dur` (it stays until a left click on its sheet `ob`, or the next drawing), only in the asleep mood.
+- **Food:** every layer's cookie holds three `<use>` (cookie, burger, cake) under one bite mask; the group round all cookies (`.fds`) runs the same kind of pick (`--fp`), paused while any strip has focus. Layer k shows food (pick + OFFSET[k]) mod 3.
+- **Limits:** a new drawing ends a toy or the bed (the hold in `brain/behaviours/hold.ts` keeps redraws away for 25 s after play, as for cookies). Unlike the cookie and boop counts, this state does not depend on focus, so the host's blur on a band update does not end it.
+
 ## Boops in a row and mad
 
 - The four touch strips come in five layers (`q1`..`q5`, `features/touch.ts`), the same trick as the cookie ladder: a layer takes clicks only while `.bot:has(>.q(k-1):focus)`, and a focused strip hides (dropping its focus) after `IN_A_ROW` (1.5 s). So each click within 1.5 s climbs a layer. `q5` is wider (4 x 35 px) and its focus lasts 15 s: that is mad. While a `q5` has focus all of `q5` takes the mouse, so hovering its outer strips says which side the hand is on.

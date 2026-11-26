@@ -5,7 +5,8 @@ import { expect, test } from 'claude-code/testing'
 
 import { MOOD_TABLE } from '../character/moods.ts'
 import {
-  K, KNOWN_SHARED, biteNo, boopLayer, cookieNo, crumbNo, gazeLevel, heartNo, heatLevel, layerNo, moodClass, petZone, propClass, stripNo,
+  BED_ON, K, KNOWN_SHARED, PLAYING, biteNo, boopLayer, cookieNo, crumbNo, foodNo, gazeLevel, heartNo, heatLevel, layerNo, moodClass, overNo, petZone, propClass, stripNo,
+  toyNo,
 } from './classes.ts'
 import { MOODS, PROPS, robotSvg } from './index.ts'
 
@@ -21,8 +22,13 @@ const families = () => [
   ...[1, 2, 3, 4, 5, 6].map(cookieNo),
   ...[0, 1, 2].map(biteNo),
   ...[0, 1, 2].map(crumbNo),
+  ...[0, 1, 2].map(foodNo),
   ...[0, 1, 2].map(heartNo),
   ...[0, 1, 2, 3].map(heatLevel),
+  ...[1, 2].map(toyNo),
+  ...[1, 2].map(overNo),
+  PLAYING,
+  BED_ON,
 ]
 
 test('every class in the registry is a different name', () => {
@@ -54,6 +60,8 @@ test('every class a drawing uses is in the registry, and every registered name i
   for (const m of pile.matchAll(/class="([^"]+)"/g)) for (const c of m[1]!.split(' ')) used.add(c)
   // The fireworks of a celebration (MPI-12).
   for (const m of robotSvg(784, { mood: 'celebrate' }).matchAll(/class="([^"]+)"/g)) for (const c of m[1]!.split(' ')) used.add(c)
+  // Asleep: the bed and its sheet (MPI-22).
+  for (const m of robotSvg(784, { mood: 'asleep' }).matchAll(/class="([^"]+)"/g)) for (const c of m[1]!.split(' ')) used.add(c)
   expect([...used].filter((c) => !known.has(c))).toEqual([])
   expect(values.filter((v) => !used.has(v))).toEqual([])
 })
@@ -70,4 +78,19 @@ test('the headset shows only while Remote Control is on, and plays only when it 
   for (const headset of ['on', 'drop', 'lift'] as const) expect(robotSvg(784, { mood: 'happy', headset })).toContain('class="hs"')
   expect(robotSvg(784, { mood: 'happy', headset: 'on' })).not.toMatch(/class="[^"]*\b(hsd|hsl)\b/)
   expect(robotSvg(784, { mood: 'happy', headset: 'drop' })).toMatch(/<svg[^>]*class="[^"]*\bhsd\b/)
+})
+
+test('right-click play: toys when awake and at home, the bed when asleep, neither on a trip or in a tantrum', () => {
+  const toy = /begin="tv\.auxclick;o2\.auxclick"/
+  const bed = /begin="tv\.auxclick" end="ob\.click"/
+  expect(robotSvg(784, { mood: 'neutral' })).toMatch(toy)
+  expect(robotSvg(784, { mood: 'neutral' })).not.toMatch(bed)
+  expect(robotSvg(784, { mood: 'asleep' })).toMatch(bed)
+  expect(robotSvg(784, { mood: 'asleep' })).not.toMatch(toy)
+  for (const mood of ['tantrum', 'celebrate'] as const) expect(robotSvg(784, { mood })).not.toContain('auxclick')
+  expect(robotSvg(784, { mood: 'neutral', visit: { prop: 'file', from: 0.1, n: 1, elapsed: 0 } })).not.toContain('auxclick')
+  // A switch replaces the root's classes, so it must repeat them.
+  const svg = robotSvg(784, { mood: 'happy', heat: 2, headset: 'on' })
+  const roots = svg.match(/<svg[^>]* class="([^"]+)"/)![1]!
+  expect(svg).toContain(`to="${roots} ${PLAYING} ${toyNo(1)}"`)
 })

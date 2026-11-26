@@ -69,6 +69,22 @@ What Claude Code is doing sets his face. Each mood (its look, how long it lasts,
 - A redraw from the hook (a mood change) ends a run and resets the count. Rare, accepted.
 - How it counts without script: `architecture/how-it-works.md` § Cookie game.
 
+## Food: cookie, hamburger or cake (2026-11-26, Fabio; not yet seen live)
+
+- The "cookie" of the cookie game is now one of three foods, picked at random on each click: a chocolate-chip cookie, a hamburger, or a slice of cake with pink icing and a cherry. One at a time. Everything else is the cookie game as it was (the dash, three bites, the joy, the 6th in a row makes him sick).
+- In a run of clicks the foods differ from one another (each click in the run shifts the pick), so a run is not six of the same.
+
+## Right-click play: toys and the bed (2026-11-26, MPI-22, Fabio's idea; not yet seen live)
+
+- **The button (2026-11-26, after Fabio's live look):** Desktop pops up its own Copy / Select All menu on a right-click over him, and nothing in his frame can stop it. So a **middle-click** (the wheel button) does everything a right-click does here, with no menu; a right-click still works, menu and all. Ctrl+click is not possible: his frame can't see the Ctrl key.
+- **A right-click anywhere on the band gives him a toy, picked at random.** He stops where he is and plays with it. **A right-click while a toy is out swaps it for the other one** (never the same one twice in a row). A left click puts the toy away; so does the end of its play, or a new drawing (Claude starting or ending work).
+- **Punching bag** (13 s): it drops in on a rope from the top of the band, beside his head. He head-butts it and smiles; the second time it swings back and bonks him (eyes shut, head knocked back); he glares at it (angry lids, a little hop), then hits it seven times fast with focused eyes; a last big hit sends it flying off, and he is pleased with himself.
+- **Ball** (11.5 s): it drops in beside him and bounces; he bounces it off the ground with his head nine times, eyes following it up and down; a last big one sends it out of the top of the band; he looks up, wide-eyed; it lands on his head (he squashes, eyes shut), bounces off and rolls away; happy eyes and a hop.
+- While a toy is out he can't be petted or fed (the clicks go to the toy), and he doesn't wander.
+- No toys in a tantrum or a celebration, or while he is on a trip to a prop or the paper pile.
+- **Asleep, a right-click tucks him into a heap of white cotton** (Fabio: "covers his whole body ... like a baby"): it puffs up from the ground to just under his eyes, so only his eyes and the top of his head show. He sinks in, snuggles (a little wobble), and sleeps on with happy "^ ^" eyes; the z's carry on. A left click takes the cotton away (the next left click is a cookie, which wakes him as before). It also goes with the next drawing.
+- More toy ideas, not built: a balloon on a string, a wind-up mouse he chases, a jack-in-the-box, a rubber duck.
+
 ## Props: what Claude is doing (built 2026-11-22, Fabio chose "add props")
 
 When Claude starts a tool (main agent only), a small prop pops up on the band and he goes to look at it. At most one every 12 s.

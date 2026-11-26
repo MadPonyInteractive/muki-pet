@@ -1,0 +1,21 @@
+{
+  "schema": "mpi-kanban/task-card/v1",
+  "id": "MPI-22",
+  "title": "Right-click play: a toy queue (punching bag, ball) and a cotton bed when he sleeps",
+  "description": "Fabio 2026-11-26: cookies alone are too thin a game. Right-click gives him a toy; the next right-click swaps it for the next toy; he plays a few seconds or until something else happens. Punching bag on a pole (he head-butts it, it swings back and sometimes hits him, he gets upset, then keeps hitting with focused eyes) and a little ball. Asleep, a right-click gives him a fluffy white cotton bed: comfy, happy eyes, sleeps on. Right-click is told apart with SMIL begin=strip.contextmenu (research/mods-api.md, 2026-11-26).",
+  "column": "done",
+  "maturity": "complete",
+  "status": "done",
+  "created_at": "2026-11-26T10:30:50+00:00",
+  "updated_at": "2026-11-26T11:05:18+00:00",
+  "links": {
+    "brief": "brief.md",
+    "plan": "plan.md",
+    "checklist": "checklist.md",
+    "validation": "validation.md",
+    "files": "files.json",
+    "events": "events.jsonl",
+    "handoffs": "handoffs/",
+    "research": "research/"
+  }
+}

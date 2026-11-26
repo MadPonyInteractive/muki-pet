@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 76">
+<!-- Proof (hand-written): which mouse events can start a SMIL <set> in Desktop's
+     script-less frame. Each square turns green for 4 s when its event fires on
+     the grey strip. A right-click must light "contextmenu" and not "click". -->
+<style>
+.s{fill:#888;outline:none}
+.i{fill:#a33}
+.on .i{fill:#3c3}
+text{font:9px sans-serif;fill:#ccc}
+</style>
+<rect id="s" class="s" x="0" y="0" width="150" height="76" tabindex="0"/>
+<g id="gClick"><set attributeName="class" to="on" begin="s.click" dur="4s"/><rect class="i" x="170" y="5" width="14" height="14"/><text x="190" y="16">click</text></g>
+<g id="gDown"><set attributeName="class" to="on" begin="s.mousedown" dur="4s"/><rect class="i" x="170" y="23" width="14" height="14"/><text x="190" y="34">mousedown</text></g>
+<g id="gMenu"><set attributeName="class" to="on" begin="s.contextmenu" dur="4s"/><rect class="i" x="170" y="41" width="14" height="14"/><text x="190" y="52">contextmenu</text></g>
+<g id="gAux"><set attributeName="class" to="on" begin="s.auxclick" dur="4s"/><rect class="i" x="170" y="59" width="14" height="14"/><text x="190" y="70">auxclick</text></g>
+</svg>

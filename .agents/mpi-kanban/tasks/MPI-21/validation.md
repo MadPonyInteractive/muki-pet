@@ -6,3 +6,4 @@
 - Headless Chrome: an animation-flipped custom property does not start a transition (snap smoothing not possible in CSS as the game is).
 - Context bar (outside the repo): type-check and `plugin validate` pass.
 - Not seen live in Desktop yet (Fabio: `/reload-plugins`, then play while Claude works).
+- Fabio, live, 2026-11-26: "it's a bit better now." No new fault reported; shipped in 0.1.1.

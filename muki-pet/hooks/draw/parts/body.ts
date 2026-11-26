@@ -17,6 +17,9 @@ import { wheelShape } from './wheels.ts'
 // How far each wheel sits from his middle (before SCALE).
 export const WHEEL_DX = 15
 
+// The travelling group's id: a right-click inside it starts a toy (features/toys.ts).
+export const TRAVEL_ID = 'tv'
+
 const parts = (headExtra: string) =>
   wheelShape(-WHEEL_DX) +
   wheelShape(WHEEL_DX) +
@@ -31,7 +34,7 @@ export function robotMarkup(W: number, ground: number, defs: string, slots: Reco
     `<line x1="0" y1="${ground + 0.5}" x2="${W}" y2="${ground + 0.5}" stroke="${COLORS.bezel}" stroke-opacity=".45"/>` +
     `<g transform="translate(0,${ground})">` +
     slots.scene +
-    `<g class="${K.travel} ${K.loop}">` +
+    `<g id="${TRAVEL_ID}" class="${K.travel} ${K.loop}">` +
     slots.props +
     `<g class="${K.carry}">` +
     slots.behind +
@@ -42,6 +45,8 @@ export function robotMarkup(W: number, ground: number, defs: string, slots: Reco
     slots.overHead +
     `</g></g>` +
     slots.front +
-    `</g></g></g></svg>`
+    `</g></g></g>` +
+    slots.over +
+    `</svg>`
   )
 }

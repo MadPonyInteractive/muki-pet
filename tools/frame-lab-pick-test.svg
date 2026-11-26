@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 76">
+<!-- Proof (hand-written): a random pick with no script. A fast animation on
+     the root flips the custom property (pick) between 0 and 1 for ever; a
+     right-click on the grey strip pauses it (SMIL adds the class tg), which
+     holds whatever it was at that instant. Container style queries read the
+     held value and choose which square is green. A second right-click, on the
+     sheet that now covers the band, moves to the other phase (t2), which must
+     show the other square. -->
+<style>
+svg{animation:pk .5s step-end infinite;--key:var(--pick) var(--ph);--ph:0}
+@keyframes pk{0%{--pick:0}50%{--pick:1}}
+.tg{animation-play-state:paused}
+.t1{--ph:1}.t2{--ph:2}
+.s{fill:#888;outline:none}
+.o{fill:#000;fill-opacity:0;pointer-events:none}
+.t1 .o1,.t2 .o2{pointer-events:all}
+.i{fill:#a33}
+@container style(--pick:0){.p0{fill:#3c3}}
+@container style(--pick:1){.p1{fill:#3c3}}
+@container style(--key:0 1) or style(--key:1 2){.ka{fill:#3c3}}
+@container style(--key:1 1) or style(--key:0 2){.kb{fill:#3c3}}
+text{font:9px sans-serif;fill:#ccc}
+</style>
+<g id="tv"><rect class="s" x="0" y="0" width="150" height="76" tabindex="0"/></g>
+<rect class="i p0" x="170" y="5" width="14" height="14"/><text x="190" y="16">pick 0 (flickers until held)</text>
+<rect class="i p1" x="170" y="23" width="14" height="14"/><text x="190" y="34">pick 1</text>
+<g><rect class="i ka" x="170" y="41" width="14" height="14"/><text x="190" y="52">toy A</text></g>
+<g><rect class="i kb" x="170" y="59" width="14" height="14"/><text x="190" y="70">toy B</text></g>
+<set attributeName="class" to="tg t1" begin="tv.contextmenu;o2.contextmenu" end="o1.contextmenu;o1.click" dur="8s"/>
+<rect id="o1" class="o o1" width="400" height="76"/>
+<set attributeName="class" to="tg t2" begin="o1.contextmenu" end="o2.contextmenu;o2.click" dur="8s"/>
+<rect id="o2" class="o o2" width="400" height="76"/>
+</svg>

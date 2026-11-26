@@ -20,9 +20,11 @@ Read this index first, then the latest file in `handoffs/`.
 - [log/2026-11-21.md](log/2026-11-21.md): day one
 - [log/2026-11-22.md](log/2026-11-22.md): first time seen in the app
 - [log/2026-11-23.md](log/2026-11-23.md): the mouse sensor that died after one visit (MPI-18)
+- [log/2026-11-26.md](log/2026-11-26.md): right-click toys, the cotton bed, burger and cake; how a right-click and a random pick work with no script (MPI-22)
 - [log/2026-11-24.md](log/2026-11-24.md): why play breaks while Claude works (the host blurs his frame on every band render)
 - [architecture/how-to-add.md](architecture/how-to-add.md): how to add a mood, prop, feature or behaviour
-- [handoffs/2026-11-24-play-vs-work.md](handoffs/2026-11-24-play-vs-work.md): **current handoff** (MPI-21: play survives Claude's work; waiting on Fabio's live test)
+- [handoffs/2026-11-26-toys-bed-food.md](handoffs/2026-11-26-toys-bed-food.md): **current handoff** (MPI-22: toys, bed, burger and cake; released in 0.1.1)
+- [handoffs/2026-11-24-play-vs-work.md](handoffs/2026-11-24-play-vs-work.md): previous (MPI-21: play survives Claude's work; Fabio 2026-11-26: "a bit better now")
 - [handoffs/2026-11-23-review-fixes.md](handoffs/2026-11-23-review-fixes.md): previous (MPI-17 review fixes; done)
 - [handoffs/2026-11-22-ghost-hunt-fixed.md](handoffs/2026-11-22-ghost-hunt-fixed.md): previous (ghost cause found: a chat opened again replays its last drawing; done)
 - [handoffs/2026-11-22-ghost-hunt-cookies-built.md](handoffs/2026-11-22-ghost-hunt-cookies-built.md): previous (cookie game built; redraw logs added)
@@ -30,7 +32,7 @@ Read this index first, then the latest file in `handoffs/`.
 - [handoffs/2026-11-22-coin-game-built.md](handoffs/2026-11-22-coin-game-built.md): previous (swap, coin game, heat and touch fix)
 - [handoffs/2026-11-22-coin-game-plan.md](handoffs/2026-11-22-coin-game-plan.md): previous (the build plan, done)
 - [handoffs/2026-11-22-moods-built.md](handoffs/2026-11-22-moods-built.md): previous (moods built)
-- `tools/frame-lab.html`: draws an SVG exactly as Desktop does (same sanitizer, CSP, sandbox) for testing in the browser pane; `tools/frame-lab-ladder-test.svg` is the cookie-counting proof and `frame-lab-coin-test.svg` the click-to-focus proof (both hand-written). A drawing from the current code: `node tools/lab-svg.mjs <boop|kick|papers|tantrum|'{json options}'> [width]` (writes a git-ignored `tools/frame-lab-<name>.svg` and prints the lab URL)
+- `tools/frame-lab.html`: draws an SVG exactly as Desktop does (same sanitizer, CSP, sandbox) for testing in the browser pane; `tools/frame-lab-rclick-test.svg` is the right-click proof, `frame-lab-pick-test.svg` the random-pick proof, `tools/frame-lab-ladder-test.svg` is the cookie-counting proof and `frame-lab-coin-test.svg` the click-to-focus proof (both hand-written). A drawing from the current code: `node tools/lab-svg.mjs <boop|kick|papers|tantrum|'{json options}'> [width]` (writes a git-ignored `tools/frame-lab-<name>.svg` and prints the lab URL)
 - [handoffs/2026-11-22-robot-visible.md](handoffs/2026-11-22-robot-visible.md): previous (done)
 - [handoffs/2026-11-22-robot-not-visible.md](handoffs/2026-11-22-robot-not-visible.md): older (done)
 

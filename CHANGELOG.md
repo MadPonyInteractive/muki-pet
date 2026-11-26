@@ -2,6 +2,13 @@
 
 What changed in each version of Muki. The newest version comes first, and its number matches `version` in `muki-pet/.claude-plugin/plugin.json`.
 
+## 0.1.1 (2026-11-26)
+
+- Toys: middle-click the band (the wheel button) and he gets a punching bag or a ball, picked at random, and plays with it. Middle-click again to swap it for the other one; a left click puts it away. A right-click does the same, but Claude Desktop also shows its own menu on it.
+- A bed: middle-click while he's asleep and he's tucked into a heap of cotton up to his eyes. He sleeps on, happy. A left click takes it away.
+- Food: a click beside him now gives a cookie, a hamburger or a slice of cake, picked at random. Six in a row still makes him sick.
+- Play holds up better while Claude works: he no longer redraws for 25 seconds after you play with him, a trip to a prop or the paper pile stops under your hand, and when a cookie game is cut short he lingers a moment and rolls home slowly, where he used to run off.
+
 ## 0.1.0 (2026-11-23)
 
 The first version.

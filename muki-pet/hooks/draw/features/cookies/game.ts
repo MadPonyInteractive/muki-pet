@@ -62,7 +62,8 @@ export function cookieGame(W: number, top: number, H: number): { css: string; st
   return {
     css: `.${K.strip}{fill:#000;fill-opacity:0;pointer-events:all;outline:none}` + css + gameCss(top, H),
     strips: strip,
-    cookies,
+    // One group round them all: it holds the random food pick (cookie.ts).
+    cookies: `<g class="${K.foods}">${cookies}</g>`,
   }
 }
 
@@ -103,7 +104,7 @@ function gameCss(top: number, H: number): string {
     `${layers.slice(0, -1).map((n) => `svg:has(${focused(n)}) .${layerNo(n + 1)}`).join(',')}{pointer-events:all}` +
     `svg:has(${c}:focus) ${c}:focus{pointer-events:all}` +
     `.${K.cookie}{display:none;pointer-events:none;transform:translate(var(--d),-29px)}` +
-    `${layers.map((n) => `${focused(n)}~.${cookieNo(n)}`).join(',')}{display:inline}` +
+    `${layers.map((n) => `${focused(n)}~.${K.foods} .${cookieNo(n)}`).join(',')}{display:inline}` +
     cookieCss(LAYERS) +
     // His mouth: hidden until he eats.
     `.${K.mouth}{transform:scale(0);transform-box:fill-box;transform-origin:center}` +

@@ -87,6 +87,8 @@ export const K = {
   strip: 'c', // a cookie strip
   cookie: 'cu', // one layer's cookie
   cookieCore: 'cc',
+  foods: 'fds', // the group round every layer's cookie: it holds the random pick
+  food: 'fd', // one of the foods a cookie can be (cookie, burger, cake)
   bite: 'bt',
   crumb: 'crm',
   // Being sick.
@@ -94,6 +96,18 @@ export const K = {
   rainbowSide: 'rbs',
   puddle: 'pd',
   puddleInner: 'pdi',
+  // Right-click play: toys and the bed (features/toys.ts).
+  over: 'ov', // a see-through sheet over the band while a toy or the bed is out
+  bedOver: 'ovb', // the bed's sheet
+  toy: 'tt', // a toy, hidden until its turn
+  toyBag: 'tbg',
+  bagDrop: 'tbd', // the bag drops in, and flies off at the end
+  bagSwing: 'tbs', // the bag swings on its rope
+  toyBall: 'tbl',
+  ballX: 'tbx',
+  ballY: 'tby',
+  ballSpin: 'tbr',
+  bed: 'bed',
 } as const
 
 // Families of classes with a number. Each prefix is its own letter(s) so the
@@ -104,12 +118,20 @@ export const stripNo = (i: number) => `c${i}` // cookie strip i (its distance)
 export const gazeLevel = (i: number) => `g${i}` // where the eyes look over a strip
 export const layerNo = (k: number) => `L${k}` // cookie-game layer k
 export const cookieNo = (k: number) => `k${k}` // the cookie of layer k
+export const foodNo = (i: number) => `f${i}` // which food: 0 cookie, 1 burger, 2 cake
 export const biteNo = (i: number) => `bt${i}`
 export const crumbNo = (i: number) => `r${i}`
 export const heartNo = (i: number) => `h${i}` // NOTE: same text as heatLevel(i), see the test
 export const heatLevel = (n: number) => `h${n}` // on the svg root
+export const toyNo = (k: number) => `t${k}` // on the svg root while toy k is out (set by SMIL, never in the markup)
+export const overNo = (k: number) => `o${k}` // toy k's sheet
 export const moodClass = (mood: string) => `m-${mood}`
 export const propClass = (prop: string) => `p-${prop}`
+
+// On the svg root while a toy or the bed is out, and while the bed is out.
+// SMIL sets them (features/toys.ts), so no drawing has them in its markup.
+export const PLAYING = 'tg'
+export const BED_ON = 'bdn'
 
 // The one place two names are meant to be the same text: a heart `h0` and the
 // root's heat class `h0` never meet (a heart has no children and sits below

@@ -26,6 +26,14 @@ Something must still *choose* the mood: a passing mood is shown by a behaviour (
 
 `muki-pet/hooks/character/props.ts`: add an entry to `PROP_TABLE` with `tools` (Claude Code tool names that drop it), an optional `match` regex for tools not listed, and `shape` (SVG markup standing on the ground at x = 0, about 20 px tall). The visit, its timing and the `p-<name>` root class come from the existing visit code.
 
+## A toy (one file)
+
+`muki-pet/hooks/draw/features/toys.ts`: draw it (a group with class `K.toy` plus its own class, in the `front` slot, origin at his feet), write its play as a function like `bagCss` (tracks from `play(k, seconds, mood)`), add its length to `TOYS` and a `when(n, ...)` line in `toysCss`. The switches, sheets and the random pick follow `TOYS`. New classes go in `draw/classes.ts`, and the toy and sheet numbers in `families()` of `draw/classes.test.ts`.
+
+## A food (one file)
+
+`muki-pet/hooks/draw/features/cookies/cookie.ts`: draw it in `<defs>` (about 14 px across, round the same middle as the cookie, so the bites fit), add it to `COOKIE_DEF` and its id to `FOODS`. The pick follows `FOODS`.
+
 ## A heat level (one file)
 
 `muki-pet/hooks/character/heat.ts`: add an entry to `HEAT_LEVELS` (keep them in rising `from` order): `from` (context %), `bezel`, `chassis`, `rim`, `tyre` colours, `droop` (px the top lids drop), `sweat` (0, 1 or 2 drops). `MAX_HEAT`, `heatOf` and the CSS (`draw/features/heat.ts`) follow the table.

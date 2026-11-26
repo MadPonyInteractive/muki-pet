@@ -39,6 +39,8 @@ export type DrawCtx = {
   options: RobotOptions
   mood: Mood
   visit: ActiveVisit | undefined
+  // The svg root's classes (a SMIL switch that adds one must repeat them).
+  roots: string
 }
 
 // Where a feature's markup goes (each is a place inside the robot's SVG):
@@ -51,8 +53,10 @@ export type DrawCtx = {
 //   props     inside the moving group, before everything that travels (a prop)
 //   scene     on the ground line, outside the moving group: stays put while he
 //             wanders (the paper pile), drawn behind him
+//   over      on the svg root, after everything: over the whole band, in band
+//             coordinates (the right-click switches and their sheets)
 // Within one place, features come in the order of the list.
-export type SlotName = 'head' | 'overHead' | 'ground' | 'zones' | 'behind' | 'front' | 'props' | 'scene'
+export type SlotName = 'head' | 'overHead' | 'ground' | 'zones' | 'behind' | 'front' | 'props' | 'scene' | 'over'
 
 export type Feature = {
   name: string

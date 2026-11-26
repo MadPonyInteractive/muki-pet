@@ -28,7 +28,8 @@ export function robotSvg(width: number, options: RobotOptions = {}): string {
   const plan = options.visit && visitPlan(W, options.visit.from, options.visit.n)
   // A visit that is over is drawn as the plain drawing at its end spot.
   const visit = plan && options.visit && options.visit.elapsed < plan.end ? { plan, ...options.visit } : undefined
-  const d: DrawCtx = { W, ground, H: BAND_HEIGHT, options, mood, visit }
+  const d: DrawCtx = { W, ground, H: BAND_HEIGHT, options, mood, visit, roots: '' }
+  d.roots = [moodClass(mood), ...FEATURES.map((f) => f.rootClass?.(d)).filter(Boolean)].join(' ')
   // Tired (30% context and over) he rolls slowly.
   const slow = (options.heat ?? 0) >= TIRED_HEAT ? TIRED_SLOW : 1
   const route = routeAround(W, plan ? plan.toX : Math.round(bandX(W, options.home ?? 0.5)), !moodDef(mood).still, slow)
@@ -44,8 +45,9 @@ export function robotSvg(width: number, options: RobotOptions = {}): string {
     front: slot('front'),
     props: slot('props'),
     scene: slot('scene'),
+    over: slot('over'),
   }
-  const roots = [moodClass(mood), ...FEATURES.map((f) => f.rootClass?.(d)).filter(Boolean)].join(' ')
+  const roots = d.roots
 
   return (
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${BAND_HEIGHT}" width="${W}" height="${BAND_HEIGHT}" class="${roots}">` +

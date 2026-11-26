@@ -55,8 +55,10 @@ Leave him alone too long and he gets lonely (after 10 minutes), then mad (20), t
 
 - **Pet him:** hold the mouse button down on him. He leans into your hand, blushes, and hearts float up.
 - **Boop him:** click him. Boop him five times in a row and he gets annoyed (unless he's tired).
-- **Cookies:** click the band beside him. He dashes over and eats the cookie.
-- **Too many cookies:** feed him six in a row and he gets sick. Very sick. With a rainbow.
+- **Food:** click the band beside him. A cookie, a hamburger or a slice of cake pops up, and he dashes over and eats it.
+- **Too much food:** feed him six in a row and he gets sick. Very sick. With a rainbow.
+- **Toys:** middle-click the band (the wheel button). He gets a punching bag or a ball, picked at random, and plays with it. Middle-click again to swap it for the other one; a left click puts it away. (A right-click works too, but Claude Desktop shows its own menu on it.)
+- **A bed:** middle-click while he's asleep, and he's tucked into a heap of cotton up to his eyes. A left click takes it away.
 
 <img src="docs/images/play.png" width="476" alt="Petting, a boop, a cookie, and too many cookies">
 
