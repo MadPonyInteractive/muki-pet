@@ -74,3 +74,4 @@
 {"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-22", "at": "2026-11-26T10:30:50+00:00", "actor": "claude", "column": "doing", "title": "Right-click play: a toy queue (punching bag, ball) and a cotton bed when he sleeps"}
 {"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-21", "at": "2026-11-26T11:05:18+00:00", "actor": "claude", "from": "doing", "to": "done", "reason": "Fabio live 2026-11-26: a bit better now; shipped in 0.1.1."}
 {"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-22", "at": "2026-11-26T11:05:18+00:00", "actor": "claude", "from": "doing", "to": "done", "reason": "Built, checks pass, toys and middle-click seen live by Fabio; shipped in 0.1.1."}
+{"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-23", "at": "2026-11-26T22:40:37+00:00", "actor": "claude", "column": "doing", "title": "Middle click gives a toy every time, not a cookie"}

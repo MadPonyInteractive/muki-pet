@@ -81,14 +81,16 @@ test('the headset shows only while Remote Control is on, and plays only when it 
 })
 
 test('right-click play: toys when awake and at home, the bed when asleep, neither on a trip or in a tantrum', () => {
-  const toy = /begin="tv\.auxclick;o2\.auxclick"/
-  const bed = /begin="tv\.auxclick" end="ob\.click"/
+  // A release starts it (a middle click's auxclick is lost to Chromium's
+  // autoscroll); a left click's own click ends it again at once.
+  const toy = /begin="tv\.mouseup;o2\.mouseup" end="o1\.mouseup;o1\.click;tv\.click\+\.001s;o2\.click\+\.001s"/
+  const bed = /begin="tv\.mouseup" end="ob\.click;tv\.click\+\.001s"/
   expect(robotSvg(784, { mood: 'neutral' })).toMatch(toy)
   expect(robotSvg(784, { mood: 'neutral' })).not.toMatch(bed)
   expect(robotSvg(784, { mood: 'asleep' })).toMatch(bed)
   expect(robotSvg(784, { mood: 'asleep' })).not.toMatch(toy)
-  for (const mood of ['tantrum', 'celebrate'] as const) expect(robotSvg(784, { mood })).not.toContain('auxclick')
-  expect(robotSvg(784, { mood: 'neutral', visit: { prop: 'file', from: 0.1, n: 1, elapsed: 0 } })).not.toContain('auxclick')
+  for (const mood of ['tantrum', 'celebrate'] as const) expect(robotSvg(784, { mood })).not.toContain('mouseup')
+  expect(robotSvg(784, { mood: 'neutral', visit: { prop: 'file', from: 0.1, n: 1, elapsed: 0 } })).not.toContain('mouseup')
   // A switch replaces the root's classes, so it must repeat them.
   const svg = robotSvg(784, { mood: 'happy', heat: 2, headset: 'on' })
   const roots = svg.match(/<svg[^>]* class="([^"]+)"/)![1]!

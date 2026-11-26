@@ -1,0 +1,4 @@
+- [x] Reproduce with real middle presses (headless Chrome)
+- [x] Fix (mouseup start, click+.001s end)
+- [x] Four checks
+- [ ] Live look by Fabio

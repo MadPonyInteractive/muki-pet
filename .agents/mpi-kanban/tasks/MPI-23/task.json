@@ -1,0 +1,21 @@
+{
+  "schema": "mpi-kanban/task-card/v1",
+  "id": "MPI-23",
+  "title": "Middle click gives a toy every time, not a cookie",
+  "description": "Fabio 2026-11-26: a middle click mostly acts like a left click (food); once the toy flashed for a moment and food showed under the pointer.",
+  "column": "doing",
+  "maturity": "in-progress",
+  "status": "active",
+  "created_at": "2026-11-26T22:40:37+00:00",
+  "updated_at": "2026-11-26T22:40:37+00:00",
+  "links": {
+    "brief": "brief.md",
+    "plan": "plan.md",
+    "checklist": "checklist.md",
+    "validation": "validation.md",
+    "files": "files.json",
+    "events": "events.jsonl",
+    "handoffs": "handoffs/",
+    "research": "research/"
+  }
+}

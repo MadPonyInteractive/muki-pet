@@ -18,6 +18,8 @@ Replaces `2026-11-24-play-vs-work.md` as the current handoff.
 2. To watch for: Desktop's own menu on a right-click; the play's speed and look; the cotton.
 3. Done 2026-11-26: committed and released as 0.1.1 on Fabio's go (MPI-21 and MPI-22 closed). README pictures added the same day (`docs/images/food.png`, `toys.png`, from `tools/shots.mjs`). Open ideas: more toys (balloon, wind-up mouse, jack-in-the-box, rubber duck).
 
+4. **MPI-23 (2026-11-26, not committed yet):** the middle click mostly gave food live. Cause: Chromium's middle-button autoscroll (the chat can scroll) swallows `auxclick`. The switches now start on `mouseup` and end on `click+.001s`; proven in headless Chrome with real presses, all four checks pass. Fabio, live after `/reload-plugins` (2026-11-26): "it's working for now" (it also worked at first last time). Committed. He'll watch it in other chats for a day or so; if it holds, close MPI-23 and offer a release (0.1.2). Known leftover: the first left click after a middle click only stops the autoscroll (swaps the toy instead of putting it away). Details: `log/2026-11-26.md` § Middle click.
+
 ## Paste-ready resume prompt
 
 ```

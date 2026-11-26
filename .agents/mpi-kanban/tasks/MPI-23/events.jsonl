@@ -1,0 +1,1 @@
+{"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-23", "at": "2026-11-26T22:40:37+00:00", "actor": "claude", "column": "doing", "title": "Middle click gives a toy every time, not a cookie"}

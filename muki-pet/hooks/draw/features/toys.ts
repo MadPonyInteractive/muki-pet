@@ -5,22 +5,27 @@
 // top of his head show, happy eyes, and he sleeps on.
 //
 // CSS can't tell a right-click from a left one (both press and focus), so the
-// switch is SMIL: a `<set>` on the svg root that starts on `auxclick` (a
-// middle or a right click; Desktop pops its own Copy / Select All menu on a
-// right one and nothing in the frame can stop it, so the middle button is the
-// clean way: Fabio saw the menu live, 2026-11-26) and
-// adds a class to the root for as long as it runs (research/mods-api.md, CSS
-// tricks). All the play is CSS under that class. It needs no focus, so the
-// host's blur on a band update can't end it.
+// switch is SMIL: a `<set>` on the svg root that starts on `mouseup` (any
+// button) and ends 1 ms after a `click` (a left click only), so only a middle
+// or a right release leaves it on. Desktop pops its own Copy / Select All menu
+// on a right one and nothing in the frame can stop it, so the middle button is
+// the clean way (Fabio saw the menu live, 2026-11-26). Not `auxclick`: when
+// the chat around the band can scroll, a middle press starts Chromium's
+// autoscroll and no `auxclick` comes at all (MPI-23). The 1 ms matters: an end
+// at the same instant as the begin is ignored. The `<set>` adds a class to the
+// root for as long as it runs (research/mods-api.md, CSS tricks). All the play
+// is CSS under that class. It needs no focus, so the host's blur on a band
+// update can't end it.
 //
 // Turns with no script: the switches are turns 1 to N (N = how many toys).
-// While turn k is on, a see-through sheet `o<k>` covers the band. A right-click
-// on it ends turn k and starts turn k + 1 (the last one starts the first
-// again), and a left click on it puts the toy away. With no toy out, the
-// right-click lands on his strips, inside the travelling group `tv`, which
-// starts turn 1. The press also focuses the strip under it (a cookie or a boop
-// would start), so while a toy or the bed is out every strip hides, which
-// drops that focus at once.
+// While turn k is on, a see-through sheet `o<k>` covers the band. A middle
+// click on it ends turn k and starts turn k + 1 (the last one starts the first
+// again), and a left click on it puts the toy away (the release starts the
+// next turn, its click ends that one too). With no toy out, the release lands
+// on his strips, inside the travelling group `tv`, which starts turn 1. The
+// press also focuses the strip under it (a cookie or a boop would start), so
+// while a toy or the bed is out every strip hides, which drops that focus at
+// once.
 //
 // Random with no script (tools/frame-lab-pick-test.svg): an animation on the
 // svg root flips a custom property through 0 to N - 1 for ever, a few times a
@@ -59,7 +64,7 @@ function switches(d: DrawCtx): string {
   const sheet = (id: string, cls: string) => `<rect id="${id}" class="${K.over} ${cls}" width="${d.W}" height="${d.H}"/>`
   if (bedOn(d)) {
     return (
-      `<set attributeName="class" to="${d.roots} ${PLAYING} ${BED_ON}" begin="${TRAVEL_ID}.auxclick" end="${BED_ID}.click"/>` +
+      `<set attributeName="class" to="${d.roots} ${PLAYING} ${BED_ON}" begin="${TRAVEL_ID}.mouseup" end="${BED_ID}.click;${TRAVEL_ID}.click+.001s"/>` +
       sheet(BED_ID, K.bedOver)
     )
   }
@@ -68,9 +73,12 @@ function switches(d: DrawCtx): string {
   return TOYS.map((_, i) => {
     const k = i + 1
     const before = i === 0 ? n : i
-    const begin = (i === 0 ? `${TRAVEL_ID}.auxclick;` : '') + `${overId(before)}.auxclick`
+    // Any release starts the turn; a left click's own `click`, at the same
+    // instant, ends it again before it is ever drawn.
+    const begin = (i === 0 ? `${TRAVEL_ID}.mouseup;` : '') + `${overId(before)}.mouseup`
+    const end = `${overId(k)}.mouseup;${overId(k)}.click;` + (i === 0 ? `${TRAVEL_ID}.click+.001s;` : '') + `${overId(before)}.click+.001s`
     return (
-      `<set attributeName="class" to="${d.roots} ${PLAYING} ${toyNo(k)}" begin="${begin}" end="${overId(k)}.auxclick;${overId(k)}.click" dur="${TURN}s"/>` +
+      `<set attributeName="class" to="${d.roots} ${PLAYING} ${toyNo(k)}" begin="${begin}" end="${end}" dur="${TURN}s"/>` +
       sheet(overId(k), overNo(k))
     )
   }).join('')
