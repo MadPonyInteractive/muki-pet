@@ -8,7 +8,7 @@
 import type { Register } from 'claude-code'
 
 import { renderBand } from './band/render.tsx'
-import { isConfirmation } from './character/confirm.ts'
+import { isConfirmation, saidByYou } from './character/confirm.ts'
 import { heatOf } from './character/heat.ts'
 import { propFor } from './character/props.ts'
 import { addPaper, sendPapers, startsBackgroundTask } from './brain/pile-store.ts'
@@ -30,9 +30,13 @@ export const register: Register = on => {
 
   // Remote Control: a message from your phone puts his headset on; one typed
   // at the desk takes it off (brain/behaviours/remote.ts).
+  // A short "it worked" from you makes him celebrate. It is read here, not at
+  // turn.start: a message typed while Claude is still working goes into the
+  // running turn, and no turn.start comes for it (MPI-24).
   on('prompt.submit', async ($, e, next) => {
     try {
-      await send($, { type: 'prompt', origin: e.origin.kind })
+      const confirmed = !e.command && !e.isMeta && saidByYou(e.origin) && isConfirmation(e.text)
+      await send($, { type: 'prompt', origin: e.origin.kind, confirmed })
     } catch {}
     return next(e)
   })
@@ -45,12 +49,11 @@ export const register: Register = on => {
     return next(e)
   })
 
-  // You sent a message (sub-agents' turns don't count). A short "it worked"
-  // makes him celebrate.
+  // A turn of Claude's main loop starts (sub-agents' turns don't count).
   on('turn.start', async ($, e, next) => {
     if (!e.agentId) {
       try {
-        await send($, { type: 'turnStart', confirmed: isConfirmation(e.text) })
+        await send($, { type: 'turnStart' })
       } catch {}
     }
     return next(e)

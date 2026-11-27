@@ -59,3 +59,11 @@ export function isConfirmation(text: string): boolean {
     .trim()
   return PHRASES.has(words) || PHRASES.has(words.replace(LEAD, ''))
 }
+
+// Whether a message is your own words: typed at the desk, sent from your phone
+// (Remote Control), `claude -p`, or a plugin speaking as you. A task
+// notification, another session or a schedule is not you saying it worked.
+export function saidByYou(origin: { kind: string; asUser?: boolean }): boolean {
+  if (origin.kind === 'plugin') return origin.asUser === true
+  return origin.kind === 'composer' || origin.kind === 'bridge' || origin.kind === 'sdk'
+}

@@ -430,3 +430,30 @@ test('two renders at once both wait for his saved spot', async () => {
   expect(brain.state.home).toBe(0.3)
   await first
 })
+
+// What Desktop sent on 2026-11-27 (MPI-24): "Perfect." as the plain text, and a
+// message typed while Claude was still working reached prompt.submit only (it
+// went into the running turn, no turn.start). He celebrates either way.
+test('"Perfect." typed while Claude is still working sets off the fireworks', async ($, on) => {
+  on('ui.render', emptyBand)
+  const clock = mock.clock(on, { now: 50_000_000 })
+  on('turn.start', (_$, e) => ({ turnId: e.turnId }))
+  on('prompt.submit', (_$, e) => ({ text: e.text }))
+  const ui = await $.ui.mount({ ...BAND, surface: 'desktop' })
+  const mood = async () => moodOf(await settled(ui, clock))
+
+  await $.turn.start({ text: 'fix the cookie', turnId: 't-work' })
+  await clock.advance(2500)
+  expect(await mood()).toBe('focused')
+
+  // A background task's notice is not you saying it worked.
+  await $.prompt.submit({ text: 'Perfect.', origin: { kind: 'task-notification' }, turnId: 't-work', wait: false })
+  expect(await mood()).toBe('focused')
+
+  // As Desktop sent it: typed at the desk, into the running turn.
+  await $.prompt.submit({ text: 'Perfect.', origin: { kind: 'composer' }, turnId: 't-work', wait: false })
+  const source = await settled(ui, clock)
+  expect(moodOf(source)).toBe('celebrate')
+  expect(String(source)).toContain(K.fireworks)
+  await ui.unmount()
+})

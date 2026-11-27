@@ -1,6 +1,7 @@
 // You told Claude it worked (MPI-12): he celebrates for a while, jumping about
 // with fireworks behind him, then settles. character/confirm.ts decides what
-// counts; the `turnStart` event carries its answer.
+// counts; the `prompt` event carries its answer (not `turnStart`: a message
+// typed while Claude works goes into the running turn and starts none, MPI-24).
 
 import { passingMs } from '../../character/moods.ts'
 import type { Ctx, Event, MoodVote, Request, Result } from '../types.ts'
@@ -27,7 +28,7 @@ export class Celebrate extends Behaviour<CelebrateSlice> {
       effects.push({ type: 'startTimer', name: 'celebrate.end', ms: passingMs('celebrate') })
     }
     switch (event.type) {
-      case 'turnStart':
+      case 'prompt':
         if (event.confirmed) start()
         break
       case 'timer':

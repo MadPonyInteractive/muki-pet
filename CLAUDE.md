@@ -38,7 +38,8 @@ The moods and their faces are defined in `muki-pet/hooks/character/moods.ts`; wh
 
 | Event | Mood |
 | --- | --- |
-| `turn.start` | alert (eyes wide); celebrate (fireworks) if your message is a short "it worked" |
+| `turn.start` | alert (eyes wide) |
+| `prompt.submit` with a short "it worked" from you (also mid-turn) | celebrate (fireworks) |
 | tool running (`tool.call`) | focused (slight top lid) |
 | `turn.complete` success | happy |
 | tool failure / error | sad |

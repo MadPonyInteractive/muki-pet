@@ -12,8 +12,7 @@ export type TimerName = 'activity.sleepy' | 'activity.asleep' | 'reaction.flash'
 
 export type Event =
   // From Claude Code.
-  // `confirmed`: your message said it worked (character/confirm.ts).
-  | { type: 'turnStart'; confirmed?: boolean }
+  | { type: 'turnStart' }
   | { type: 'turnComplete'; reason: string }
   // `id`: the tool call's id, so only the asked tool's end ends the question.
   | { type: 'toolAsk'; id?: string }
@@ -21,7 +20,9 @@ export type Event =
   | { type: 'toolDone'; failed: boolean; id?: string }
   | { type: 'heat'; level: number }
   // A message entered the chat; `origin` is where from (`prompt.submit`'s origin.kind).
-  | { type: 'prompt'; origin: string }
+  // `confirmed`: you said it worked (character/confirm.ts). It comes here, not
+  // with turnStart: a message typed mid-turn starts no turn (MPI-24).
+  | { type: 'prompt'; origin: string; confirmed?: boolean }
   // Background tasks still running at the end of a turn (the paper pile).
   | { type: 'papers'; count: number }
   // Your mouse came over the band (true) or left it (false).
