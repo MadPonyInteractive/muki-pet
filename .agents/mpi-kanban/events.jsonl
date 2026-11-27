@@ -75,3 +75,5 @@
 {"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-21", "at": "2026-11-26T11:05:18+00:00", "actor": "claude", "from": "doing", "to": "done", "reason": "Fabio live 2026-11-26: a bit better now; shipped in 0.1.1."}
 {"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-22", "at": "2026-11-26T11:05:18+00:00", "actor": "claude", "from": "doing", "to": "done", "reason": "Built, checks pass, toys and middle-click seen live by Fabio; shipped in 0.1.1."}
 {"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-23", "at": "2026-11-26T22:40:37+00:00", "actor": "claude", "column": "doing", "title": "Middle click gives a toy every time, not a cookie"}
+{"schema": "mpi-kanban/event/v1", "type": "task.created", "id": "MPI-24", "at": "2026-11-27T15:20:49+00:00", "actor": "claude", "column": "doing", "title": "Celebrate (fireworks) never fires on 'perfect'"}
+{"schema": "mpi-kanban/event/v1", "type": "task.moved", "id": "MPI-24", "at": "2026-11-27T15:52:55+00:00", "actor": "claude", "from": "doing", "to": "doing", "reason": "fix 05cb0be; waiting on Fabio's live test: perfect typed while Claude works"}
