@@ -60,6 +60,15 @@ export function isConfirmation(text: string): boolean {
   return PHRASES.has(words) || PHRASES.has(words.replace(LEAD, ''))
 }
 
+// Whether a question card's result holds an "it worked" answer. Its answers
+// sit in `result.answers`, question text to the picked label (seen live:
+// `{ result: { answers: { "...": "1" } } }`).
+export function answeredYes(result: unknown): boolean {
+  const answers = (result as { result?: { answers?: unknown } } | null)?.result?.answers
+  if (!answers || typeof answers !== 'object') return false
+  return Object.values(answers).some(a => typeof a === 'string' && isConfirmation(a))
+}
+
 // Whether a message is your own words: typed at the desk, sent from your phone
 // (Remote Control), `claude -p`, or a plugin speaking as you. A task
 // notification, another session or a schedule is not you saying it worked.

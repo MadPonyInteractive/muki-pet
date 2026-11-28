@@ -457,3 +457,27 @@ test('"Perfect." typed while Claude is still working sets off the fireworks', as
   expect(String(source)).toContain(K.fireworks)
   await ui.unmount()
 })
+
+// A question card's answer never reaches prompt.submit: it comes back as the
+// card's result. The shape Desktop sent on 2026-11-28 (MPI-24).
+test('"1" picked on a question card sets off the fireworks', async ($, on) => {
+  on('ui.render', emptyBand)
+  const clock = mock.clock(on, { now: 50_000_000 })
+  let pick = 'Skip test'
+  on('tool.call', () => ({
+    result: { questions: [{ question: 'Does it work?', header: 'Check', options: [{ label: '1', description: 'Looks right' }], multiSelect: false }], answers: { 'Does it work?': pick } },
+    text: `Your questions have been answered: "Does it work?"="${pick}".`,
+  }))
+  const ui = await $.ui.mount({ ...BAND, surface: 'desktop' })
+  const ask = () => $.tool.call({ tool: 'AskUserQuestion', tool_use_id: `q-${pick}`, questions: [] } as never)
+
+  await ask()
+  expect(moodOf(await settled(ui, clock))).not.toBe('celebrate')
+
+  pick = '1'
+  await ask()
+  const source = await settled(ui, clock)
+  expect(moodOf(source)).toBe('celebrate')
+  expect(String(source)).toContain(K.fireworks)
+  await ui.unmount()
+})

@@ -8,7 +8,7 @@
 import type { Register } from 'claude-code'
 
 import { renderBand } from './band/render.tsx'
-import { isConfirmation, saidByYou } from './character/confirm.ts'
+import { answeredYes, isConfirmation, saidByYou } from './character/confirm.ts'
 import { heatOf } from './character/heat.ts'
 import { propFor } from './character/props.ts'
 import { addPaper, sendPapers, startsBackgroundTask } from './brain/pile-store.ts'
@@ -79,6 +79,11 @@ export const register: Register = on => {
       if (!e.agentId && startsBackgroundTask(e.tool, e)) await addPaper($)
     } catch {}
     const result = await next(e)
+    // Your answer on a question card ("1", "Looks right") comes back as the
+    // card's result, never through prompt.submit (MPI-24).
+    try {
+      if (!e.agentId && e.tool === 'AskUserQuestion' && answeredYes(result)) await send($, { type: 'prompt', origin: 'question', confirmed: true })
+    } catch {}
     try {
       const failed = !e.agentId && ('deny' in result || Boolean((result as { isError?: boolean }).isError))
       await send($, { type: 'toolDone', failed, id: e.tool_use_id })
